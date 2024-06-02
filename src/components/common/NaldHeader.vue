@@ -1,60 +1,57 @@
 <template>
-  <v-app-bar color="rgba(22, 22, 22, 0.95)" density="compact">
+  <v-app-bar color="rgba(22, 22, 22, 0.95)" density="compact" class='nald-header'>
     <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-    <v-toolbar-title @click="onChangePage(menuInfo[0])">
+    <v-toolbar-title @click="onChangePage(menuInfo[0])" style='cursor: pointer;'>
       <v-avatar rounded size="30px">
         <v-img src="@/assets/logo.png"></v-img>
       </v-avatar>
       <span> Nald</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <template v-if="$vuetify.display.mdAndUp">
-      <v-btn v-if="!accountInfo.accountId" @click="updateShowLoginDialog(true)" color="primary" variant="outlined" rounded
-        class="ma-2">
-        {{ t('login') }}
-        <v-icon dark right>mdi-account-outline</v-icon>
-      </v-btn>
-      <v-btn v-else icon color="primary">
-        <v-icon class="text-secondary">mdi-face-man</v-icon>
-        <v-icon class="text-secondary">mdi-menu-down</v-icon>
-        <v-menu activator="parent">
-          <v-list>
-            <v-list-subheader>{{ accountInfo.accountName }}</v-list-subheader>
-            <v-list-item class="right-panel-item" v-if="accountInfo.authority === 0" style="height: 10px">
-              <v-list-item-title>
-                <v-icon :icon="'mdi-account-edit-outline'" />
-                {{ t('editPassword') }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item class="right-panel-item" style="height: 10px">
-              <v-list-item-title @click="clickToChangeLang">
-                <v-icon>mdi-swap-horizontal</v-icon>
-                {{ lang }}
-                <v-avatar tile size="20" left>
-                  <v-img v-if="langSetting === 'ko'" src="../../assets/icons/america.png"></v-img>
-                  <v-img v-else src="../../assets/icons/korea.png"></v-img>
-                </v-avatar>
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item class="right-panel-item" v-if="accountInfo.authority === 0" style="height: 10px">
-              <v-list-item-title @click="clickToAdmin">
-                <v-icon>mdi-security</v-icon>
-                {{ t('adminPage') }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item class="right-panel-item" style="height: 10px">
-              <v-list-item-title @click="clickToLogout">
-                <v-icon>mdi-logout-variant</v-icon>
-                {{ t('logout') }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-btn>
-    </template>
+    <v-btn v-if="!accountInfo.accountId" @click="updateShowLoginDialog(true)" color="primary" variant="outlined" rounded
+      class="ma-2">
+      {{ t('login') }}
+      <v-icon dark right>mdi-account-outline</v-icon>
+    </v-btn>
+    <v-btn v-else icon color="primary">
+      <v-icon class="text-secondary">mdi-face-man</v-icon>
+      <v-icon class="text-secondary">mdi-menu-down</v-icon>
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-subheader>{{ accountInfo.accountName }}</v-list-subheader>
+          <v-list-item class="right-panel-item" v-if="accountInfo.authority === 0">
+            <v-list-item-title>
+              <v-icon :icon="'mdi-account-edit-outline'" />
+              {{ t('editPassword') }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item class="right-panel-item">
+            <v-list-item-title @click="clickToChangeLang">
+              <v-icon>mdi-swap-horizontal</v-icon>
+              {{ lang }}
+              <v-avatar tile size="20" left>
+                <v-img v-if="langSetting === 'ko'" src="../../assets/icons/america.png"></v-img>
+                <v-img v-else src="../../assets/icons/korea.png"></v-img>
+              </v-avatar>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item class="right-panel-item" v-if="accountInfo.authority === 0">
+            <v-list-item-title @click="clickToAdmin">
+              <v-icon>mdi-security</v-icon>
+              {{ t('adminPage') }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item class="right-panel-item">
+            <v-list-item-title @click="clickToLogout">
+              <v-icon>mdi-logout-variant</v-icon>
+              {{ t('logout') }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
 
   </v-app-bar>
-  <!-- <header-drawer :modelValue="drawer" @update:modelValue="drawer = $event" /> -->
   <v-navigation-drawer v-model="drawer" app fixed left temporary>
     <v-list dense :class="{ beforeLoginNav: !accountInfo }">
       <div class="text-center mt-3">
@@ -125,7 +122,6 @@ import LoginDialog from './LoginDialog.vue';
 import EditAccountInfoDialog from './EditAccountInfoDialog.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useLanguageStatusStore } from '@/store/languageStatusStore';
-import HeaderDrawer from './HeaderDrawer.vue';
 import _ from 'lodash';
 import { useAppStatusStore } from '@/store/appStatusStore';
 
@@ -306,6 +302,7 @@ const clickToChangeLang = () => {
   langSetting.value = newLang;
   localStorage.setItem('language', newLang);
   languageStatusStore.saveLanguage(newLang);
+  location.reload();
 };
 
 // 관리자 페이지로 이동 함수
@@ -335,8 +332,13 @@ watch(langSetting, (newLang: string) => {
 </script>
 
 <style lang="scss" scoped>
+.nald-header {
+  z-index: 1000;
+}
+
 .right-panel-item {
   cursor: pointer;
+  height: 10px;
 
   :hover {
     opacity: 0.7;

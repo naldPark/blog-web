@@ -1,12 +1,11 @@
 <template>
   <div class="page" ref="page">
-    <nald-header class="nald-header"></nald-header>
-    <div ref="mainlayout" class="mainlayout">
-      <div class="subPage" ref="subPage">
-        <router-view class="mainRouter" :class="{ notMobile: !smAndDown }" />
+    <nald-header />
+    <div ref="mainlayout" class="main-layout">
+      <div class="sub-page" ref="subPage">
+        <router-view class="main-router" :class="{ 'is-mobile': isMobile }" />
         <v-btn class="fixed-button" icon="mdi-arrow-up" color="primary" @click="goTo(0)" />
         <nald-footer class="footer" :isMobile="smAndDown"></nald-footer>
-
       </div>
     </div>
   </div>
@@ -16,13 +15,13 @@
 import { ref, watch, onMounted } from 'vue';
 import NaldHeader from '@/components/common/NaldHeader.vue';
 import NaldFooter from '@/components/common/NaldFooter.vue';
-import { isMobile as isMobileFunction } from '@/utils/common';
 import { useRoute } from 'vue-router';
 import { useDisplay, useGoTo } from 'vuetify';
 const mainlayout = ref<any>(null);
 const route = useRoute();
 const goTo = useGoTo();
-const isMobile = ref(isMobileFunction());
+const display = useDisplay();
+const isMobile: Ref<boolean> = display.smAndDown;
 const { smAndDown } = ref(useDisplay()).value;
 
 const showScrollTopBtn = ref(false);
@@ -61,32 +60,29 @@ function toScrollTop() {
 .page {
   height: 100%;
 
-  .nald-header {
-    z-index: 1000;
-  }
-
-  .mainlayout {
+  .main-layout {
     position: relative;
     margin: auto;
     height: 100%;
     width: 100%;
     background-color: #0e0e0e;
 
-    .subPage {
+    .sub-page {
       position: relative;
       min-height: 100%;
       overflow-y: auto;
       margin-top: 48px;
 
-      .mainRouter {
+      .main-router {
         max-width: 1500px;
         margin: auto;
-        padding-bottom: 32px;
+        padding-bottom: 48px;
+        margin-top: 30px;
+        height: 100%;
 
-        &.notMobile {
-          //상우하좌
-          padding-bottom: 48px;
-          margin-top: 30px;
+        &.is-mobile {
+          margin-top: 0px;
+          padding-bottom: 32px;
         }
       }
     }

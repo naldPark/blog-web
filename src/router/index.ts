@@ -4,7 +4,7 @@ import {
   NavigationGuardNext,
   RouteLocationNormalized,
 } from 'vue-router';
-import MainLayout from '@/pages/MainLayout.vue';
+import MainLayout from '@/layouts/MainLayout.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 
 const routes = [

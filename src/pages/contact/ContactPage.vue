@@ -1,68 +1,65 @@
 <template>
-    <div>
-        <v-row justify="center" no-gutters>
-            <v-col cols="10" md="4" lg="4">
-                <v-card color="rgba(0, 0, 0, 0)" elevation="0" max-width="400" style="display: block; margin: 0px auto;">
-                    <v-card-text class="text-center">
-                        <h1 class="font-weight-bold mb-1 text-grey">
-                            Nald Park
-                        </h1>
-                        <h4 class="font-weight-light mb-3 grey--text">
-                            WEB DEVELOPER
-                        </h4>
-                        <v-img max-height="400" style="display: block; margin: 0px auto;"
-                            src="@/assets/images/profiles/me.jpg">
-                            <div class="innerBorder"></div>
-                        </v-img>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn v-for="(social, i) in socials" :key="i" :color="social.color" icon small>
-                                <v-icon @click="exploreSNS(social.link)">{{ social.icon }}</v-icon>
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="10" md="6">
-                <div class="text-md-left pa-7 contact-box">
-                    <h1 class="font-weight-bold">
-                        Contact <span class="text-primary">Me.</span>
+    <v-row justify="center" no-gutters>
+        <v-col cols="10" md="4" lg="4">
+            <v-card color="rgba(0, 0, 0, 0)" elevation="0" max-width="400" style="display: block; margin: 0px auto;">
+                <v-card-text class="text-center">
+                    <h1 class="font-weight-bold mb-1 text-grey">
+                        Nald Park
                     </h1>
-                    <p class="font-weight-light grey--text">
-                        {{ $t('contactMsg') }}
-                    </p>
-                    <br />
-                    <v-theme-provider dark>
-                        <v-row class="pa-2">
-                            <v-col cols="12">
-                                <v-text-field flat v-model="messageData.name" :rules="[rules.required]"
-                                    :label="`${$t('name')} *`" :placeholder="`${$t('name')} *`"></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-text-field flat v-model="messageData.email" :rules="[rules.required, rules.email]"
-                                    :label="`${$t('email')} *`" :placeholder="`${$t('email')} *`"></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-text-field v-model="messageData.title" :rules="[rules.required]"
-                                    :label="`${$t('title')} *`" :placeholder="`${$t('title')} *`"></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-textarea :class="{ contentArea: !mobile }" v-model="messageData.content"
-                                    :rules="[rules.required]" auto-grow flat solo :label="`${$t('content')} *`"
-                                    :placeholder="`${$t('content')} *`"></v-textarea>
-                            </v-col>
-                            <v-col class="mx-auto" cols="auto">
-                                <v-btn color="primary" outlined rounded variant="outlined" @click="sendMessage">
-                                    <v-icon>mdi-check</v-icon>
-                                    {{ $t('send') }}
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-theme-provider>
-                </div>
-            </v-col>
-        </v-row>
-    </div>
+                    <h4 class="font-weight-light mb-3 grey--text">
+                        WEB DEVELOPER
+                    </h4>
+                    <v-img max-height="400" style="display: block; margin: 0px auto;" src="@/assets/images/profiles/me.jpg">
+                        <div class="innerBorder"></div>
+                    </v-img>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn v-for="(social, i) in socials" :key="i" :color="social.color" icon small>
+                            <v-icon @click="exploreSNS(social.link)">{{ social.icon }}</v-icon>
+                        </v-btn>
+                    </v-card-actions>
+                </v-card-text>
+            </v-card>
+        </v-col>
+        <v-col cols="10" md="6">
+            <div class="text-md-left pa-7 contact-box">
+                <h1 class="font-weight-bold">
+                    Contact <span class="text-primary">Me.</span>
+                </h1>
+                <p class="font-weight-light grey--text">
+                    {{ $t('contactMsg') }}
+                </p>
+                <br />
+                <v-theme-provider dark>
+                    <v-row class="pa-2">
+                        <v-col cols="12">
+                            <v-text-field flat v-model="messageData.name" :rules="[rules.required]"
+                                :label="`${$t('name')} *`" :placeholder="`${$t('name')} *`"></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field flat v-model="messageData.email" :rules="[rules.required, rules.email]"
+                                :label="`${$t('email')} *`" :placeholder="`${$t('email')} *`"></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field v-model="messageData.title" :rules="[rules.required]" :label="`${$t('title')} *`"
+                                :placeholder="`${$t('title')} *`"></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-textarea :class="{ contentArea: !mobile }" v-model="messageData.content"
+                                :rules="[rules.required]" auto-grow flat solo :label="`${$t('content')} *`"
+                                :placeholder="`${$t('content')} *`"></v-textarea>
+                        </v-col>
+                        <v-col class="mx-auto" cols="auto">
+                            <v-btn color="primary" outlined rounded variant="outlined" @click="sendMessage">
+                                <v-icon>mdi-check</v-icon>
+                                {{ $t('send') }}
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-theme-provider>
+            </div>
+        </v-col>
+    </v-row>
 </template>
 
 <script lang="ts" setup >
