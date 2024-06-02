@@ -2,28 +2,16 @@
   "compilerOptions": {
     "target": "esnext",
     "jsx": "preserve",
-    "typeRoots": [
-      "src/types",
-      "node_modules/@types"
-    ],
-    "lib": [
-      "DOM",
-      "esnext"
-    ],
-    "baseUrl": "./",
+    "typeRoots": ["src/types", "node_modules/@types"],
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "baseUrl": ".",
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
     "resolveJsonModule": true,
-    "types": [
-      "vite/client",
-      "vite-plugin-vue-layouts/client",
-      "unplugin-vue-router/client"
-    ],
+    "types": ["vite/client", "vite-plugin-vue-layouts/client", "unplugin-vue-router/client"],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
@@ -34,14 +22,7 @@
     "skipLibCheck": true,
     "composite": true,
     "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "src",
-    "vite.config.mts"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "cypress"
-  ],
+  }
+  // "include": ["src/**/*", "vite.config.mts"],
+  // "exclude": ["dist", "node_modules"]
 }

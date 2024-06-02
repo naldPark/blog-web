@@ -10,66 +10,49 @@ import * as path from "path";
 
 // Utilities
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'node:url'
-
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    VueRouter({
-      dts: 'src/typed-router.d.ts',
-    }),
-    Layouts(),
-    AutoImport({
-      imports: [
-        'vue',
-        {
-          'vue-router/auto': ['useRoute', 'useRouter'],
-        }
-      ],
-      dts: 'src/auto-imports.d.ts',
-      eslintrc: {
-        enabled: true,
-      },
-      vueTemplate: true,
-    }),
-    Components({
-      dts: 'src/components.d.ts',
-    }),
+    // VueRouter({
+    //   dts: 'src/typed-router.d.ts',
+    // }),
+    // Layouts(),
+    // AutoImport({
+    //   imports: [
+    //     'vue',
+    //     {
+    //       'vue-router/auto': ['useRoute', 'useRouter'],
+    //     }
+    //   ],
+    //   dts: 'src/auto-imports.d.ts',
+    //   eslintrc: {
+    //     enabled: true,
+    //   },
+    //   vueTemplate: true,
+    // }),
+    // Components({
+    //   dts: 'src/components.d.ts',
+    // }),
     Vue({
       template: { transformAssetUrls },
     }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
       autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
     }),
-    Fonts({
-      google: {
-        families: [{
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
-        }],
-      },
-    }),
+    // Fonts({
+    //   google: {
+    //     families: [{
+    //       name: 'Roboto',
+    //       styles: 'wght@100;300;400;500;700;900',
+    //     }],
+    //   },
+    // }),
   ],
   define: { 'process.env': {} },
   root: './',
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      "@/assets": path.resolve(__dirname, "src/assets"),
-    },
-    extensions: [
-      '.js',
-      '.json',
-      '.jsx',
-      '.mjs',
-      '.ts',
-      '.tsx',
-      '.vue',
-    ],
+      '@': path.resolve(__dirname, 'src')
+    }
   },
   server: {
     proxy: {

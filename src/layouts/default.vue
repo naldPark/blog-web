@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <v-app>
     <v-main>
       <router-view />
@@ -10,4 +10,4 @@
 
 <script lang="ts" setup>
   //
-</script>
+</script> -->

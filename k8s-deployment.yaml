@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-page
+  namespace: main
+spec:
+  selector:
+    matchLabels:
+      app: main-page
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: main-page
+    spec:
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: main-page-config
+            items:
+              - key: NGINX
+                path: nginx.conf
+            defaultMode: 420
+        - name: config-json
+          configMap:
+            name: main-page-config
+            items:
+              - key: CONFIG
+                path: config.json
+            defaultMode: 420
+      containers:
+        - name: main-page
+          image: nas.nald.me:35003/docker/main/frontend:__DOCKER_IMG_VER__
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: nginx-conf
+              readOnly: true
+              mountPath: /etc/nginx/conf.d
+            - name: config-json
+              readOnly: true
+              mountPath: /usr/share/nginx/html/env
+          readinessProbe:
+            tcpSocket:
+              port: 80
+      imagePullSecrets:
+        - name: regcred
+        - name: regcred-dns

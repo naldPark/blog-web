@@ -17,12 +17,11 @@
                     data-words='["Odds and end.", "Programming.", "Operation."]'></span>
                 </p>
                 <v-row class="badges-image-wrapper mt-3" style="max-width: 600px;">
-                  <v-chip v-for="(item, index) in badges"  :key="index"  size="small" class="ma-1" :color="item.backgroundColor"
-                     variant="flat" :style="`color: ${item.color}`">
+                  <v-chip v-for="(item, index) in badges" :key="index" size="small" class="ma-1"
+                    :color="item.backgroundColor" variant="flat" :style="`color: ${item.color}`">
                     <v-tooltip bottom>
                       <template v-slot:activator="{ props }">
-                        <div v-ripple v-bind="props"
-                          class="text-center d-flex align-center justify-space-around">
+                        <div v-ripple v-bind="props" class="text-center d-flex align-center justify-space-around">
                           <img style="width: 17px; height: 17px" :src="item.src" alt="Badge icon" />
                           <span class="pl-1" v-if="appSize !== 'xs'">{{ item.name }}</span>
                         </div>
@@ -42,7 +41,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue';
 import NaldHeader from '@/components/common/NaldHeader.vue';
 // import LoginDialog from '@/components/common/LoginDialog.vue';
@@ -70,137 +69,116 @@ interface Badge {
   src: string;
 }
 
-export default defineComponent({
-  name: 'MainPage',
-  components: {
-    NaldHeader,
-    // LoginDialog,
-  },
-  setup() {
-    // console.log("메인을 안오는데?/?", svgs)
-    const { t } = useI18n();
-    const display = useDisplay();
-    const accountStatusStore = useAccountStatusStore();
-    const appStatusStore = useAppStatusStore();
-    const accountName: Ref<string | null > =  ref(useAccountStatusStore().accountInfo.accountName);
-    const isMobile = ref(isMobileFunction());
-    const appSize: Ref<string> = display.name;
-    const showLoginDialog = ref(false);
-    const badges = ref<Badge[]>([]);
-    const typeWriter = ref<TypeWriter>(new TypeWriter());
+// console.log("메인을 안오는데?/?", svgs)
+const { t } = useI18n();
+const display = useDisplay();
+const accountStatusStore = useAccountStatusStore();
+const appStatusStore = useAppStatusStore();
+const accountName: Ref<string | null> = ref(useAccountStatusStore().accountInfo.accountName);
+const isMobile = ref(isMobileFunction());
+const appSize: Ref<string> = display.name;
+const showLoginDialog = ref(false);
+const badges = ref<Badge[]>([]);
+const typeWriter = ref<TypeWriter>(new TypeWriter());
 
-    watch(
-      () => appSize.value,
-      () => {
-        switch (appSize.value) {
-          case 'xs':
-          case 'sm':
-            isMobile.value = true;
-            break;
-          case 'md':
-          case 'lg':
-          case 'xl':
-            isMobile.value = false;
-            break;
-          default:
-            isMobile.value = false;
-        }
-      }
-    );
+// watch(
+//   () => appSize.value,
+//   () => {
+//     switch (appSize.value) {
+//       case 'xs':
+//       case 'sm':
+//         isMobile.value = true;
+//         break;
+//       case 'md':
+//       case 'lg':
+//       case 'xl':
+//         isMobile.value = false;
+//         break;
+//       default:
+//         isMobile.value = false;
+//     }
+//   }
+// );
 
-    const typingRun = () => {
-      const current = typeWriter.value.wordIndex % typeWriter.value.words.length;
-      const fullTxt = typeWriter.value.words[current];
+const typingRun = () => {
+  const current = typeWriter.value.wordIndex % typeWriter.value.words.length;
+  const fullTxt = typeWriter.value.words[current];
 
-      if (typeWriter.value.isDeleting) {
-        typeWriter.value.txt = fullTxt.substring(0, typeWriter.value.txt.length - 1);
-      } else {
-        typeWriter.value.txt = fullTxt.substring(0, typeWriter.value.txt.length + 1);
-      }
+  if (typeWriter.value.isDeleting) {
+    typeWriter.value.txt = fullTxt.substring(0, typeWriter.value.txt.length - 1);
+  } else {
+    typeWriter.value.txt = fullTxt.substring(0, typeWriter.value.txt.length + 1);
+  }
 
-      typeWriter.value.txtElement!.innerHTML = `<span class="txt" style="border-right: 0.2rem solid #FFB800 !important;">${typeWriter.value.txt}</span>`;
+  typeWriter.value.txtElement!.innerHTML = `<span class="txt" style="border-right: 0.2rem solid #FFB800 !important;">${typeWriter.value.txt}</span>`;
 
-      let typeSpeed = 300;
+  let typeSpeed = 300;
 
-      if (typeWriter.value.isDeleting) {
-        typeSpeed /= 2;
-      }
+  if (typeWriter.value.isDeleting) {
+    typeSpeed /= 2;
+  }
 
-      if (!typeWriter.value.isDeleting && typeWriter.value.txt === fullTxt) {
-        typeSpeed = typeWriter.value.wait;
-        typeWriter.value.isDeleting = true;
-      } else if (typeWriter.value.isDeleting && typeWriter.value.txt === '') {
-        typeWriter.value.isDeleting = false;
-        typeWriter.value.wordIndex++;
-        typeSpeed = 500;
-      }
+  if (!typeWriter.value.isDeleting && typeWriter.value.txt === fullTxt) {
+    typeSpeed = typeWriter.value.wait;
+    typeWriter.value.isDeleting = true;
+  } else if (typeWriter.value.isDeleting && typeWriter.value.txt === '') {
+    typeWriter.value.isDeleting = false;
+    typeWriter.value.wordIndex++;
+    typeSpeed = 500;
+  }
 
-      setTimeout(typingRun, typeSpeed);
-    };
+  setTimeout(typingRun, typeSpeed);
+};
 
-    const typingAnimation = () => {
-      const txtElement = document.querySelector<HTMLElement>('.txt-type');
-      if (!txtElement) return;
+const typingAnimation = () => {
+  const txtElement = document.querySelector<HTMLElement>('.txt-type');
+  if (!txtElement) return;
 
-      const words = JSON.parse(txtElement.getAttribute('data-words') as string);
-      const wait = parseInt(txtElement.getAttribute('data-wait') as string, 10);
+  const words = JSON.parse(txtElement.getAttribute('data-words') as string);
+  const wait = parseInt(txtElement.getAttribute('data-wait') as string, 10);
 
-      typeWriter.value = new TypeWriter();
-      typeWriter.value.txtElement = txtElement;
-      typeWriter.value.words = words;
-      typeWriter.value.txt = '';
-      typeWriter.value.wordIndex = 0;
-      typeWriter.value.wait = wait;
-      typingRun();
-    };
+  typeWriter.value = new TypeWriter();
+  typeWriter.value.txtElement = txtElement;
+  typeWriter.value.words = words;
+  typeWriter.value.txt = '';
+  typeWriter.value.wordIndex = 0;
+  typeWriter.value.wait = wait;
+  typingRun();
+};
 
-    const onClickGithub = () => {
-      window.open('https://github.com/naldPark/', '_blank');
-    };
+const onClickGithub = () => {
+  window.open('https://github.com/naldPark/', '_blank');
+};
 
-    const clickShowLoginDialog = () => {
-      showLoginDialog.value = true;
-    };
+const clickShowLoginDialog = () => {
+  showLoginDialog.value = true;
+};
 
-    onMounted(async () => {
-      appStatusStore.showLoading();
-      await getBadgeList().then((res: any) => {
-        badges.value = res.data.data.map((m: any) => ({
-          ...m,
-          src: `src/assets/svgs/${m.src}`, // src 속성 지정
-        }));
-        appStatusStore.hideLoading();
-      });
-      typingAnimation();
-    });
-
-    return {
-      isMobile,
-      appSize,
-      showLoginDialog,
-      badges,
-      typeWriter,
-      onClickGithub,
-      clickShowLoginDialog,
-      typingRun,
-      typingAnimation,
-      accountName
-    };
-  },
+onMounted(async () => {
+  appStatusStore.showLoading();
+  await getBadgeList().then((res: any) => {
+    badges.value = res.data.data.map((m: any) => ({
+      ...m,
+      src: `src/assets/svgs/${m.src}`, // src 속성 지정
+    }));
+    appStatusStore.hideLoading();
+  });
+  typingAnimation();
 });
 </script>
 
 <style lang="scss" scoped>
-
 html {
   overflow-y: hidden;
+
   .mainCover {
     background: linear-gradient(to top, rgba(20, 20, 20, 0.8), rgb(0, 0, 0)),
       url('./../assets/images/network.gif') no-repeat;
-       background-position:  60% center;/* GIF를 컨테이너 중간에서 오른쪽으로 배치 */
+    background-position: 60% center;
+    /* GIF를 컨테이너 중간에서 오른쪽으로 배치 */
     overflow: hidden;
     display: flex;
-     background-color: black; 
+    background-color: black;
     flex-direction: column;
     justify-content: center;
     height: 100%;

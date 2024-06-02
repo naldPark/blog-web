@@ -18,9 +18,9 @@ $font-30: 30px;
   --font-family: #{$font-family};
 }
 
-:export {
-  font-family: #{$font-family};
-}
+// :export {
+//   font-family: #{$font-family};
+// }
 
 @font-face {
   font-family: 'Raleway';

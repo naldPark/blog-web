@@ -42,18 +42,15 @@ interface IToastMessage {
 export interface IAppStatus {
     timezone: string;
     showUIBlocker: boolean;
-    showUIBlockerCancel: boolean;
     toastMessages: Array<IToastMessage>;
     dialogInfo: IDialog;
     prevRouteName: string | null | undefined;
-    lockUIBlocker: boolean;
 }
 
 export const useAppStatusStore = defineStore('app-status', {
     state: (): IAppStatus => ({
         timezone: 'Asia/Seoul',
         showUIBlocker: false,
-        showUIBlockerCancel: false,
         toastMessages: [],
         dialogInfo: {
             show: false,
@@ -66,15 +63,12 @@ export const useAppStatusStore = defineStore('app-status', {
             invisibleClose: false
         },
         prevRouteName: '',
-        lockUIBlocker: false
     }),
 
     actions: {
         setLoading(info: any) {
-            if (!this.lockUIBlocker) {
-                this.showUIBlocker = info.val;
-                this.showUIBlockerCancel = info.cancel ? info.cancel : false;
-            }
+            console.log("setLoading", info)
+            this.showUIBlocker = info.val;
         },
 
         setDialogInfo(info: IDialog) {
@@ -108,10 +102,12 @@ export const useAppStatusStore = defineStore('app-status', {
         },
 
         showLoading(info?: any) {
+            console.log("showLoading")
             this.setLoading({ val: true, cancel: info ? info.cancel : false });
         },
 
         hideLoading() {
+            console.log('hideLoading')
             this.setLoading({ val: false, cancel: false });
         },
 

@@ -1,39 +1,24 @@
-import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import MainPage from '@/pages/MainPage.vue';
+import {
+  createRouter,
+  createWebHistory,
+  NavigationGuardNext,
+  RouteLocationNormalized,
+} from 'vue-router';
 import MainLayout from '@/pages/MainLayout.vue';
-// import ProjectPage from '@/pages/project/ProjectPage.vue';
-// import ContactPage from '@/pages/contact/ContactPage.vue';
-// import AboutMePage from '@/pages/aboutMe/AboutMePage.vue';
-// import StreamingPage from '@/pages/wonderWall/streaming/StreamingPage.vue';
-// import StreamingListPage from '@/pages/wonderWall/streaming/StreamingListPage.vue';
-// import CrawlingPage from '@/pages/wonderWall/crawling/CrawlingPage.vue';
-// import CharacterTestPage from '@/pages/wonderWall/characterTest/CharacterTestPage.vue';
-// import UtilsPage from '@/pages/wonderWall/utils/UtilsPage.vue';
-// import WonderWallPage from '@/pages/wonderWall/WonderWallPage.vue';
-// import BlogPage from '@/pages/blog/BlogPage.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
-// import WonderWallLayout from '@/pages/wonderWall/WonderWallLayout.vue';
-// import AdminPage from '@/pages/admin/AdminPage.vue';
-// import CoinLockerPage from '@/pages/wonderWall/coinLocker/CoinLockerPage.vue';
-// import DoodlePage from '@/pages/wonderWall/doodle/DoodlePage.vue';
-// import DrawingPage from '@/pages/wonderWall/catchDrawing/DrawingPage.vue';
-// import CliLendorPage from '@/pages/wonderWall/clilendor/CliLendorPage.vue';
-// import SandboxPage from '@/pages/wonderWall/sandbox/SandboxPage.vue';
-// import SandboxTerminalPage from '@/pages/wonderWall/sandbox/SandboxTerminalPage.vue';
-
 
 const routes = [
   {
     path: '/main',
-    name: MainPage.name,
-    component: MainPage,
+    component: () => import('./../pages/MainPage.vue'),
+    name: 'MainPage',
     meta: {
       anonymousAccess: true,
     },
   },
   {
     path: '/',
-    name: MainLayout.name,
+    name: 'MainLayout',
     component: MainLayout,
     redirect: { path: '/main' },
     children: [
@@ -132,14 +117,14 @@ const routes = [
       //     anonymousAccess: false,
       //   },
       // },
-      // {
-      //   path: 'contact',
-      //   name: ContactPage.name,
-      //   component: ContactPage,
-      //   meta: {
-      //     anonymousAccess: true,
-      //   },
-      // },
+      {
+        path: 'contact',
+        name: 'ContactPage',
+        component: () => import('@/pages/contact/ContactPage.vue'),
+        meta: {
+          anonymousAccess: true,
+        },
+      },
       // {
       //   path: 'admin',
       //   name: AdminPage.name,
@@ -161,23 +146,30 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-
-  const accountStatusStore = useAccountStatusStore();
-  await accountStatusStore.loadAuthToken();
-  if (to.matched.some(route => route.meta.anonymousAccess)) {
-    next();
-  } else if (accountStatusStore.isSignIn) {
-    next();
-  } else {
-    moveToMain();
-  }
-});
+router.beforeEach(
+  async (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext,
+  ) => {
+    const accountStatusStore = useAccountStatusStore();
+    await accountStatusStore.loadAuthToken();
+    if (to.matched.some((route) => route.meta.anonymousAccess)) {
+      next();
+    } else if (accountStatusStore.isSignIn) {
+      next();
+    } else {
+      moveToMain();
+    }
+  },
+);
 
 const moveToMain = () => {
-  router.push({
-    name: MainPage.name,
-  }).catch((err) => console.error(err));
+  router
+    .push({
+      name: 'MainPage',
+    })
+    .catch((err) => console.error(err));
 };
 
 export default router;

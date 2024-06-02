@@ -1,19 +1,25 @@
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+import { ref } from 'vue';
+
 
 // 이 함수는 현재 디바이스가 모바일인지 여부를 결정합니다.
 export function isMobile(): boolean {
-    // const vuetify = useVuetify();
-    // switch (vuetify.framework.breakpoint.name) {
-    //     case 'xs':
-    //     case 'sm':
-    //         return true;
-    //     case 'md':
-    //     case 'lg':
-    //     case 'xl':
-    //         return false;
-    //     default:
-    //         return false;
-    // }
-    return false;
+    const { smAndDown } = ref(useDisplay()).value;
+    console.log('smAndDown', smAndDown)
+    return smAndDown
+    // console.log(frame.name)
+    // // switch (frame) {
+    // //     case 'xs':
+    // //     case 'sm':
+    // //         return true;
+    // //     case 'md':
+    // //     case 'lg':
+    // //     case 'xl':
+    // //         return false;
+    // //     default:
+    // //         return false;
+    // // }
+    // return false;
 }
 
 // 이 함수는 현재 디바이스의 크기 이름을 반환합니다.

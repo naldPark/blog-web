@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="lazyShow" width="444px" content-class="app-g-dialog" style="justify-content: flex-start">
+  <v-dialog :model-value="showValue" @update:model-value="updateShowValue" width="444px" content-class="app-g-dialog">
     <v-card>
-      <v-toolbar dense dark color="grey darken-3">
+      <v-toolbar density="compact" dark color="grey-darken-3">
         <v-toolbar-title>
-          <v-icon class="primary--text">mdi-key</v-icon>
+          <v-icon class="text-primary">mdi-key</v-icon>
           {{ t('login') }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
@@ -12,108 +12,94 @@
         <v-container>
           <v-row>
             <v-col cols="12" class="pa-0">
-              <v-text-field v-model="accountId" :label="t('id')" :placeholder="t('idDes')" flat required
-                @keyup.enter="onClickLogin"></v-text-field>
+              <v-text-field color="primary" v-model="accountId" :label="t('id')" :placeholder="t('idDes')" flat
+                required></v-text-field>
             </v-col>
             <v-col cols="12" class="pa-0">
-              <v-text-field v-model="accountPassword" :label="t('password')" :placeholder="t('pwdDes')" type="password"
-                flat required @keyup.enter="onClickLogin"></v-text-field>
+              <v-text-field color="primary" v-model="accountPassword" :label="t('password')" :placeholder="t('pwdDes')"
+                flat required @keyup.enter="onClickLogin" :append-inner-icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+                :type="passwordVisible ? 'text' : 'password'"
+                @click:append-inner="passwordVisible = !passwordVisible"></v-text-field>
             </v-col>
           </v-row>
         </v-container>
+        <v-btn class="mb-3" color="primary" variant="tonal" outlined block @click="onClickLogin">
+          Log In
+        </v-btn>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn class="ma-2" @click="lazyShow = false" color="primary" outlined rounded variant="outlined">
-          {{ t('cancel') }}
-        </v-btn>
-        <v-btn class="ma-2" color="primary" outlined rounded variant="outlined" dark @click="onClickLogin">
-          {{ t('confirm') }}
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { login } from '@/api/AccountService';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
-import { useAppStatusStore } from  '@/store/appStatusStore';
+import { useAppStatusStore } from '@/store/appStatusStore';
 import { decodeToken } from '@/utils/common';
 import { useCookies } from '@vueuse/integrations/useCookies';
 
-export default defineComponent({
-  name: 'LoginDialog',
-  setup(_, { emit }) {
-    const { t } = useI18n(); // t 함수 가져오기
-    const accountId = ref('');
-    const accountPassword = ref('');
-    const lazyShow = ref(false);
-    const cookies = useCookies();
-    const accountStatusStore = useAccountStatusStore();
-    const appStatusStore = useAppStatusStore();
+const { t } = useI18n(); // t 함수 가져오기
+const accountId = ref('');
+const accountPassword = ref('');
+const passwordVisible = ref(false);
+const cookies = useCookies();
+const accountStatusStore = useAccountStatusStore();
+const appStatusStore = useAppStatusStore();
+const props = defineProps({ showValue: Boolean });
+// const emit = defineEmits(['change', 'delete'])
+const emits = defineEmits(['update:modelValue']);
+function updateShowValue(value: any) {
+  emits('update:modelValue', value);
+}
+// function onContainerMounted(el) {
+//   //init the widget here
+// }
 
-    async function onClickLogin() {
-      appStatusStore.showLoading();
-      await login(accountId.value, accountPassword.value)
-        .then((res: any) => {
-          if (res.data.statusCode === 200) {
-            const token = "Bearer " + res.data.data.access_token;
-            cookies.set("access_token", token);
-            const tokenInfo = JSON.parse(decodeToken(token));
+async function onClickLogin() {
+  // appStatusStore.showLoading();
+  try {
+    const res = await login(accountId.value, accountPassword.value);
+    if (res.data.statusCode === 200) {
+      const token = 'Bearer ' + res.data.data.access_token;
+      cookies.set('access_token', token);
+      const tokenInfo = JSON.parse(decodeToken(token));
 
-            cookies.set("accountId", tokenInfo.user_id);
-            cookies.set("accountName", tokenInfo.user_name);
-            cookies.set("authority", tokenInfo.authority);
-            cookies.set("email", tokenInfo.user_email);
+      cookies.set('accountId', tokenInfo.user_id);
+      cookies.set('accountName', tokenInfo.user_name);
+      cookies.set('authority', tokenInfo.authority);
+      cookies.set('email', tokenInfo.user_email);
 
-            accountStatusStore.setAuthToken(token);
-            accountStatusStore.setAccountInfo({
-              accountId: tokenInfo.user_id,
-              accountName: tokenInfo.user_name,
-              authority: tokenInfo.authority,
-              email: tokenInfo.user_email,
-            });
-          } else {
-            appStatusStore.showDialog({
-              title: t('loginFailed'),
-              description: res.data.data.error,
-              invisibleClose: true,
-              action: () => { },
-            });
-            accountStatusStore.resetAccountInfo();
-          }
-          lazyShow.value = false;
-          appStatusStore.hideLoading();
-        })
-        .catch((error: any) => {
-          appStatusStore.showDialog({
-            title: t('error'),
-            description: 'unknown error',
-            invisibleClose: true,
-            action: () => { },
-          });
-          lazyShow.value = false;
-          appStatusStore.hideLoading();
-        });
-    
+      accountStatusStore.setAuthToken(token);
+      accountStatusStore.setAccountInfo({
+        accountId: tokenInfo.user_id,
+        accountName: tokenInfo.user_name,
+        authority: tokenInfo.authority,
+        email: tokenInfo.user_email,
+      });
+    } else {
+      appStatusStore.showDialog({
+        title: t('loginFailed'),
+        description: res.data.data.error,
+        invisibleClose: true,
+        action: () => { },
+      });
+      accountStatusStore.resetAccountInfo();
     }
-
-    watch(() => lazyShow.value, (newValue) => {
-      emit("input", newValue);
+    updateShowValue(false);
+    appStatusStore.hideLoading();
+  } catch (error) {
+    appStatusStore.showDialog({
+      title: t('error'),
+      description: 'unknown error',
+      invisibleClose: true,
+      action: () => { },
     });
-
-    return {
-      accountId,
-      accountPassword,
-      lazyShow,
-      onClickLogin,
-      t,
-    };
+    updateShowValue(false);
+    appStatusStore.hideLoading();
   }
-});
+}
 </script>
 
 <style lang="scss" scoped></style>

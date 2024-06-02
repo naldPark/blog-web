@@ -8,6 +8,7 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@mdi/font": "6.2.95",
     "@stomp/stompjs": "^6.1.2",
     "@types/sockjs-client": "^1.1.0",
@@ -20,6 +21,7 @@
     "lodash": "^4.17.21",
     "module": "^1.2.5",
     "pinia": "^2.0.14",
+    "pinia-plugin-persist": "^1.0.0",
     "roboto-fontface": "*",
     "sass": "^1.54.0",
     "socket.io-client": "^4.5.2",
@@ -49,7 +51,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.22.0",
-    "pinia": "^2.1.7",
+    "prettier": "^3.2.5",
     "sass": "^1.71.1",
     "sass-loader": "^13.3.0",
     "typescript": "^5.4.2",

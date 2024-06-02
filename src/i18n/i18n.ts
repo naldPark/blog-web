@@ -19,8 +19,8 @@ export const getLocale = () => {
   return lang ? lang : 'ko';
 };
 
-
-const i18n = createI18n({
+type MessageSchema = typeof ko // json 파일 타입화?해서 messages타입 지정해줌
+const i18n = createI18n<[MessageSchema], 'ko' | 'en'>({
   legacy: false,
   globalInjection: true,
   locale: getLocale(),

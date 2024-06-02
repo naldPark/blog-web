@@ -1,68 +1,54 @@
 <template>
   <div class="page" ref="page">
     <nald-header class="nald-header"></nald-header>
-    <div ref="mainlayout" class="mainlayout" @scroll="onScroll">
+    <div ref="mainlayout" class="mainlayout">
       <div class="subPage" ref="subPage">
-        <transition name="fade">
-          <router-view name="main" class="mainRouter" :class="{ notMobile: !isMobile }"></router-view>
-        </transition>
-        <nald-footer class="footer" :isMobile="isMobile"></nald-footer>
-        <v-btn v-show="showScrollTopBtn" fab dark fixed bottom small right color="primary" @click="toScrollTop">
-          <v-icon>mdi-arrow-up</v-icon>
-        </v-btn>
+        <router-view class="mainRouter" :class="{ notMobile: !smAndDown }" />
+        <v-btn class="fixed-button" icon="mdi-arrow-up" color="primary" @click="goTo(0)" />
+        <nald-footer class="footer" :isMobile="smAndDown"></nald-footer>
+
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { ref, watch, onMounted } from 'vue';
 import NaldHeader from '@/components/common/NaldHeader.vue';
 import NaldFooter from '@/components/common/NaldFooter.vue';
 import { isMobile as isMobileFunction } from '@/utils/common';
 import { useRoute } from 'vue-router';
+import { useDisplay, useGoTo } from 'vuetify';
+const mainlayout = ref<any>(null);
+const route = useRoute();
+const goTo = useGoTo();
+const isMobile = ref(isMobileFunction());
+const { smAndDown } = ref(useDisplay()).value;
 
-export default defineComponent({
-  name: 'MainLayout',
-  components: { NaldHeader, NaldFooter },
-  setup() {
-    const mainlayout = ref<any>(null);
-    const route = useRoute();
-    const isMobile = ref(isMobileFunction());
-    const showScrollTopBtn = ref(false);
+const showScrollTopBtn = ref(false);
 
-    watch(() => route.path, () => {
-      toScrollTop();
-    });
-
-    watch(
-      () => mainlayout.value?.scrollTop || 0,
-      (top) => {
-        showScrollTopBtn.value = top > 20;
-      },
-      { immediate: true }
-    );
-
-    function onScroll() {
-      const top = mainlayout.value?.scrollTop || 0;
-      showScrollTopBtn.value = top > 20;
-    }
-
-    function toScrollTop() {
-      if (mainlayout.value) {
-        mainlayout.value.scrollTop = 0;
-      }
-    }
-
-    return {
-      mainlayout,
-      isMobile,
-      showScrollTopBtn,
-      onScroll,
-      toScrollTop,
-    };
-  },
+watch(() => route.path, () => {
+  toScrollTop();
 });
+onMounted(() => {
+  goTo(0);
+});
+
+watch(
+  () => mainlayout.value?.scrollTop || 0,
+  (top) => {
+    showScrollTopBtn.value = top > 20;
+  },
+  { immediate: true }
+);
+
+
+function toScrollTop() {
+  if (mainlayout.value) {
+    mainlayout.value.scrollTop = 0;
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -73,6 +59,8 @@ export default defineComponent({
 }
 
 .page {
+  height: 100%;
+
   .nald-header {
     z-index: 1000;
   }
@@ -83,39 +71,22 @@ export default defineComponent({
     height: 100%;
     width: 100%;
     background-color: #0e0e0e;
-    overflow-y: auto !important;
 
     .subPage {
       position: relative;
-      overflow: hidden;
-      overflow-y: auto;
       min-height: 100%;
-      padding-top: 50px;
-
-      .fade-enter-active,
-      .fade-leave-active {
-        transition-property: opacity;
-        transition-duration: .35s;
-      }
-
-      .fade-enter-active {
-        transition-delay: .35s;
-      }
-
-      .fade-enter,
-      .fade-leave-active {
-        opacity: 0;
-      }
+      overflow-y: auto;
+      margin-top: 48px;
 
       .mainRouter {
-        max-height: calc(100% - 32px);
         max-width: 1500px;
         margin: auto;
-        padding: 0px 0px 32px 0px;
+        padding-bottom: 32px;
 
         &.notMobile {
-          padding: 0px 30px 48px 30px;
-          margin-top: 0px;
+          //상우하좌
+          padding-bottom: 48px;
+          margin-top: 30px;
         }
       }
     }
@@ -127,5 +98,12 @@ export default defineComponent({
       position: absolute;
     }
   }
+}
+
+.fixed-button {
+  position: fixed;
+  z-index: 999;
+  inset-block-end: 3%;
+  inset-inline-end: 30px;
 }
 </style>
