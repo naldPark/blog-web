@@ -5,6 +5,7 @@ import {
   RouteLocationNormalized,
 } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
+import WonderWallLayout from '@/layouts/WonderWallLayout.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 
 const routes = [
@@ -22,101 +23,33 @@ const routes = [
     component: MainLayout,
     redirect: { path: '/main' },
     children: [
-      // {
-      //   path: 'project',
-      //   name: ProjectPage.name,
-      //   component: ProjectPage,
-      //   meta: {
-      //     anonymousAccess: false,
-      //   },
-      // },
-      // {
-      //   path: 'wonderWall',
-      //   name: WonderWallLayout.name,
-      //   component: WonderWallLayout,
-      //   redirect: { name: WonderWallPage.name },
-      //   meta: {
-      //     anonymousAccess: false,
-      //   },
-      //   children: [
-      //     {
-      //       path: 'main',
-      //       name: WonderWallPage.name,
-      //       component: WonderWallPage,
-      //     },
-      //     {
-      //       path: 'video',
-      //       name: StreamingListPage.name,
-      //       component: StreamingListPage,
-      //     },
-      //     {
-      //       path: 'video/play',
-      //       name: StreamingPage.name,
-      //       component: StreamingPage,
-      //     },
-      //     {
-      //       path: 'crawling',
-      //       name: CrawlingPage.name,
-      //       component: CrawlingPage,
-      //     },
-      //     {
-      //       path: 'utils',
-      //       name: UtilsPage.name,
-      //       component: UtilsPage,
-      //     },
-      //     {
-      //       path: 'characterTest',
-      //       name: CharacterTestPage.name,
-      //       component: CharacterTestPage,
-      //     },
-      //     {
-      //       path: 'sandbox',
-      //       name: SandboxPage.name,
-      //       component: SandboxPage,
-      //     },
-      //     {
-      //       path: 'sandboxTerminal',
-      //       name: SandboxTerminalPage.name,
-      //       component: SandboxTerminalPage,
-      //     },
-      //     {
-      //       path: 'clilendor',
-      //       name: CliLendorPage.name,
-      //       component: CliLendorPage,
-      //     },
-      //     {
-      //       path: 'coinLocker',
-      //       name: CoinLockerPage.name,
-      //       component: CoinLockerPage,
-      //     },
-      //     {
-      //       path: 'catchDrawing',
-      //       name: DrawingPage.name,
-      //       component: DrawingPage,
-      //     },
-      //     {
-      //       path: 'doodle',
-      //       name: DoodlePage.name,
-      //       component: DoodlePage,
-      //     },
-      //   ],
-      // },
-      // {
-      //   path: 'aboutMe',
-      //   name: AboutMePage.name,
-      //   component: AboutMePage,
-      //   meta: {
-      //     anonymousAccess: false,
-      //   },
-      // },
-      // {
-      //   path: 'blog',
-      //   name: BlogPage.name,
-      //   component: BlogPage,
-      //   meta: {
-      //     anonymousAccess: false,
-      //   },
-      // },
+      {
+        path: 'wonderWall',
+        component: WonderWallLayout,
+        children: [
+          {
+            path: 'main',
+            name: 'WonderWallPage',
+            component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
+          },
+          {
+            path: 'share',
+            name: 'SharePage',
+            component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
+            beforeEnter() {
+              window.location.href = "https://upload.nald.me";
+            }
+          },
+          {
+            path: 'webapp',
+            name: 'WebAppPage',
+            component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
+            beforeEnter() {
+              window.location.href = "https://pwa.nald.me";
+            }
+          },
+        ],
+      },
       {
         path: 'contact',
         name: 'ContactPage',
@@ -125,14 +58,6 @@ const routes = [
           anonymousAccess: true,
         },
       },
-      // {
-      //   path: 'admin',
-      //   name: AdminPage.name,
-      //   component: AdminPage,
-      //   meta: {
-      //     anonymousAccess: false,
-      //   },
-      // },
     ],
   },
   {

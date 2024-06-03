@@ -125,25 +125,7 @@ import { useLanguageStatusStore } from '@/store/languageStatusStore';
 import _ from 'lodash';
 import { useAppStatusStore } from '@/store/appStatusStore';
 
-const group = null;
-const items = [
-  {
-    title: 'Foo',
-    value: 'foo',
-  },
-  {
-    title: 'Bar',
-    value: 'bar',
-  },
-  {
-    title: 'Fizz',
-    value: 'fizz',
-  },
-  {
-    title: 'Buzz',
-    value: 'buzz',
-  },
-];
+
 
 const appStatusStore: any = useAppStatusStore();
 const router = useRouter();
@@ -161,18 +143,6 @@ const updateShowLoginDialog = (newValue: boolean) => {
   showLoginDialog.value = newValue;
 };
 
-let overlay = ref(false);
-const clickOverlay = () => {
-  console.log('asdsad', appStatusStore.showUIBlocker);
-  overlay.value = !overlay.value;
-};
-
-// const items = [
-//   { title: 'Click Me' },
-//   { title: 'Click Me' },
-//   { title: 'Click Me' },
-//   { title: 'Click Me 2' },
-// ];
 
 // Menu 아이템 목록
 const menuItems = [
@@ -219,6 +189,12 @@ const menuItems = [
         title: t('menubar.shareLocker'),
         value: 'SharePage',
         availableRange: 1,
+      },
+      {
+        name: 'webApp',
+        icon: 'mdi-cellphone-text',
+        title: t('menubar.webApp'),
+        value: 'WebAppPage',
       },
       {
         name: 'video',

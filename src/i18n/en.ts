@@ -110,6 +110,7 @@ export default {
     bookCafe: "BookCafe",
     coinLocker: "Coin Locker",
     clilendor: "Chat Room",
+    webApp: "PWA (Web App)",
     catchDrawing: "Catch Drawing",
   },
   sandbox: {

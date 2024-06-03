@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "vite --port 8081",
+    "dev": "vite --port 8081",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore"

@@ -110,6 +110,7 @@ export default {
     shareLocker: "공유드라이브 ( S3 )", // workupload
     doodle: "연습용 페이지(공사중)", // 진짜 연습용
     clilendor: "채팅방", // 스플렌더
+    webApp: "PWA (웹앱)",
     catchDrawing: "기린그림판(공사중)", // 캐치마인드
   },
   sandbox: {
