@@ -24,6 +24,14 @@ const routes = [
     redirect: { path: '/main' },
     children: [
       {
+        path: 'about',
+        name: 'AboutMePage',
+        component: () => import('@/pages/aboutMe/AboutMePage.vue'),
+        meta: {
+          anonymousAccess: true,
+        },
+      },
+      {
         path: 'wonderWall',
         component: WonderWallLayout,
         children: [
@@ -37,16 +45,16 @@ const routes = [
             name: 'SharePage',
             component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
             beforeEnter() {
-              window.location.href = "https://upload.nald.me";
-            }
+              window.location.href = 'https://upload.nald.me';
+            },
           },
           {
             path: 'webapp',
             name: 'WebAppPage',
             component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
             beforeEnter() {
-              window.location.href = "https://pwa.nald.me";
-            }
+              window.location.href = 'https://pwa.nald.me';
+            },
           },
         ],
       },

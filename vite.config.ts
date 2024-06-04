@@ -1,15 +1,15 @@
 // Plugins
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import Fonts from 'unplugin-fonts/vite'
-import Layouts from 'vite-plugin-vue-layouts'
-import Vue from '@vitejs/plugin-vue'
-import VueRouter from 'unplugin-vue-router/vite'
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import * as path from "path";
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import Fonts from 'unplugin-fonts/vite';
+import Layouts from 'vite-plugin-vue-layouts';
+import Vue from '@vitejs/plugin-vue';
+import VueRouter from 'unplugin-vue-router/vite';
+import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
+import * as path from 'path';
 
 // Utilities
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [
     // VueRouter({
@@ -51,13 +51,13 @@ export default defineConfig({
   root: './',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   server: {
     proxy: {
       '/api': {
-        target: 'https://nald.me/backend',
+        target: 'http://localhost:8000/',
         rewrite: (path) => path.replace(/^\/api/, ''),
         changeOrigin: true,
         secure: false,
@@ -74,4 +74,4 @@ export default defineConfig({
       },
     },
   },
-})
+});
