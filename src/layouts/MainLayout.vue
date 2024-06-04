@@ -71,7 +71,6 @@ function toScrollTop() {
       position: relative;
       min-height: 100%;
       overflow-y: auto;
-      margin-top: 48px;
 
       .main-router {
         max-width: 1500px;

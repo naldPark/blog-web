@@ -6,20 +6,7 @@ import { ref } from 'vue';
 export function isMobile(): boolean {
     const { smAndDown } = ref(useDisplay()).value;
     console.log('smAndDown', smAndDown)
-    return smAndDown
-    // console.log(frame.name)
-    // // switch (frame) {
-    // //     case 'xs':
-    // //     case 'sm':
-    // //         return true;
-    // //     case 'md':
-    // //     case 'lg':
-    // //     case 'xl':
-    // //         return false;
-    // //     default:
-    // //         return false;
-    // // }
-    // return false;
+    return smAndDown;
 }
 
 // 이 함수는 현재 디바이스의 크기 이름을 반환합니다.

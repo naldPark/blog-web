@@ -24,6 +24,7 @@ const i18n = createI18n<[MessageSchema], 'ko' | 'en'>({
   legacy: false,
   globalInjection: true,
   locale: getLocale(),
+  warnHtmlInMessage: 'off',
   fallbackLocale: "ko",
   messages,
   silentTranslationWarn: true, // 필요한 옵션

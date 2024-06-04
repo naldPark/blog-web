@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 export default {
   lang: "ko",
   hello: "클라우드 내 집",
@@ -141,7 +143,8 @@ export default {
     file_set_error: "알 수 없는 형태의 데이터 셋입니다.",
     file_error: "API 호출 시 오류가 발생하였습니다. \n 파일을 확인해주세요.(파일명 특수문자 등) \n\n {0} \n 관리자에게 문의 하시기 바랍니다."
   },
-  prMessage: "<b>Docker와 Kubernetes</b> 등의 환경에 익숙하며,  Backend는 <b>Java</b>, Frontend는 <b>Javascript(주로 Vue.js)</b>를 다룹니다.<br>도전적인 문제 해결에 성취감을 느낍니다. <br> 직관적이고 확장성있는 코드방식을 선호하고 효율적인 인프라 설계를 모색하는 편입니다.",
+  prMessage: DOMPurify.sanitize("<b>Docker와 Kubernetes</b> 등의 환경에 익숙하며, Backend는 <b>Java</b>, Frontend는 <b>Javascript(주로 Vue.js)</b>를 다룹니다.<br>도전적인 문제 해결에 성취감을 느낍니다. <br> 직관적이고 확장성있는 코드방식을 선호하고 효율적인 인프라 설계를 모색하는 편입니다."),
+  // message: DOMPurify.sanitize("<b>Docker와 Kubernetes</b> 등의 환경에 익숙하며, Backend는 <b>Java</b>, Frontend는 <b>Javascript(주로 Vue.js)</b>를 다룹니다.<br>도전적인 문제 해결에 성취감을 느낍니다. <br> 직관적이고 확장성있는 코드방식을 선호하고 효율적인 인프라 설계를 모색하는 편입니다.")
   contactMsg: "편하게 연락 주세요.",
 
 };
