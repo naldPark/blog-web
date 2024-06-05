@@ -40,22 +40,6 @@ const routes = [
             name: 'WonderWallPage',
             component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
           },
-          {
-            path: 'share',
-            name: 'SharePage',
-            component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
-            beforeEnter() {
-              window.location.href = 'https://upload.nald.me';
-            },
-          },
-          {
-            path: 'webapp',
-            name: 'WebAppPage',
-            component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
-            beforeEnter() {
-              window.location.href = 'https://pwa.nald.me';
-            },
-          },
         ],
       },
       {

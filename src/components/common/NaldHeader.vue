@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar color="rgba(22, 22, 22, 0.95)" density="compact" class='nald-header'>
+  <v-app-bar color="rgba(22, 22, 22, 0.95)" density="compact" class="nald-header">
     <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-    <v-toolbar-title @click="onChangePage(menuInfo[0])" style='cursor: pointer;'>
+    <v-toolbar-title @click="onChangePage(menuInfo[0])" style="cursor: pointer">
       <v-avatar rounded size="30px">
         <v-img src="@/assets/logo.png"></v-img>
       </v-avatar>
@@ -50,7 +50,6 @@
         </v-list>
       </v-menu>
     </v-btn>
-
   </v-app-bar>
   <v-navigation-drawer v-model="drawer" app fixed left temporary>
     <v-list dense :class="{ beforeLoginNav: !accountInfo }">
@@ -122,12 +121,7 @@ import LoginDialog from './LoginDialog.vue';
 import EditAccountInfoDialog from './EditAccountInfoDialog.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useLanguageStatusStore } from '@/store/languageStatusStore';
-import _ from 'lodash';
-import { useAppStatusStore } from '@/store/appStatusStore';
 
-
-
-const appStatusStore: any = useAppStatusStore();
 const router = useRouter();
 const { t } = useI18n();
 const accountStatusStore = useAccountStatusStore();
@@ -142,7 +136,6 @@ const showLoginDialog = ref(false); // 다이얼로그가 열린 상태로 초�
 const updateShowLoginDialog = (newValue: boolean) => {
   showLoginDialog.value = newValue;
 };
-
 
 // Menu 아이템 목록
 const menuItems = [
@@ -189,12 +182,14 @@ const menuItems = [
         title: t('menubar.shareLocker'),
         value: 'SharePage',
         availableRange: 1,
+        url: 'https://upload.nald.me',
       },
       {
         name: 'webApp',
         icon: 'mdi-cellphone-text',
         title: t('menubar.webApp'),
         value: 'WebAppPage',
+        url: 'https://pwa.nald.me',
       },
       {
         name: 'video',
@@ -264,7 +259,10 @@ const accountInfo = computed(() => accountStatusStore.accountInfo);
 
 // 현재 언어 설정
 const lang = computed(
-  () => LANGUAGE_TYPE[langSetting.value as keyof typeof LANGUAGE_TYPE],
+  () =>
+    LANGUAGE_TYPE[
+    langSetting.value === 'ko' ? 'en' : ('ko' as keyof typeof LANGUAGE_TYPE)
+    ],
 );
 
 // 로그인 다이얼로그 열기/닫기 함수
@@ -294,8 +292,11 @@ const clickToLogout = () => {
 
 // 페이지 변경 함수
 const onChangePage = (menu: any) => {
+  console.log('menu', menu);
   if (menu.subMenus) {
     menu.active = !menu.active;
+  } else if (menu.url) {
+    location.href = menu.url;
   } else {
     router.push({ name: menu.value });
   }
