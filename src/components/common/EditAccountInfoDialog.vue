@@ -24,11 +24,11 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn class="ma-2" @click="lazyShow = false" color="primary" outlined rounded  variant="outlined">
+        <v-btn class="ma-2" @click="lazyShow = false" color="primary" outlined rounded variant="outlined">
           {{ $t('cancel') }}
         </v-btn>
         <v-btn class="ma-2" :disabled="accountPassword === '' || accountPassword !== accountPasswordConfirm"
-          color="primary" outlined rounded  variant="outlined" dark @click="onClickEdit">
+          color="primary" outlined rounded variant="outlined" dark @click="onClickEdit">
           {{ $t('confirm') }}
         </v-btn>
       </v-card-actions>
@@ -40,7 +40,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import { useAppStatusStore } from '@/store/appStatusStore';
 import { useI18n } from 'vue-i18n';
-import { editPassword } from '@/api/AccountService';
+import { editPassword } from '@/api/accountService';
 
 export default defineComponent({
   name: 'EditAccountInfoDialog',
@@ -115,5 +115,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

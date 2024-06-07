@@ -76,7 +76,7 @@ function toScrollTop() {
         max-width: 1500px;
         margin: auto;
         padding-bottom: 48px;
-        margin-top: 30px;
+        padding-top: 48px;
         height: 100%;
 
         &.is-mobile {

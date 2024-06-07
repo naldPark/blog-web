@@ -32,6 +32,13 @@ body {
     }
 }
 
+
+* {
+    box-sizing: border-box;
+    // i18n /n적용하기 위함
+    white-space: pre-line;
+}
+
 .page {
     width: 100%;
     height: 100%;

@@ -17,7 +17,8 @@
             </v-col>
             <v-col cols="12" class="pa-0">
               <v-text-field color="primary" v-model="accountPassword" :label="t('password')" :placeholder="t('pwdDes')"
-                flat required @keyup.enter="onClickLogin" :append-inner-icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+                flat required @keyup.enter="onClickLogin"
+                :append-inner-icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
                 :type="passwordVisible ? 'text' : 'password'"
                 @click:append-inner="passwordVisible = !passwordVisible"></v-text-field>
             </v-col>
@@ -34,7 +35,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { login } from '@/api/AccountService';
+import { login } from '@/api/accountService';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useAppStatusStore } from '@/store/appStatusStore';
 import { decodeToken } from '@/utils/common';

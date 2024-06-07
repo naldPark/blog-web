@@ -40,6 +40,12 @@ const routes = [
             name: 'WonderWallPage',
             component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
           },
+          {
+            path: 'sandbox',
+            name: 'SandboxPage',
+            component: () =>
+              import('@/pages/wonderWall/sandbox/SandboxPage.vue'),
+          },
         ],
       },
       {
