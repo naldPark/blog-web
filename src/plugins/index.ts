@@ -1,24 +1,29 @@
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
-import { createVuetify } from 'vuetify';
+import { createVuetify, type ThemeDefinition } from 'vuetify'
 import type { App } from 'vue';
 
-const myTheme = {
+const myTheme: ThemeDefinition = {
   dark: true,
   colors: {
-    primary: '#FFB800',
+    primary: '#ffb800',
     btnPrimary: '#d69100',
     secondary: '#fcd97c',
     error: '#c24c4f',
     warning: '#6ed7f5',
     background: '#33363b',
-  },
+  }
 }
 
 
 const vuetify = createVuetify({
   theme: {
     defaultTheme: 'myTheme',
+    variations: {
+      colors: ['primary', 'secondary'],
+      lighten: 1,
+      darken: 2,
+    },
     themes: {
       myTheme
     }

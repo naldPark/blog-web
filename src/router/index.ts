@@ -32,6 +32,14 @@ const routes = [
         },
       },
       {
+        path: 'project',
+        name: 'ProjectPage',
+        component: () => import('@/pages/project/ProjectPage.vue'),
+        meta: {
+          anonymousAccess: true,
+        },
+      },
+      {
         path: 'wonderWall',
         component: WonderWallLayout,
         children: [

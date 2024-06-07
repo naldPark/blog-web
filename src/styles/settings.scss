@@ -26,6 +26,7 @@ body {
     height: 100%;
     position: relative;
     overflow: unset;
+    white-space: pre-line;
 
     .v-application--wrap {
         min-height: calc(var(--vh, 1vh) * 100) !important; // 덮어씌우기
@@ -36,7 +37,7 @@ body {
 * {
     box-sizing: border-box;
     // i18n /n적용하기 위함
-    white-space: pre-line;
+
 }
 
 .page {

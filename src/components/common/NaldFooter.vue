@@ -32,10 +32,6 @@ const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <style lang="scss" scoped >
-* {
-  font-family: 'Raleway';
-}
-
 .not-mobile:after {
   content: " | ";
 }

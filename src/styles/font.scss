@@ -1,4 +1,4 @@
-$font-family: 'Raleway', 'NanumGothic', 'NotoSansKR', 'sans-serif' !important;
+$font-family: 'NanumGothic', 'NotoSansKR', 'sans-serif' !important;
 $font-00: 10px;
 $font-01: 11px;
 $font-02: 12px;
@@ -16,60 +16,6 @@ $font-30: 30px;
 
 :root {
   --font-family: #{$font-family};
-}
-
-// :export {
-//   font-family: #{$font-family};
-// }
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 100;
-  src: url("~@/assets/fonts/Raleway-Thin.ttf") format('ttf')
-}
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 200;
-  src: url("~@/assets/fonts/Raleway-ExtraLight.ttf") format('ttf')
-}
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 300;
-  src: url("~@/assets/fonts/Raleway-Light.ttf") format('ttf')
-}
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 300;
-  src: url("~@/assets/fonts/Raleway-Regular.ttf") format('ttf')
-}
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 400;
-  src: url("~@/assets/fonts/Raleway-Medium.ttf") format('ttf')
-}
-
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 700;
-  src: url("~@/assets/fonts/Raleway-SemiBold.ttf") format('ttf')
-}
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 900;
-  src: url("~@/assets/fonts/Raleway-Bold.ttf") format('ttf')
 }
 
 

@@ -1,7 +1,6 @@
 import HttpClient from '@/api/HttpClient';
 import Config from '@/config';
-import CryptoJS from "crypto-js";
-
+import CryptoJS from 'crypto-js';
 
 const defaultAPI = `${Config.backend}`;
 
@@ -10,7 +9,7 @@ const login = async (userId: string, password: string): Promise<any> => {
   const pw = CryptoJS.SHA256(password).toString();
   const requestParam = {
     accountId: userId,
-    password: pw
+    password: pw,
   };
   return await HttpClient.post(`${defaultAPI}/login`, requestParam);
 };
@@ -20,16 +19,19 @@ const editPassword = async (userId: string, password: string): Promise<any> => {
   const pw = CryptoJS.SHA256(password).toString();
   const requestParam = {
     accountId: userId,
-    password: pw
+    password: pw,
   };
   return await HttpClient.put(`${defaultAPI}/editPassword`, requestParam);
 };
 
 // 상태 변경 메서드
-const changeStatus = async (userIds: Array<string>, status: number): Promise<any> => {
+const changeStatus = async (
+  userIds: Array<string>,
+  status: number,
+): Promise<any> => {
   const requestParam = {
     userIds,
-    status
+    status,
   };
   return await HttpClient.put(`${defaultAPI}/changeStatus`, requestParam);
 };
@@ -62,5 +64,5 @@ export {
   createUser,
   editUser,
   sendMessage,
-  getUserList
+  getUserList,
 };
