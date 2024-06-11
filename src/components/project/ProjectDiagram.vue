@@ -1,77 +1,103 @@
 <template>
     <v-row dense class="projectPage">
-        asdsada
         <v-col cols="12" md="8">
-            <!-- <diagram-item @modelData="emitData" @change="diagramChange" @nodeSelected="nodeSelected"
-                :selectedNodeDesc="selectedNodeDesc" :selectedNode="selectedNode">
-            </diagram-item> -->
+            <diagram-item @modelData="emitData" @change="diagramChange" :selectedNodeDesc="selectedNodeDesc"
+                @nodeSelected="nodeSelected" :selectedNode="selectedNode">
+            </diagram-item>
         </v-col>
         <v-col cols="12" md="4" v-if="!isMobile">
             <v-card v-if="selectedNode && selectedNode.icon" class="pa-3" height="100%" width="100%">
                 <v-card-text>
-                    <v-row class="mb-4" align="center">
+                    <v-row class="mb-4 align-center">
                         <v-avatar rounded class="mr-4" size="30">
-                            <v-img :src="`@/assets/diagram/${selectedNode.icon}.png`"></v-img>
+                            <v-img :src="require(`@/assets/diagram/${selectedNode.icon}.png`)"></v-img>
                         </v-avatar>
                         <strong class="text-h6">{{ selectedNode.name }}</strong>
                         <v-spacer></v-spacer>
                     </v-row>
                     <v-divider class="mt-2 mb-4"></v-divider>
-                    <p class="text-h6 font-weight-bold mb-10">
-                        ▶ {{ selectedNodeDesc.title }}
+                    <!-- <p class="text-h6 font-weight-bold mb-10"> -->
+                    <!-- ▶ {{ selectedNodeDesc.title }}
                     </p>
                     <p class="text-subtitle-1 font-weight-light" style="white-space: pre-line;">
                         {{ selectedNodeDesc.content }}
-                    </p>
+                    </p> -->
                 </v-card-text>
             </v-card>
             <v-card class="pa-3" v-else height="100%" flat>
                 <v-card-text>
-                    <v-row class="mb-4" align="center">
-                        <v-avatar rounded class="mr-4" size="30">
-                            <v-img :src="`@/assets/diagram/nald.png`"></v-img>
-                        </v-avatar>
+                    <v-row class="mb-4 align-center">
+                        <!-- <v-avatar rounded class=" mr-4" size="30">
+                        <v-img :src="require(`@/assets/diagram/nald.png`)"></v-img>
+                        </v-avatar> -->
                         <strong class="text-h6">Nald.me</strong>
                         <v-spacer></v-spacer>
                     </v-row>
                     <v-divider class="mt-2 mb-4"></v-divider>
-                    <p class="text-subtitle-1"
-                        v-html="selectedNodeDesc ? selectedNodeDesc.content : 'No description available.'" />
                 </v-card-text>
             </v-card>
         </v-col>
     </v-row>
 </template>
 
-<script lang="ts" setup>
-import story from './story';
-import { useDisplay } from 'vuetify';
+<script setup lang="ts">
+import { ref } from 'vue';
+import DiagramItem from "./DiagramItem.vue";
+import story from '@/assets/data/story'
 
-const display = useDisplay();
-let selectedNode: any = null;
-let selectedNodeDesc: any = null;
-let diagram: any = null;
-let modelData: any = null;
-const isMobile: Ref<boolean> = display.smAndDown;
+
+interface Node {
+    icon: string;
+    name: string;
+    value: string;
+}
+const isMobile = ref(false);
+const selectedNode: Ref<Node> = ref({ icon: '', name: '', value: '' });
+const selectedNodeDesc = ref(null);
+const modelData = ref(null);
+
+let diagram: Ref<any> = ref(null);
+
+const onChangeDiagram = (e: any) => {
+    diagram.value = e;
+}
 
 const emitData = (item: any) => {
-    modelData = item;
+    modelData.value = item;
 }
 
 const diagramChange = (item: any) => {
-    diagram = item;
+    diagram.value = item;
 }
 
-// const nodeSelected = (e: any) => {
-//     selectedNode = e;
-//     selectedNodeDesc = story[e.name] || { title: 'No title', content: 'No description available.' };
-// }
+const changedSelection = (e: any) => {
+    // console.log('체인지드셀렉션');
+    selectedNode.value = e;
+}
+
+const groupSelected = (e: any) => {
+    // console.log('그룹클릭', e);
+    selectedNode.value = e;
+}
+
+const nodeSelected = (e: any) => {
+    // console.log('노드클릭', e);
+    selectedNode.value = e;
+    selectedNodeDesc.value = story[e.name];
+}
+
+const linkSelected = (e: any) => {
+    // selectedNode.value = null;
+}
 
 const resetClick = (e: any) => {
-    selectedNode = null;
-    selectedNodeDesc = null;
+    selectedNode.value = '';
 }
 
+const modelChanged = (e: any) => {
+    // console.log(e)
+    diagram.value = e;
+}
 </script>
 
 <style lang="scss" scoped>
