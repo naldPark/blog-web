@@ -91,7 +91,7 @@ const linkSelected = (e: any) => {
 }
 
 const resetClick = (e: any) => {
-    selectedNode.value = '';
+    selectedNode.value.value = '';
 }
 
 const modelChanged = (e: any) => {

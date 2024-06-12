@@ -1,4 +1,4 @@
-export default {
+const story: any = {
   Nald: {
     title: '프로젝트 존재의 이유',
     content:
@@ -104,3 +104,5 @@ export default {
       '여러가지 어플리케이션을 간단한 cmd명령어로 실행할 수 있는데, nfs는 Helm을 활용하여 설치함',
   },
 };
+
+export default story;

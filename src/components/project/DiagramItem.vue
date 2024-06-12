@@ -46,11 +46,10 @@
 </template>
 
 <script lang="ts" setup>
-import go from 'gojs';
-import { ref, onMounted, watch } from 'vue';
+import go, { Diagram } from 'gojs';
+import { ref, onMounted, toRaw } from 'vue';
 import infraService from "@/api/infraService";
 import { defineEmits } from "vue";
-// import { AppStatusModule } from '@/store/modules/AppStatusModule';
 import { useDisplay } from 'vuetify';
 
 const display = useDisplay();
@@ -81,10 +80,14 @@ const roundedRectangleParams = {
   spot1: go.Spot.TopLeft, spot2: go.Spot.BottomRight
 };
 
-const myDiagram: Ref<any> = ref(null);
+
+const divDiagram = ref("diagramDiv");
+let myDiagram: Diagram | null = null; // this will hold the diagram object
+
 const myOverview: Ref<any> = ref(null);
 const emit = defineEmits(['nodeSelected', 'linkSelected', 'groupSelected']);
-let nodeDataArray: any = [];
+let nodeDataArray: Ref<any> = ref(null);
+
 const linkDataArray = [
   { from: 0, to: 2 },
   { from: 0, to: 3 },
@@ -102,7 +105,7 @@ onMounted(async () => {
   console.log("하이");
 
   const res = await infraService.getDiagramList();
-  console.log(res);
+  console.log(res.data.data);
 
   if (res.status === 200) {
     nodeDataArray.value = res.data.data;
@@ -110,7 +113,7 @@ onMounted(async () => {
     console.log('?')
   }
 
-  myDiagram.value =
+  myDiagram =
     gojs(go.Diagram, "diagramDiv",
       {
         initialDocumentSpot: go.Spot.Top,
@@ -142,11 +145,11 @@ onMounted(async () => {
           }),
       });
 
-  myDiagram.value.toolManager.dragSelectingTool.box =
+  myDiagram.toolManager.dragSelectingTool.box =
     gojs(go.Part, { layerName: "Tool", selectable: false },
       gojs(go.Shape, { name: "SHAPE", fill: null, stroke: "red", strokeWidth: 0 }));
 
-  myDiagram.value.nodeTemplate =
+  myDiagram.nodeTemplate =
     gojs(go.Node, "Auto",
       {
         locationSpot: go.Spot.Top,
@@ -217,7 +220,7 @@ onMounted(async () => {
 
 
 
-  myDiagram.value.linkTemplate =
+  myDiagram.linkTemplate =
     gojs(go.Link, go.Link.Orthogonal,
       { corner: 5, selectable: false },
       gojs(go.Shape, {
@@ -231,13 +234,13 @@ onMounted(async () => {
       }));
 
 
-  myDiagram.value.groupTemplate =
+  myDiagram.groupTemplate =
     gojs(go.Group, "Vertical",
       {
         selectionObjectName: "PANEL",  // selection handle goes around shape, not label
         ungroupable: false,  // Ctrl-Shift-G 를 누르면 그룹 해제 가능,
         click: (e, groupNode: any) => {
-          const node = nodeDataArray.find((f: any) => f.name === groupNode.data.name && !f.isGroup)
+          const node = nodeDataArray.value.find((f: any) => f.name === groupNode.data.name && !f.isGroup)
 
           emit('groupSelected', node);
         },
@@ -263,9 +266,9 @@ onMounted(async () => {
       ),
     );
 
-  myDiagram.value.model =
+  myDiagram.model =
     gojs(go.GraphLinksModel, {
-      nodeDataArray: nodeDataArray,
+      nodeDataArray: toRaw(nodeDataArray.value),
       linkDataArray: linkDataArray
     });
 
