@@ -6,6 +6,11 @@ const timelineEntries = [
     title: 'Release Note History . .',
   },
   {
+    icon: '📺',
+    cardTitle: 'vue-query',
+    cardText: '해부장',
+  },
+  {
     icon: '📺💻🕋',
     cardTitle: '리펙토링',
     cardText:

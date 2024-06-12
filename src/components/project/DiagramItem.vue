@@ -1,15 +1,17 @@
 <template>
   <div>
     <div style="position: relative">
+      <!-- diagram div -->
       <div id="diagramDiv" class="pa-2"></div>
-      <div id="overviewChart" class="overviewChart" v-if="!isMobile"></div>
-      <div class="overviewChart isMobile text-center" v-else>
+      <!-- minimap -->
+      <div id="miniMap" class="miniMap" v-if="!isMobile"></div>
+      <!-- popup description when it is mobile -->
+      <div class="miniMap is-mobile text-center" v-else>
         <v-btn
           color="primary"
           :disabled="!selectedNode || !selectedNode.icon"
-          outlined
-          dark
-          small
+          variant="outlined"
+          size="small"
           @click="showSelectedNodeInfo = !showSelectedNodeInfo"
         >
           <v-avatar rounded class="mr-2" size="20" v-if="selectedNode?.icon">
@@ -71,13 +73,14 @@
   import { ref, onMounted, toRaw } from 'vue';
   import infraService from '@/api/infraService';
   import { defineEmits } from 'vue';
+  import { useAppStatusStore } from '@/store/appStatusStore';
   import { useDisplay } from 'vuetify';
 
   const display = useDisplay();
   const isMobile: Ref<boolean> = display.smAndDown;
   const gojs = go.GraphObject.make;
 
-  interface Node {
+  interface NodeInfo {
     icon: string;
     name: string;
     value: string;
@@ -87,13 +90,17 @@
     title: string;
     content: string;
   }
-  const selectedNode: Ref<Node> = ref({ icon: '', name: '', value: '' });
-  const selectedNodeDesc: Ref<SelectedNodeDesc> = ref({
-    title: '',
-    content: '',
-  });
+  const { selectedNode = {}, selectedNodeDesc } = defineProps<{
+    selectedNode: NodeInfo;
+    selectedNodeDesc: SelectedNodeDesc;
+  }>();
+  // const selectedNodeDesc: Ref<SelectedNodeDesc> = ref({
+  //   title: '',
+  //   content: '',
+  // });
   const showSelectedNodeInfo = ref(false);
 
+  const appStatusStore = useAppStatusStore();
   const pt180 = new go.Margin(180, 0, 40, 0);
   const pt100 = new go.Margin(100, 0, 40, 0);
   const mr8 = new go.Margin(0, 10, 0, 0);
@@ -121,10 +128,7 @@
   ];
 
   onMounted(async () => {
-    // AppStatusModule.ShowUIBlocker();
-    // onChangeSize();
-    console.log('하이');
-
+    appStatusStore.showLoading();
     const res = await infraService.getDiagramList();
     console.log(res.data.data);
 
@@ -335,17 +339,14 @@
     });
 
     // Overview
-    // if (!isMobile.value) {
-    //   myOverview.value =
-    //     gojs(go.Overview, "overviewChart",
-    //       {
-    //         observed: myDiagram,
-    //         contentAlignment: go.Spot.Center
-    //       });
-    //   // myOverview.box.elt(0).stroke = '#ffb700';
-    // }
-    // AppStatusModule.HideUIBlocker();
-
+    if (!isMobile.value) {
+      myOverview.value = gojs(go.Overview, 'miniMap', {
+        observed: myDiagram,
+        contentAlignment: go.Spot.Center,
+      });
+      myOverview.value.box.elt(0).stroke = '#ffb700';
+    }
+    appStatusStore.hideLoading();
     console.log('myDiagram', myDiagram);
   });
 
@@ -366,7 +367,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .overviewChart {
+  .miniMap {
     position: absolute;
     width: 150px;
     height: 100px;
@@ -376,7 +377,7 @@
     z-index: 2;
     border: solid 1px rgb(255, 184, 0, 0.2);
 
-    &.isMobile {
+    &.is-mobile {
       width: unset;
       height: unset;
       border: 0px;

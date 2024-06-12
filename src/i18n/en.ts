@@ -147,6 +147,6 @@ export default {
       'Error occurred when calling the API. \n please check the file .(ex: file name, special character etc) \n\n {0} \n ask the administrator ',
   },
   prMessage:
-    'Mainly specialized in <b>Javascript</b> for frontend, <b>Java</b> for backend as well DevOps tools like <b>Docker, Kubernetes.</b> <br>Highly self-motivated about solving tech problem through writing clean code and build more efficient architecture.<br> Check out my work below.',
+    'Mainly specialized in Javascript for frontend, Java for backend as well DevOps tools like Docker, Kubernetes. \nHighly self-motivated about solving tech problem through writing clean code and build more efficient architecture. \n Check out my work below.',
   contactMsg: 'Please feel free to reach out to me',
 };

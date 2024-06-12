@@ -5,6 +5,7 @@
       <div class="router-page">
         <router-view />
         <v-btn
+          v-if="scrollY > 100"
           class="fixed-button"
           icon="mdi-arrow-up"
           color="primary"
@@ -20,15 +21,18 @@
   import { ref, watch, onMounted } from 'vue';
   import NaldHeader from '@/components/common/NaldHeader.vue';
   import NaldFooter from '@/components/common/NaldFooter.vue';
-  import { useRoute } from 'vue-router';
   import { useDisplay, useGoTo } from 'vuetify';
   const mainlayout = ref<any>(null);
-  const route = useRoute();
   const goTo = useGoTo();
-  const display = useDisplay();
+  const scrollY = ref(0);
   onMounted(() => {
     goTo(0);
+    window.addEventListener('scroll', handleScroll);
   });
+
+  const handleScroll = () => {
+    scrollY.value = window.scrollY;
+  };
 </script>
 
 <style lang="scss" scoped>

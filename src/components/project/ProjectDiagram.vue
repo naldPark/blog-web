@@ -20,7 +20,6 @@
         <v-card-text>
           <v-row class="mb-4 align-center">
             <v-avatar rounded class="mr-4" size="30">
-              <!-- images[`@/assets/diagram/${selectedNode.icon}.png`] -->
               <v-img
                 :src="`src/assets/diagram/${selectedNode.icon}.png`"
               ></v-img>
@@ -60,7 +59,7 @@
   import { ref } from 'vue';
   import DiagramItem from './DiagramItem.vue';
   import story from '@/assets/data/story';
-
+  import { useDisplay } from 'vuetify';
   interface Node {
     icon: string;
     name: string;
@@ -72,7 +71,8 @@
     content: string;
   }
 
-  const isMobile = ref(false);
+  const display = useDisplay();
+  const isMobile: Ref<boolean> = display.smAndDown;
   const selectedNode: Ref<Node> = ref({ icon: '', name: '', value: '' });
   const selectedNodeDesc: Ref<NodeDesc> = ref({ title: '', content: '' });
   const modelData = ref(null);

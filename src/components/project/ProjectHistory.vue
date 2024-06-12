@@ -1,8 +1,18 @@
 <template>
   <div class="project-history-wrap">
     <v-timeline side="end">
-      <v-timeline-item v-for="(entry, index) in timelineEntries" :key="index" :hide-dot="entry.hideDot" class="mb-1"
-        :class="entry.class" :large="entry.large" dot-color="grey" fill-dot size="15" min-width="100%">
+      <v-timeline-item
+        v-for="(entry, index) in timelineEntries"
+        :key="index"
+        :hide-dot="entry.hideDot"
+        class="mb-1"
+        :class="entry.class"
+        :large="entry.large"
+        dot-color="grey"
+        fill-dot
+        size="15"
+        min-width="100%"
+      >
         <template v-if="entry.title">
           <h2 class="timeline-title-text">{{ entry.title }}</h2>
         </template>
@@ -13,8 +23,15 @@
             </v-card-title>
             <v-card-text class="font-weight-light text-white">
               <div>{{ entry.cardText }}</div>
-              <v-btn v-if="entry.link" :href="entry.link" target="_blank" variant="outlined" size="small" class="mt-3"
-                color="btnPrimary">
+              <v-btn
+                v-if="entry.link"
+                :href="entry.link"
+                target="_blank"
+                variant="outlined"
+                size="small"
+                class="mt-3"
+                color="btnPrimary"
+              >
                 More detail here <i class="mdi mdi-link-variant"></i>
               </v-btn>
             </v-card-text>
@@ -26,18 +43,18 @@
 </template>
 
 <script lang="ts" setup>
-import timelineEntries from '@/assets/data/about';
+  import timelineEntries from '@/assets/data/timelineEntries';
 </script>
 
 <style lang="scss" scoped>
-.project-history-wrap {
-  max-width: 1300px;
-  margin: auto;
-  padding: 50px;
-  background-color: #1e1e1e;
+  .project-history-wrap {
+    max-width: 1300px;
+    margin: auto;
+    padding: 50px;
+    background-color: #1e1e1e;
 
-  .history-card {
-    border: 0.5px solid dimgrey;
+    .history-card {
+      border: 0.5px solid dimgrey;
+    }
   }
-}
 </style>

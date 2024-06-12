@@ -10,11 +10,9 @@
           <h1 class="pr-3 font-weight-bold">
             All I can imagine is able to create.
           </h1>
-          <h4
-            class="pr-3 font-weight-thin mt-3"
-            v-if="!isMobile"
-            v-html="t('prMessage')"
-          />
+          <h4 class="pr-3 font-weight-thin mt-3" v-if="!isMobile">
+            {{ t('prMessage') }}
+          </h4>
           <div class="mt-2 pt-2">
             <v-btn
               color="primary"

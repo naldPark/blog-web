@@ -25,6 +25,6 @@
     "noEmit": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*", "@/**/*", "vite.config.ts"],
+  "include": ["src/**/*", "vite.config.ts"],
   "exclude": ["dist", "node_modules"]
 }
