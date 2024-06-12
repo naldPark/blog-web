@@ -12,46 +12,18 @@ import * as path from 'path';
 import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [
-    // VueRouter({
-    //   dts: 'src/typed-router.d.ts',
-    // }),
-    // Layouts(),
-    // AutoImport({
-    //   imports: [
-    //     'vue',
-    //     {
-    //       'vue-router/auto': ['useRoute', 'useRouter'],
-    //     }
-    //   ],
-    //   dts: 'src/auto-imports.d.ts',
-    //   eslintrc: {
-    //     enabled: true,
-    //   },
-    //   vueTemplate: true,
-    // }),
-    // Components({
-    //   dts: 'src/components.d.ts',
-    // }),
     Vue({
       template: { transformAssetUrls },
     }),
     Vuetify({
       autoImport: true,
     }),
-    // Fonts({
-    //   google: {
-    //     families: [{
-    //       name: 'Roboto',
-    //       styles: 'wght@100;300;400;500;700;900',
-    //     }],
-    //   },
-    // }),
   ],
   define: { 'process.env': {} },
   root: './',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   server: {
