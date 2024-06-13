@@ -25,5 +25,6 @@ declare module 'vue' {
     ProjectKube: typeof import('./components/project/ProjectKube.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TerminalItem: typeof import('./components/terminal/TerminalItem.vue')['default']
   }
 }

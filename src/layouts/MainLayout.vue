@@ -11,8 +11,8 @@
           color="primary"
           @click="goTo(0)"
         />
+        <nald-footer class="footer"></nald-footer>
       </div>
-      <nald-footer class="footer"></nald-footer>
     </div>
   </div>
 </template>

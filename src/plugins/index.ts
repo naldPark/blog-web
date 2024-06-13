@@ -1,7 +1,8 @@
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
-import { createVuetify, type ThemeDefinition } from 'vuetify'
+import { createVuetify, type ThemeDefinition } from 'vuetify';
 import type { App } from 'vue';
+import { VTreeview } from 'vuetify/lib/labs/components.mjs';
 
 const myTheme: ThemeDefinition = {
   dark: true,
@@ -12,9 +13,8 @@ const myTheme: ThemeDefinition = {
     error: '#c24c4f',
     warning: '#6ed7f5',
     background: '#33363b',
-  }
-}
-
+  },
+};
 
 const vuetify = createVuetify({
   theme: {
@@ -25,11 +25,13 @@ const vuetify = createVuetify({
       darken: 2,
     },
     themes: {
-      myTheme
-    }
+      myTheme,
+    },
+  },
+  components: {
+    VTreeview,
   },
 });
-
 
 export function registerPlugins(app: App) {
   app.use(vuetify);

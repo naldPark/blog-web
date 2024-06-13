@@ -6,13 +6,13 @@
       }}</v-card-title>
       <v-card-text class="mb-3">
         <p class="subtitle-2 text-white mt-3 mb-1">{{ $t('sandbox.rules') }}</p>
-        <h4 class="ec2Content font-weight-light" style="margin-right: 12px">
+        <h4 class="ec2-content font-weight-light" style="margin-right: 12px">
           {{ $t('sandbox.rulesDesc') }}
         </h4>
         <p class="subtitle-2 text-white mt-3 mb-1">
           {{ $t('sandbox.howToUse') }}
         </p>
-        <div class="ec2Content font-weight-light" style="margin-right: 12px">
+        <div class="ec2-content font-weight-light" style="margin-right: 12px">
           {{ $t('sandbox.howToUseDesc') }}
         </div>
       </v-card-text>
@@ -23,21 +23,37 @@
       </v-card-title>
       <v-card-text>
         <p class="subtitle-2 mt-3 mb-1">{{ $t('sandbox.status') }}</p>
-        <!-- <v-select style="max-width: 300px;" item-text="name" class="input-custom pt-0"
-                    v-model="selectedStatusItem" :items="statusItems" @change="onChangeStatus">
-                    <template v-slot:selection="{ item }">
-                        <span><v-icon :style="{ color: item.color }">{{ item.icon }}</v-icon>{{ item.name }}</span>
-                    </template>
-<template v-slot:item="{ item }">
-                        <span><v-icon :style="{ color: item.color }">{{ item.icon }}</v-icon>{{ item.name }}</span>
-                    </template>
-</v-select> -->
-        <v-row align="center" class="mt-3 mb-1">
+        <v-select
+          style="max-width: 300px"
+          item-text="name"
+          class="input-custom pt-0"
+          v-model="selectedStatusItem"
+          :items="statusItems"
+          @change="onChangeStatus"
+        >
+          <template v-slot:selection="item">
+            <span>
+              <v-icon :style="{ color: item.item.value.color }">{{
+                item.item.value.icon
+              }}</v-icon>
+              {{ item.item.value.name }}
+            </span>
+          </template>
+          <template v-slot:item="{ item }">
+            <span>
+              <v-icon :style="{ color: item.value.color }">{{
+                item.value.icon
+              }}</v-icon>
+              {{ item.value.name }}
+            </span>
+          </template>
+        </v-select>
+        <v-row class="mt-3 mb-1 align-center">
           <v-col cols="12" sm="6">
             <p class="subtitle-2 text-white mt-3 mb-1">
               {{ $t('sandbox.instanceInfo') }}
             </p>
-            <span class="ec2Content">
+            <span class="ec2-content">
               <v-icon class="text-primary mr-1">mdi-ubuntu</v-icon>
               Linux
             </span>
@@ -49,11 +65,11 @@
             <p class="subtitle-2 text-white mt-3 mb-1">
               {{ $t('sandbox.instancePwd') }}
             </p>
-            <span class="ec2Content" v-if="!showPwd">
+            <span class="ec2-content" v-if="!showPwd">
               <v-icon class="text--grey">mdi-eye-off-outline</v-icon>
               ******
             </span>
-            <span class="ec2Content" v-else @click="copyClipboard">
+            <span class="ec2-content" v-else @click="copyClipboard">
               <v-icon class="text--grey">mdi-eye-outline</v-icon>
               qwerty1234
             </span>
@@ -65,7 +81,9 @@
         <p class="subtitle-2 text-white mt-3 mb-1">
           {{ $t('sandbox.containerImage') }}
         </p>
-        <span class="ec2Content" style="margin-right: 12px">/node:16.14.0</span>
+        <span class="ec2-content" style="margin-right: 12px"
+          >/node:16.14.0</span
+        >
       </v-card-text>
     </v-card>
     <v-card variant="outlined" elevation="0" class="sandbox-card">
@@ -73,13 +91,25 @@
         {{ $t('sandbox.sourceFolder') }}
       </v-card-title>
       <v-card-text>
-        <!-- <v-treeview class="sourceFolder" v-model="selectedTree" :open="initiallyOpen" :items="treeItems"
-                    activatable item-key="name" open-on-click>
-                    <template v-slot:prepend="{ item, open }">
-                        <v-icon dense v-if="!item.file">{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
-                        <v-icon dense v-else>{{ files[item.file] }}</v-icon>
-                    </template>
-                </v-treeview> -->
+        <v-treeview
+          v-model="selectedTree"
+          class="sourceFolder"
+          :opened="initiallyOpen"
+          item-key="name"
+          :items="treeItems"
+          activatable
+          open-on-click
+        >
+          <template v-slot:prepend="{ item }">
+            <!-- {{ JSON.stringify(item) }} -->
+            <v-icon v-if="!item.file">
+              {{ 'mdi-folder' }}
+            </v-icon>
+            <v-icon v-else>
+              {{ files[item.file] }}
+            </v-icon>
+          </template>
+        </v-treeview>
       </v-card-text>
     </v-card>
   </div>
@@ -92,8 +122,12 @@
   import { useAppStatusStore } from '@/store/appStatusStore';
   import infraService from '@/api/infraService';
 
+  interface StatusItems {
+    name: string;
+    icon: string;
+    color: string;
+  }
   const appStatusStore = useAppStatusStore();
-
   const { t } = useI18n();
 
   // Router
@@ -103,77 +137,23 @@
   const initiallyOpen = ref(['src']);
   const showPwd = ref(false);
   const selectedTree = ref<any[]>([]);
-  const selectedStatusItem = ref({
+  const selectedStatusItem = ref<any>({
     name: 'Running',
     icon: 'mdi-play',
     color: 'orange',
   });
 
   // Files and tree items data
-  const files = {
+  const files: any = {
     html: 'mdi-language-html5',
     js: 'mdi-nodejs',
     ts: 'mdi-language-typescript',
     json: 'mdi-code-json',
     md: 'mdi-language-markdown',
   };
-  const treeItems = [
-    {
-      name: 'Dockerfile',
-    },
-    {
-      name: 'node_modules',
-    },
-    {
-      name: 'dist',
-      children: [
-        {
-          name: 'Pty.js',
-          file: 'js',
-        },
-        {
-          name: 'Socket.js',
-          file: 'js',
-        },
-        {
-          name: 'Pty.js',
-          file: 'js',
-        },
-      ],
-    },
-    {
-      name: 'src',
-      children: [
-        {
-          name: 'Pty.ts',
-          file: 'ts',
-        },
-        {
-          name: 'Socket.ts',
-          file: 'ts',
-        },
-        {
-          name: 'Pty.ts',
-          file: 'ts',
-        },
-      ],
-    },
-    {
-      name: 'package-lock.json',
-      file: 'json',
-    },
-    {
-      name: 'tsconfig.json',
-      file: 'json',
-    },
-    {
-      name: 'package.json',
-      file: 'json',
-    },
-  ];
 
   // Status items data
-  const statusItems: any = [
+  const statusItems = ref<StatusItems[]>([
     {
       name: 'Running',
       icon: 'mdi-play',
@@ -204,7 +184,62 @@
       icon: 'mdi-circle-outline',
       color: '#868E96',
     },
-  ];
+  ]);
+
+  const treeItems = ref<any[]>([
+    {
+      title: 'Dockerfile',
+    },
+    {
+      title: 'node_modules',
+    },
+    {
+      title: 'dist',
+      children: [
+        {
+          title: 'Pty.js',
+          file: 'js',
+        },
+        {
+          title: 'Socket.js',
+          file: 'js',
+        },
+        {
+          title: 'Pty.js',
+          file: 'js',
+        },
+      ],
+    },
+    {
+      title: 'src',
+      children: [
+        {
+          title: 'Pty.ts',
+          file: 'ts',
+        },
+        {
+          title: 'Socket.ts',
+          file: 'ts',
+        },
+        {
+          title: 'Pty.ts',
+          file: 'ts',
+        },
+      ],
+    },
+    {
+      title: 'package-lock.json',
+      file: 'json',
+    },
+    {
+      title: 'tsconfig.json',
+      file: 'json',
+    },
+    {
+      title: 'package.json',
+      file: 'json',
+    },
+  ]);
 
   // Computed properties
   const sandboxMessage = computed(() => ({
@@ -215,20 +250,20 @@
   // Methods
   const copyClipboard = () => {
     const text = 'qwerty1234';
-    const t = document.createElement('textarea');
-    document.body.appendChild(t);
-    t.value = text;
-    t.select();
-    t.focus();
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+    textarea.value = text;
+    textarea.select();
+    textarea.focus();
     document.execCommand('copy');
-    document.body.removeChild(t);
-    // appStatusStore.addToastMessage({
-    //     type: 'success',
-    //     message: `${t('copied')}`,
-    //     buttonMsg: null,
-    //     timeout: null,
-    //     buttonCallback: null
-    // });
+    document.body.removeChild(textarea);
+    appStatusStore.addToastMessage({
+      type: 'success',
+      message: `${t('copied')}`,
+      buttonMsg: null,
+      timeout: null,
+      buttonCallback: null,
+    });
   };
 
   const onChangeStatus = (e: any) => {
@@ -253,7 +288,7 @@
 
 <style lang="scss" scoped>
   .sandbox-wrapper {
-    // margin-top: 100px;
+    height: 100%;
 
     .sandbox-card {
       color: darkgray;
@@ -264,7 +299,7 @@
         font-size: 9pt !important;
       }
 
-      .ec2Content {
+      .ec2-content {
         margin-left: 10px;
         margin-right: 12px;
         color: rgb(134, 134, 134) !important;
