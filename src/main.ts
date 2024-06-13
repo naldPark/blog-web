@@ -6,6 +6,7 @@ import { createPinia } from 'pinia';
 import piniaPersist from 'pinia-plugin-persist';
 import router from './router';
 import '@/styles/settings.scss';
+import '../node_modules/xterm/css/xterm.css';
 
 // 앱 생성
 const app = createApp(App);

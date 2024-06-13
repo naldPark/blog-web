@@ -1,10 +1,5 @@
 // Plugins
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite';
-import Fonts from 'unplugin-fonts/vite';
-import Layouts from 'vite-plugin-vue-layouts';
 import Vue from '@vitejs/plugin-vue';
-import VueRouter from 'unplugin-vue-router/vite';
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import * as path from 'path';
 
@@ -35,7 +30,7 @@ export default defineConfig({
         secure: false,
       },
       '/chatEndPoint': {
-        target: 'http://localhost:8100/',
+        target: 'https://nald.me/chatEndPoint',
         changeOrigin: true,
         secure: false,
       },

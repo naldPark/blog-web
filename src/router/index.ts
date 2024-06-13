@@ -54,6 +54,12 @@ const routes = [
             component: () =>
               import('@/pages/wonderWall/sandbox/SandboxPage.vue'),
           },
+          {
+            path: 'sandboxTerminal',
+            name: 'SandboxTerminalPage',
+            component: () =>
+              import('@/pages/wonderWall/sandbox/SandboxTerminalPage.vue'),
+          },
         ],
       },
       {

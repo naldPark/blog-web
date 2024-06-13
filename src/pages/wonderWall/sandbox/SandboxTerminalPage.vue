@@ -10,7 +10,6 @@
                     <v-icon>mdi-checkbox-blank-outline</v-icon>
                     <v-icon>mdi-close</v-icon>
                 </v-system-bar>
-                <!-- <div id="terminal" ref="terminal"></div> -->
                 <terminal-item></terminal-item>
             </div>
         </div>
@@ -32,5 +31,5 @@ const action = (type: string, data: Record<string, any>) =>
 </script>
 
 <style lang="scss" scoped>
-@import "~xterm/css/xterm.css";
+@import '../../../../node_modules/xterm/css/xterm.css';
 </style>
