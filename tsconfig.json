@@ -20,6 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "skipLibCheck": true,
+    "importHelpers": true,
     "composite": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,

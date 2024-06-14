@@ -1,61 +1,56 @@
-import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useAppStatusStore } from '@/store/appStatusStore';
-import _ from 'lodash';
+import { isEmpty } from 'ramda';
 import Config from '@/config';
 
-class HttpClient {
-  ignoreNetworkErrorToastUrl = [];
-
-  static instance: HttpClient;
-  axiosInstance: AxiosInstance;
-
-  constructor() {
-    this.axiosInstance = Axios.create({
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      },
-    });
-
-    // 요청 인터셉터 추가
-    this.axiosInstance.interceptors.request.use(
-      (request: AxiosRequestConfig) => this.requestInterceptorHandler(request)
-    );
-
-    // 응답 인터셉터 추가
-    this.axiosInstance.interceptors.response.use(
-      (response: AxiosResponse) => this.responseInterceptorHandler(response),
-      this.errorResponseInterceptorHandler
-    );
-  }
+const createHttpClient = (): AxiosInstance => {
+  const axiosInstance: AxiosInstance = Axios.create({
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+      Expires: '0',
+    },
+  });
 
   // 요청 인터셉터 핸들러
-  requestInterceptorHandler = async (request: AxiosRequestConfig) => {
+  const requestInterceptorHandler = async (
+    request: AxiosRequestConfig,
+  ): Promise<AxiosRequestConfig<any>> => {
     const accountStatusStore = useAccountStatusStore();
     const authToken = await accountStatusStore.getAuthToken();
-
+    console.log('adasd');
+    if (!request.headers) {
+      request.headers = {};
+    }
+    console.log('Config.AUTH_TOKEN_HEADER_KEY', Config.AUTH_TOKEN_HEADER_KEY);
     if (!request.headers[Config.AUTH_TOKEN_HEADER_KEY]) {
-      if (_.isString(authToken) && !_.isEmpty(authToken)) {
+      if (typeof authToken === 'string' && !isEmpty(authToken)) {
         request.headers[Config.AUTH_TOKEN_HEADER_KEY] = `${authToken}`;
       }
       request.headers['requestPath'] = location.pathname;
     }
-    return request;
+    return request as AxiosRequestConfig<any>;
   };
 
   // 응답 인터셉터 핸들러
-  responseInterceptorHandler = async (response: AxiosResponse) => {
+  const responseInterceptorHandler = async (
+    response: AxiosResponse,
+  ): Promise<AxiosResponse> => {
     if (response.data.spec && response.data.spec === 'AccessDeniedException') {
       const appStatusStore = useAppStatusStore();
       appStatusStore.showDialog({
         title: '로그아웃',
         description: '다시 로그인 해주세요',
         invisibleClose: true,
-        action: () => { },
+        action: () => {},
       });
 
       const accountStatusStore = useAccountStatusStore();
@@ -66,7 +61,7 @@ class HttpClient {
   };
 
   // 오류 응답 인터셉터 핸들러
-  errorResponseInterceptorHandler = async (error: any) => {
+  const errorResponseInterceptorHandler = async (error: any): Promise<any> => {
     const appStatusStore = useAppStatusStore();
 
     if (error.message === 'Network Error') {
@@ -89,14 +84,23 @@ class HttpClient {
     throw error;
   };
 
-  // 싱글톤 패턴을 사용하여 HttpClient 인스턴스를 가져옵니다.
-  static getInstance = () => {
-    if (!HttpClient.instance) {
-      HttpClient.instance = new HttpClient();
-    }
-    return HttpClient.instance.axiosInstance;
-  };
-}
+  // 요청 인터셉터 추가
+  axiosInstance.interceptors.request.use(
+    requestInterceptorHandler as unknown as (
+      request: AxiosRequestConfig<any>,
+    ) => Promise<InternalAxiosRequestConfig<any>>,
+  );
 
-// HttpClient 인스턴스를 디폴트로 내보냅니다.
-export default HttpClient.getInstance();
+  // 응답 인터셉터 추가
+  axiosInstance.interceptors.response.use(
+    responseInterceptorHandler,
+    errorResponseInterceptorHandler,
+  );
+
+  return axiosInstance;
+};
+
+// 싱글톤 패턴을 사용하여 Axios 인스턴스를 반환합니다.
+const httpClient = createHttpClient();
+
+export default httpClient;

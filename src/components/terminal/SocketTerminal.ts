@@ -44,6 +44,7 @@ export default class SocketTerminal {
   }
 
   _onKeyHandler(e: { key: string; domEvent: KeyboardEvent }) {
+    console.log('??');
     const printable: boolean =
       !e.domEvent.altKey && !e.domEvent.ctrlKey && !e.domEvent.metaKey;
 
@@ -56,11 +57,13 @@ export default class SocketTerminal {
     } else if (e.domEvent.key === 'ArrowLeft') {
       this._moveLeft();
     } else if (printable) {
+      console.log('printable', this._input);
       this._input++;
     }
   }
 
   _onDataHandler(e: string) {
+    console.log('_onDataHandler');
     this._socket.execute(e);
   }
 

@@ -64,5 +64,8 @@ export default defineConfig({
         secure: false,
       },
     },
+    hmr: {
+      protocol: 'ws',
+    },
   },
 });
