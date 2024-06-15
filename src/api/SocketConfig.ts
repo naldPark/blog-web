@@ -1,7 +1,5 @@
 import { io, Socket as SocketIOClient } from 'socket.io-client';
 import { Terminal as xterm } from 'xterm';
-import { useRoute } from 'vue-router';
-
 // 클라이언트 측에서 소켓을 설정하고 관리.
 class SocketConfig {
   socket: SocketIOClient;
@@ -11,7 +9,6 @@ class SocketConfig {
   constructor() {
     console.log('??');
     this.url = `${location.protocol}//${location.host}/nodeterm`;
-
     this.socket = io(this.url, {
       transports: ['websocket'],
       path: '/nodeterm/',

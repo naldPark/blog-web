@@ -59,7 +59,8 @@ export default defineConfig({
         secure: false,
       },
       '/nodeterm': {
-        target: 'https://nald.me/nodeterm',
+        // target: 'ws://localhost:8088',
+        target: 'ws://nald.me:30554',
         changeOrigin: true,
         secure: false,
       },
