@@ -47,7 +47,8 @@ export interface IAppStatus {
   prevRouteName: string | null | undefined;
 }
 
-export const useAppStatusStore = defineStore('app-status', {
+export const useAppStatusStore = defineStore({
+  id: 'app-status',
   state: (): IAppStatus => ({
     timezone: 'Asia/Seoul',
     showUIBlocker: false,

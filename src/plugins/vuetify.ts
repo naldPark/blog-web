@@ -33,7 +33,7 @@ const vuetify = createVuetify({
   },
 });
 
-export function registerPlugins(app: App) {
+export function vuetifyPlugins(app: App) {
   app.use(vuetify);
 }
 

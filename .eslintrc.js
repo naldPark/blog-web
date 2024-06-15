@@ -9,9 +9,16 @@ module.exports = {
     'eslint:recommended',
     '@vue/eslint-config-typescript',
   ],
+  ignorePatterns: ['node_modules', 'dist', '*.d.ts', 'vendor'],
   rules: {
     'vue/multi-word-component-names': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-explicit-any': 'warn',
+  },
+  settings: {
+    'import/resolver': {
+      node: true,
+      typescript: {},
+    },
   },
 };

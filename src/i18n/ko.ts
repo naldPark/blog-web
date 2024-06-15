@@ -101,7 +101,7 @@ export default {
     sandbox: '샌드박스( EC2 )',
     blog: '블로그 및 깃헙',
     aboutMe: '자기소개',
-    wonderWall: '원더월',
+    wonderwall: '원더월',
     contact: '연락하기',
     video: '날드 티비', // 검색기능 추가, 컨텐츠 추가 업로드
     bookCafe: '도서대여점(공사중)',

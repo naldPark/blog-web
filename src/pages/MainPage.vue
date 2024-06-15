@@ -18,17 +18,15 @@
           <v-row class="badges-image-wrapper mt-3" style="max-width: 600px">
             <v-chip v-for="(item, index) in badges" :key="index" size="small" class="ma-1" :color="item.backgroundColor"
               variant="flat" :style="`color: ${item.color}`">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ props }">
-                  <div v-ripple v-bind="props" class="text-center d-flex align-center justify-space-around">
-                    <img style="width: 17px; height: 17px" :src="item.src" alt="Badge icon" />
-                    <span class="pl-1" v-if="appSize !== 'xs'">{{
-                      item.name
-                    }}</span>
-                  </div>
-                </template>
-                <span>{{ item.name }}</span>
-              </v-tooltip>
+              <div class="text-center d-flex align-center justify-space-around">
+                <img style="width: 17px; height: 17px" :src="item.src" alt="Badge icon" />
+                <span class="pl-1" v-if="appSize !== 'xs'">{{
+                  item.name
+                }}</span>
+                <v-tooltip activator="parent" location="bottom">{{
+                  item.name
+                }}</v-tooltip>
+              </div>
             </v-chip>
           </v-row>
           <div class="py-4"></div>

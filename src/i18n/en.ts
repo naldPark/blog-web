@@ -99,7 +99,7 @@ export default {
     sandbox: 'Sandbox ( EC2 )',
     blog: 'Blog',
     aboutMe: 'About Me',
-    wonderWall: 'Wonder Wall',
+    wonderwall: 'Wonder Wall',
     contact: 'Contact Me',
     video: 'Nald TV',
     crawling: 'Crawling',

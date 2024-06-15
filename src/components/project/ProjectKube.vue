@@ -136,6 +136,7 @@ const fetchClusterInfo = async () => {
         .filter((v) => v.startsWith('node-role.kubernetes.io'))[0]
         .replace('node-role.kubernetes.io/', ''),
     }));
+    console.log('nodeInfo.value', nodeInfo.value)
     podInfo.value = result.podResult;
   } catch (error) {
     console.error('Error fetching cluster info:', error);

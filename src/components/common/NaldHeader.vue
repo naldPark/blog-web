@@ -164,10 +164,10 @@ const menuItems = [
     active: false,
   },
   {
-    name: 'wonderWall',
+    name: 'wonderwall',
     icon: 'mdi-space-invaders',
-    title: t('menubar.wonderWall'),
-    value: 'WonderWallPage',
+    title: t('menubar.wonderwall'),
+    value: 'WonderwallPage',
     anonymousAccess: false,
     subMenus: [
       {

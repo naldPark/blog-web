@@ -1,12 +1,21 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_APP_TITLE: string;
-  // 다른 환경 변수들에 대한 타입 정의...
+  [key: string]: any;
+  BASE_URL: string;
+  MODE: string;
+  DEV: boolean;
+  PROD: boolean;
+  SSR: boolean;
 }
-
 interface ImportMeta {
+  url: string;
+
+  readonly hot?: import('./hot').ViteHotContext;
+
   readonly env: ImportMetaEnv;
+
+  glob: import('./importGlob').ImportGlobFunction;
 }
 
 declare module '*.vue' {

@@ -16,7 +16,8 @@ export interface IAccountInfo {
 }
 
 // Pinia 스토어를 정의합니다.
-export const useAccountStatusStore = defineStore('account-status', {
+export const useAccountStatusStore = defineStore({
+  id: 'account-status',
   state: () => ({
     isSignIn: false,
     accountInfo: {
@@ -27,7 +28,9 @@ export const useAccountStatusStore = defineStore('account-status', {
     } as IAccountInfo,
     authToken: null as string | null,
   }),
-
+  persist: {
+    enabled: true, // 상태 지속 기능 활성화
+  },
   actions: {
     // 인증 토큰을 설정합니다.
     setAuthToken(token: string | null) {

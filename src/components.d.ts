@@ -12,6 +12,7 @@ declare module 'vue' {
     FileUpload: typeof import('./components/FileUpload.vue')['default']
     HeaderDrawer: typeof import('./components/common/HeaderDrawer.vue')['default']
     LoginDialog: typeof import('./components/common/LoginDialog.vue')['default']
+    MovieItem: typeof import('./components/wonderwall/video/MovieItem.vue')['default']
     NaldFooter: typeof import('./components/common/NaldFooter.vue')['default']
     NaldHeader: typeof import('./components/common/NaldHeader.vue')['default']
     ProjectDiagram: typeof import('./components/project/ProjectDiagram.vue')['default']
@@ -20,5 +21,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TerminalItem: typeof import('./components/terminal/TerminalItem.vue')['default']
+    VideoPlayer: typeof import('./components/wonderwall/video/VideoPlayer.vue')['default']
   }
 }

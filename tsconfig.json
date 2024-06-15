@@ -11,7 +11,7 @@
       "@/*": ["src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["vuetify", "vite/client", "vite-plugin-vue-layouts/client", "unplugin-vue-router/client"],
+    "types": ["vite/client", "vite-plugin-vue-layouts/client", "unplugin-vue-router/client"],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
@@ -21,11 +21,12 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "importHelpers": true,
+    "sourceMap": true,
     "composite": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*", "vite.config.ts"],
+  "include": ["./typed-router.d.ts", "./vite.config.*", "./env.d.ts", "./shims.d.ts", "./src/**/*", "./src/**/*.vue", "./auto-imports.d.ts", "./components.d.ts"],
   "exclude": ["dist", "node_modules"]
 }

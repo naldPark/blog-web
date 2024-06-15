@@ -5,7 +5,7 @@ import {
   RouteLocationNormalized,
 } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
-import WonderWallLayout from '@/layouts/WonderWallLayout.vue';
+import WonderwallLayout from '@/layouts/WonderwallLayout.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 
 const routes = [
@@ -40,25 +40,43 @@ const routes = [
         },
       },
       {
-        path: 'wonderWall',
-        component: WonderWallLayout,
+        path: 'wonderwall',
+        component: WonderwallLayout,
         children: [
           {
             path: 'main',
-            name: 'WonderWallPage',
-            component: () => import('@/pages/wonderWall/WonderWallPage.vue'),
+            name: 'WonderwallPage',
+            component: () => import('@/pages/wonderwall/WonderwallPage.vue'),
           },
           {
             path: 'sandbox',
             name: 'SandboxPage',
             component: () =>
-              import('@/pages/wonderWall/sandbox/SandboxPage.vue'),
+              import('@/pages/wonderwall/sandbox/SandboxPage.vue'),
           },
           {
-            path: 'sandboxTerminal',
+            path: 'sandbox/terminal',
             name: 'SandboxTerminalPage',
             component: () =>
-              import('@/pages/wonderWall/sandbox/SandboxTerminalPage.vue'),
+              import('@/pages/wonderwall/sandbox/SandboxTerminalPage.vue'),
+          },
+          {
+            path: 'sandbox/terminal',
+            name: 'SandboxTerminalPage',
+            component: () =>
+              import('@/pages/wonderwall/sandbox/SandboxTerminalPage.vue'),
+          },
+          {
+            path: 'video',
+            name: 'StreamingListPage',
+            component: () =>
+              import('@/pages/wonderwall/streaming/StreamingListPage.vue'),
+          },
+          {
+            path: 'video/play',
+            name: 'StreamingPage',
+            component: () =>
+              import('@/pages/wonderwall/streaming/StreamingPage.vue'),
           },
         ],
       },
@@ -79,7 +97,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
 
