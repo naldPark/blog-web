@@ -22,5 +22,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TerminalItem: typeof import('./components/terminal/TerminalItem.vue')['default']
     VideoPlayer: typeof import('./components/wonderwall/video/VideoPlayer.vue')['default']
+    VideoSlider: typeof import('./components/wonderwall/video/VideoSlider.vue')['default']
   }
 }

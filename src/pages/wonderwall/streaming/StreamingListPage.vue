@@ -31,16 +31,16 @@
     </v-card>
     <v-divider class="mb-10"></v-divider>
     <h2 class="text-primary mb-3">{{ t('video.nald') }}</h2>
-    <card-silder :category="'nald'" :cardList="movieList.filter((f: any) => f.fileType === 'nald')"
-      @onClickMovie="onClickMovie($event)"></card-silder>
+    <VideoSlider :category="'nald'" :cardList="movieList.filter((f: any) => f.fileType === 'nald')"
+      @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
     <h2 class="text-primary mb-3 ml-2">{{ t('video.movie') }}</h2>
-    <card-silder :category="'movie'" :cardList="movieList.filter((f: any) => f.fileType === 'movie')"
-      @onClickMovie="onClickMovie($event)"></card-silder>
+    <VideoSlider :category="'movie'" :cardList="movieList.filter((f: any) => f.fileType === 'movie')"
+      @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
     <h2 class="text-primary mb-3">{{ t('video.tomAndJerry') }}</h2>
-    <card-silder :category="'ani'" :cardList="movieList.filter((f: any) => f.fileType === 'ani')"
-      @onClickMovie="onClickMovie($event)"></card-silder>
+    <VideoSlider :category="'ani'" :cardList="movieList.filter((f: any) => f.fileType === 'ani')"
+      @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
     <resource-manage-dialog v-if="showResourceManageDialog" v-model="showResourceManageDialog"
       @fetchVideoList="fetchVideoList"></resource-manage-dialog>
@@ -52,8 +52,8 @@ import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import storageService from '@/api/storageService';
 import { useI18n } from 'vue-i18n';
+import VideoSlider from '@/components/wonderwall/video/VideoSlider.vue'
 import { shuffleArray } from '@/utils/common';
-
 const { t } = useI18n();
 const categories: any = [
   { label: t('video.movie'), value: 'movie', hint: t('video.movie') },

@@ -14,8 +14,6 @@
 import 'video.js/dist/video-js.css';
 import videojs from 'video.js';
 import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import { defineEmits } from 'vue';
-
 
 
 const props = defineProps({

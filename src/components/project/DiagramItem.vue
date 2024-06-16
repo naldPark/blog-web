@@ -27,8 +27,7 @@
                 selectedNode ? selectedNode.name : 'Please select node'
               }}</span>
               <v-spacer></v-spacer>
-              <v-btn class="justify-end" color="primary" small
-                @click="showSelectedNodeInfo = !showSelectedNodeInfo">Close
+              <v-btn class="justify-end" color="primary" small @click="showSelectedNodeInfo = !showSelectedNodeInfo">Close
               </v-btn>
             </v-card-actions>
             <v-divider></v-divider>
@@ -53,7 +52,6 @@
 import go, { Diagram } from 'gojs';
 import { ref, onMounted, toRaw } from 'vue';
 import infraService from '@/api/infraService';
-import { defineEmits } from 'vue';
 import { useAppStatusStore } from '@/store/appStatusStore';
 import { useDisplay } from 'vuetify';
 
