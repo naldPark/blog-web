@@ -20,6 +20,7 @@ declare module 'vue' {
     ProjectKube: typeof import('./components/project/ProjectKube.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Subtitles: typeof import('./components/wonderwall/video/Subtitles.vue')['default']
     TerminalItem: typeof import('./components/terminal/TerminalItem.vue')['default']
     VideoPlayer: typeof import('./components/wonderwall/video/VideoPlayer.vue')['default']
     VideoSlider: typeof import('./components/wonderwall/video/VideoSlider.vue')['default']

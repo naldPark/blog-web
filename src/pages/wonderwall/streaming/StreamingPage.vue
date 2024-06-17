@@ -3,9 +3,8 @@
     <div v-if="!lazyShow">
       <div id="vue-core-video-player-box" class="movie-player text-center" :preload="'metadata'"
         style="vertical-align: middle">
-        <video-player ref="videoPlayer" :options="playerOptions" @play="onPlayerPlay($event)"
-          :cover="currentMovie.fileCover" :src="currentMovie.fileSrc" @loadeddata="loaded('loaded', $event)"
-          @ended="loaded('ended', $event)" @ready="onPlayerReady($event)" />
+        <VideoPlayer />
+        <Subtitles />
       </div>
       <div class="movie-detail pl-3">
         <v-chip small color="grey" outlined class="mb-2">
@@ -50,10 +49,11 @@ import { ref, watch, onMounted, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import StorageService from "@/api/storageService";
 import MovieItem from "@/components/wonderwall/video/MovieItem.vue";
-import VideoPlayer from "@/components/wonderwall/video/VideoPlayer.vue"
 import Config from "@/config";
 import { useDisplay } from 'vuetify';
 import { useI18n } from 'vue-i18n';
+import VideoPlayer from '@/components/wonderwall/video/VideoPlayer.vue';
+import Subtitles from '@/components/wonderwall/video/Subtitles.vue';
 import { useAppStatusStore } from '@/store/appStatusStore';
 const playerOptions = ref({
   autoplay: false,
