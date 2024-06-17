@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="reseted">
-      <video class="video-js vjs-default-skin vjs-big-play-centered" ref="video" data-setup='{}'
+      <video class="video-js vjs-default-skin vjs-big-play-centered" ref="videoObj" data-setup='{}'
         :crossOrigin="crossOrigin">
         <track v-for="(crtTrack, index) in trackList" :key="index" :kind="crtTrack.kind" :label="crtTrack.label"
           :src="crtTrack.src" :srcLang="crtTrack.srcLang" :default="crtTrack.default" />
@@ -14,7 +14,6 @@
 import 'video.js/dist/video-js.css';
 import videojs from 'video.js';
 import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
-
 
 const props = defineProps({
   crossOrigin: {
@@ -61,11 +60,11 @@ const props = defineProps({
 });
 const emit = defineEmits(['ready', 'statechanged']);
 
-let player: any = null;
+let player = null as any; // Define player variable
 const reseted = ref(true);
-
+const videoObj = ref<any>(null); // Define ref for the video element
 const initialize = () => {
-  const videoObj: any = ref(null);
+  if (!videoObj.value) return; // Check if videoObj has a valid value
 
   const emitPlayerState = (event: any, value: any) => {
     if (event) {
@@ -116,11 +115,10 @@ const initialize = () => {
   }
 };
 
+
 const dispose = (callback?: any) => {
   if (player && player.dispose) {
-    if (player.techName_ !== 'Flash') {
-      player.pause && player.pause();
-    }
+    player.pause && player.pause();
     player.dispose();
     player = null;
     nextTick(() => {
@@ -134,7 +132,6 @@ const dispose = (callback?: any) => {
     });
   }
 };
-
 watch(() => props.options, (options, oldOptions) => {
   dispose(() => {
     if (options && options.sources && options.sources.length) {

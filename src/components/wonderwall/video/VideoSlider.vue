@@ -1,7 +1,7 @@
 <template>
   <div class="movie-scoll">
     <div class="arrow-left">
-      <v-btn plain color="primary" @click="onClickMove('left')">
+      <v-btn variant="plain" color="primary" @click="onClickMove('left')">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
     </div>
@@ -18,12 +18,12 @@
         </div>
         <div class="movie-content movie-desc" v-else>{{ item.fileDesc }}</div>
         <div class="movie-title" v-if="item.fileName">
-          <v-icon small class="secondary--text mr-1">mdi-play</v-icon>{{ item.fileName }}
+          <v-icon small class="text-secondary mr-1">mdi-play</v-icon>{{ item.fileName }}
         </div>
       </li>
     </ul>
     <div class="arrow-right">
-      <v-btn plain color="primary" @click="onClickMove('right')">
+      <v-btn variant="plain" color="primary" @click="onClickMove('right')">
         <v-icon>mdi-arrow-right</v-icon>
       </v-btn>
     </div>
@@ -59,54 +59,76 @@ const onClickMovie = (item: any) => {
   }
 };
 
-let startX: any;
 
-const start = (e: MouseEvent | TouchEvent) => {
-  isMouseDown.value = true;
-  const slider = document.getElementById(`movie-items-${props.category}`);
-  if (!slider) return;
-  slider.classList.add('active');
-  startX = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX - slider.clientLeft;
-  scrollLeft.value = slider.scrollLeft;
-};
+onMounted(() => {
 
-const move = (e: MouseEvent | TouchEvent) => {
-  if (!isMouseDown.value) return;
-  const slider = document.getElementById(`movie-items-${props.category}`);
-  if (!slider) return;
-  e.preventDefault();
-  const x = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX - slider.clientLeft;
-  const dist = (x - startX);
-  slider.scrollLeft = scrollLeft.value - dist;
-};
+  let startX: any;
 
-const end = () => {
-  isMouseDown.value = false;
-  const slider = document.getElementById(`movie-items-${props.category}`);
-  if (!slider) return;
-  slider.classList.remove('active');
-};
+  const start = (e: MouseEvent | TouchEvent) => {
+    console.log('start')
+    isMouseDown.value = true;
+    const slider = document.getElementById(`movie-items-${props.category}`);
+    if (!slider) return;
+    slider.classList.add('active');
+    startX = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX - slider.clientLeft;
+    scrollLeft.value = slider.scrollLeft;
+  };
 
-const doingDragging = (isDragging: boolean) => {
-  if (isDragging === false) {
-    setTimeout(() => {
+  const move = (e: MouseEvent | TouchEvent) => {
+    if (!isMouseDown.value) return;
+    const slider = document.getElementById(`movie-items-${props.category}`);
+    if (!slider) return;
+    e.preventDefault();
+    const x = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX - slider.clientLeft;
+    const dist = (x - startX);
+    slider.scrollLeft = scrollLeft.value - dist;
+  };
+
+  const end = () => {
+    isMouseDown.value = false;
+    const slider = document.getElementById(`movie-items-${props.category}`);
+    if (!slider) return;
+    slider.classList.remove('active');
+  };
+
+  const doingDragging = (isDragging: boolean) => {
+    if (isDragging === false) {
+      setTimeout(() => {
+        isDraggingMode.value = isDragging;
+      }, 200);
+    } else {
       isDraggingMode.value = isDragging;
-    }, 200);
-  } else {
-    isDraggingMode.value = isDragging;
-  }
-};
+    }
+  };
 
-// Event listeners setup
-const slider = document.getElementById(`movie-items-${props.category}`);
-if (slider) {
-  slider.addEventListener("mousedown", start);
-  slider.addEventListener('touchstart', start, { passive: true });
-  slider.addEventListener('touchmove', move, { passive: true });
-  slider.addEventListener('mouseleave', end);
-  slider.addEventListener('touchend', end);
-  slider.addEventListener("mouseup", end);
-}
+  // Event listeners setup
+  const slider = document.getElementById(`movie-items-${props.category}`);
+  if (slider) {
+    slider.addEventListener("mousedown", (e) => {
+      isMouseDown.value = true;
+      start(e);
+    });
+    slider.addEventListener('touchstart', start, { passive: true });
+    slider.addEventListener('touchmove', move, { passive: true });
+
+    slider.addEventListener("mousemove", (e) => {
+      if (isMouseDown.value) {
+        doingDragging(true);
+      } else {
+        doingDragging(false);
+      }
+      move(e);
+    });
+    slider.addEventListener('mouseleave', end);
+    slider.addEventListener('touchend', end);
+    slider.addEventListener("mouseup", () => {
+      isMouseDown.value = false;
+      doingDragging(false);
+      end();
+    });
+  }
+});
+
 
 </script>
 
@@ -128,7 +150,7 @@ if (slider) {
       width: 50px;
       background-color: transparent !important;
       min-width: 0px !important;
-      font-size: 100px !important;
+      font-size: 50px !important;
       padding: 0px 0px !important;
     }
   }

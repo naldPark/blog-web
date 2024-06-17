@@ -3,7 +3,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import Layouts from 'vite-plugin-vue-layouts';
 import Vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import VueRouter from 'unplugin-vue-router/vite';
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import * as path from 'path';
@@ -16,7 +16,7 @@ export default defineConfig({
       dts: 'src/typed-router.d.ts',
     }),
     Layouts(),
-        vueJsx(),
+    vueJsx(),
     AutoImport({
       imports: ['vue', 'vue-router', 'pinia'],
       dts: 'src/auto-imports.d.ts',
@@ -57,8 +57,8 @@ export default defineConfig({
         secure: false,
       },
       '/nodeterm': {
-        target: 'ws://localhost:8088',
-        // target: 'ws://nald.me:30554',
+        // target: 'ws://localhost:8088',
+        target: 'ws://nald.me:30554',
         changeOrigin: true,
         secure: false,
       },

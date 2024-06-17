@@ -5,7 +5,7 @@ import {
   RouteLocationNormalized,
 } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
-import WonderwallLayout from '@/layouts/WonderwallLayout.vue';
+import WonderwallLayout from '@/layouts/WonderWallLayout.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 
 const routes = [
@@ -46,7 +46,7 @@ const routes = [
           {
             path: 'main',
             name: 'WonderwallPage',
-            component: () => import('@/pages/wonderwall/WonderwallPage.vue'),
+            component: () => import('@/pages/wonderwall/WonderWallPage.vue'),
           },
           {
             path: 'sandbox',
