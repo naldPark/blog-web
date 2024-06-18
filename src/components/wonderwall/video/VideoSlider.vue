@@ -54,6 +54,7 @@ const onClickMove = (direction: 'left' | 'right') => {
 };
 
 const onClickMovie = (item: any) => {
+  console.log("무비클릭")
   if (!isDraggingMode.value) {
     emits('onClickMovie', item);
   }

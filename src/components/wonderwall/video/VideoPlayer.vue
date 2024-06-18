@@ -1,7 +1,7 @@
 <template>
   <div>
     <video ref="videoPlayer" controls :poster="posterUrl">
-      <source v-if="hlsSource" :src="hlsSource" type="application/x-mpegURL" />
+      <source type="application/x-mpegURL" />
     </video>
   </div>
 </template>
@@ -9,13 +9,15 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import Hls from 'hls.js';
-
-const hlsSource = '/api/storage/hls/KaeNon169530701398148/KaeNon169530701398148.m3u8';
-const posterUrl = 'https://upload.nald.me/nald/pinocchio.png';
-
 const videoPlayer = ref<HTMLVideoElement | null>(null);
 
+const { hlsSource, posterUrl } = defineProps<{
+  hlsSource: string;
+  posterUrl: string;
+}>();
+
 onMounted(() => {
+  console.log('videoPlayer.value', videoPlayer.value)
   if (videoPlayer.value) {
     if (Hls.isSupported()) {
       const hls = new Hls();

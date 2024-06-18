@@ -108,6 +108,7 @@ const playAny = () => {
 };
 
 const onClickMovie = (item: any) => {
+  // console.log('엄마 클릭', item.fileC)
   if (item.fileSrc !== null && item.fileSrc !== '') {
     router
       .push({
