@@ -3,7 +3,8 @@
     <div v-if="!lazyShow">
       <div id="vue-core-video-player-box" class="movie-player text-center" :preload="'metadata'"
         style="vertical-align: middle">
-        <VideoPlayer :hlsSource='currentMovie.fileSrc' :posterUrl='currentMovie.fileCover' />
+        <VideoPlayer :hlsSource='currentMovie.fileSrc' :posterUrl='currentMovie.fileCover'
+          :vttSrc='currentMovie.vttSrc' />
         <Subtitles />
       </div>
       <div class="movie-detail pl-3">
@@ -170,13 +171,13 @@ async function onClickMovie(storageId: any) {
     const videoSrc = `/api/storage${res.data.data.fileSrc}`;
     console.log('videoSrc', videoSrc)
     currentMovie.value = {
-      ...res.data.data, fileSrc: videoSrc
+      ...res.data.data, fileSrc: videoSrc, vttSrc: vttSrc
     }
     lazyShow.value = false;  // 비디오 컴포넌트 먼저 만들고
     console.log('22222')
-    nextTick(() => {
-      playVideo(videoSrc, vttSrc); // 컴포넌트 플레이하라고 보냄
-    });
+    // nextTick(() => {
+    //   playVideo(videoSrc, vttSrc); // 컴포넌트 플레이하라고 보냄
+    // });
     fetchVideoList();
     console.log('3333', currentMovie.value)
     appStatusStore.hideLoading();

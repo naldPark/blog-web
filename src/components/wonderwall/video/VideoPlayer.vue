@@ -1,36 +1,64 @@
 <template>
-  <div>
-    <video ref="videoPlayer" controls :poster="posterUrl">
-      <source type="application/x-mpegURL" />
+  <div class="video-container">
+    <video ref="videoPlayer" class="video-js vjs-default-skin vjs-big-play-centered" data-setup='{}'
+      crossorigin="anonymous">
+      <track v-if="vttSrc" :src="vttSrc" kind="subtitles" srclang="ko" label="Korean" default />
+      <source :src="hlsSource" type="application/x-mpegURL" />
     </video>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import Hls from 'hls.js';
-const videoPlayer = ref<HTMLVideoElement | null>(null);
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 
-const { hlsSource, posterUrl } = defineProps<{
+// 비디오 플레이어 타입 정의
+type VideoJsPlayer = ReturnType<typeof videojs>;
+
+const videoPlayer = ref<VideoJsPlayer | null>(null);
+
+const { hlsSource, posterUrl, vttSrc } = defineProps<{
   hlsSource: string;
   posterUrl: string;
+  vttSrc: string
 }>();
 
-onMounted(() => {
-  console.log('videoPlayer.value', videoPlayer.value)
-  if (videoPlayer.value) {
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(hlsSource);
-      hls.attachMedia(videoPlayer.value);
-    } else if (videoPlayer.value.canPlayType('application/vnd.apple.mpegurl')) {
-      videoPlayer.value.src = hlsSource;
-    }
 
-    videoPlayer.value.addEventListener('loadedmetadata', () => {
-      const track: any = videoPlayer.value?.textTracks[0];
-      track.mode = 'showing'; // 자막을 표시할 모드로 설정
+onMounted(() => {
+  console.log('vttSrc', vttSrc)
+  const videoElement = document.querySelector('.video-js') as HTMLVideoElement;
+  if (videoElement) {
+    videoElement.setAttribute('playsinline', 'true');
+    videoElement.setAttribute('webkit-playsinline', 'true');
+    videoElement.setAttribute('x5-playsinline', 'true');
+    videoElement.setAttribute('x5-video-player-type', 'h5');
+    videoElement.setAttribute('x5-video-player-fullscreen', 'false');
+    videoPlayer.value = videojs(videoElement, {
+      autoplay: true,
+      controls: true,
+      language: 'ko',
+      inactivityTimeout: 0,
+      preload: 'auto',
+      fluid: true,
+      techOrder: ['html5'],
+      plugins: {},
+      html5: {
+        hls: {
+          overrideNative: true
+        }
+      }
     });
+
+  }
+
+});
+
+onUnmounted(() => {
+  if (videoPlayer.value) {
+    videoPlayer.value.dispose();
   }
 });
 </script>
+
+<style scoped></style>
