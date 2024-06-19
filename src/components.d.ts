@@ -8,10 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     DiagramItem: typeof import('./components/project/DiagramItem.vue')['default']
-    EditAccountInfoDialog: typeof import('./components/common/EditAccountInfoDialog.vue')['default']
-    FileUpload: typeof import('./components/FileUpload.vue')['default']
+    EditAccountInfoDialog: typeof import('./components/dialog/EditAccountInfoDialog.vue')['default']
+    FileUpload: typeof import('./components/wonderwall/video/FileUpload.vue')['default']
     HeaderDrawer: typeof import('./components/common/HeaderDrawer.vue')['default']
-    LoginDialog: typeof import('./components/common/LoginDialog.vue')['default']
+    LoginDialog: typeof import('./components/dialog/LoginDialog.vue')['default']
     MovieItem: typeof import('./components/wonderwall/video/MovieItem.vue')['default']
     NaldFooter: typeof import('./components/common/NaldFooter.vue')['default']
     NaldHeader: typeof import('./components/common/NaldHeader.vue')['default']

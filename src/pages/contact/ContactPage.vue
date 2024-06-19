@@ -2,31 +2,16 @@
   <div class="contant-page-wrap">
     <v-row justify="center" no-gutters>
       <v-col cols="10" md="4" lg="4">
-        <v-card
-          color="rgba(0, 0, 0, 0)"
-          elevation="0"
-          max-width="400"
-          style="display: block; margin: 0px auto"
-        >
+        <v-card color="rgba(0, 0, 0, 0)" elevation="0" max-width="400" style="display: block; margin: 0px auto">
           <v-card-text class="text-center">
             <h1 class="font-weight-bold mb-1 text-grey">Nald Park</h1>
             <h4 class="font-weight-light mb-3 text-grey">WEB DEVELOPER</h4>
-            <v-img
-              max-height="400"
-              style="display: block; margin: 0px auto"
-              src="@/assets/images/profiles/me.jpg"
-            >
+            <v-img max-height="400" style="display: block; margin: 0px auto" src="@/assets/images/profiles/me.jpg">
               <div class="inner-border"></div>
             </v-img>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                v-for="(social, i) in socials"
-                :key="i"
-                :color="social.color"
-                icon
-                small
-              >
+              <v-btn v-for="(social, i) in socials" :key="i" :color="social.color" icon small>
                 <v-icon @click="exploreSNS(social.link)">{{
                   social.icon
                 }}</v-icon>
@@ -44,53 +29,26 @@
             {{ $t('contactMsg') }}
           </p>
           <br />
-          <v-theme-provider dark>
+          <v-theme-provider>
             <v-row class="pa-2">
               <v-col cols="12">
-                <v-text-field
-                  flat
-                  v-model="messageData.name"
-                  :rules="[rules.required]"
-                  :label="`${$t('name')} *`"
-                  :placeholder="`${$t('name')} *`"
-                ></v-text-field>
+                <v-text-field flat v-model="messageData.name" :rules="[rules.required]" :label="`${$t('name')} *`"
+                  :placeholder="`${$t('name')} *`"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  flat
-                  v-model="messageData.email"
-                  :rules="[rules.required, rules.email]"
-                  :label="`${$t('email')} *`"
-                  :placeholder="`${$t('email')} *`"
-                ></v-text-field>
+                <v-text-field flat v-model="messageData.email" :rules="[rules.required, rules.email]"
+                  :label="`${$t('email')} *`" :placeholder="`${$t('email')} *`"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  v-model="messageData.title"
-                  :rules="[rules.required]"
-                  :label="`${$t('title')} *`"
-                  :placeholder="`${$t('title')} *`"
-                ></v-text-field>
+                <v-text-field v-model="messageData.title" :rules="[rules.required]" :label="`${$t('title')} *`"
+                  :placeholder="`${$t('title')} *`"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-textarea
-                  v-model="messageData.content"
-                  :rules="[rules.required]"
-                  auto-grow
-                  flat
-                  solo
-                  :label="`${$t('content')} *`"
-                  :placeholder="`${$t('content')} *`"
-                ></v-textarea>
+                <v-textarea v-model="messageData.content" :rules="[rules.required]" auto-grow flat solo
+                  :label="`${$t('content')} *`" :placeholder="`${$t('content')} *`"></v-textarea>
               </v-col>
               <v-col class="mx-auto" cols="auto">
-                <v-btn
-                  color="primary"
-                  outlined
-                  rounded
-                  variant="outlined"
-                  @click="sendMessage"
-                >
+                <v-btn color="primary" rounded variant="outlined" @click="sendMessage">
                   <v-icon>mdi-check</v-icon>
                   {{ $t('send') }}
                 </v-btn>
@@ -104,147 +62,146 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { useAppStatusStore } from '@/store/appStatusStore';
-  import { contact } from '@/api/commonService';
-  import router from '@/router';
-  import { useI18n } from 'vue-i18n';
-  import { useDisplay } from 'vuetify';
-  const { mobile } = useDisplay();
+import { ref } from 'vue';
+import { useAppStatusStore } from '@/store/appStatusStore';
+import { contact } from '@/api/commonService';
+import router from '@/router';
+import { useI18n } from 'vue-i18n';
+import { useDisplay } from 'vuetify';
+const { mobile } = useDisplay();
 
-  const appStatusStore = useAppStatusStore();
-  const { t } = useI18n();
-  const messageData: any = ref({
-    name: '',
-    email: '',
-    title: '',
-    content: '',
-  });
+const appStatusStore = useAppStatusStore();
+const { t } = useI18n();
+const messageData: any = ref({
+  name: '',
+  email: '',
+  title: '',
+  content: '',
+});
 
-  const rules = {
-    required: (value: any) => !!value || 'Required.',
-    email: (value: any) => {
+const rules = {
+  required: (value: any) => !!value || 'Required.',
+  email: (value: any) => {
+    const pattern =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return pattern.test(value) || 'Invalid e-mail.';
+  },
+};
+
+const validateCheck = () => {
+  let res = '';
+  for (const key in messageData) {
+    if (key === 'email') {
       const pattern =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return pattern.test(value) || 'Invalid e-mail.';
-    },
-  };
-
-  const validateCheck = () => {
-    let res = '';
-    for (const key in messageData) {
-      if (key === 'email') {
-        const pattern =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        res =
-          pattern.test(messageData[key]) === false
-            ? `${t('emailValidate')}`
-            : res;
-      }
-      res = messageData[key] === '' ? `${t('inputEmpty')}` : res;
+      res =
+        pattern.test(messageData[key]) === false
+          ? `${t('emailValidate')}`
+          : res;
     }
-    return res;
-  };
+    res = messageData[key] === '' ? `${t('inputEmpty')}` : res;
+  }
+  return res;
+};
 
-  const socials = [
-    {
-      icon: 'mdi-linkedin',
-      color: '#0A66C2',
-      link: 'https://www.linkedin.com/in/naldpark/',
-    },
-    {
-      icon: 'mdi-instagram',
-      color: '#FF5A51',
-      link: 'https://www.instagram.com/youngik_nald/',
-    },
-    {
-      icon: 'mdi-facebook',
-      color: 'indigo',
-      link: 'https://www.facebook.com/nald873',
-    },
-  ];
+const socials = [
+  {
+    icon: 'mdi-linkedin',
+    color: '#0A66C2',
+    link: 'https://www.linkedin.com/in/naldpark/',
+  },
+  {
+    icon: 'mdi-instagram',
+    color: '#FF5A51',
+    link: 'https://www.instagram.com/youngik_nald/',
+  },
+  {
+    icon: 'mdi-facebook',
+    color: 'indigo',
+    link: 'https://www.facebook.com/nald873',
+  },
+];
 
-  const exploreSNS = (url: string) => {
-    window.open(url);
-  };
+const exploreSNS = (url: string) => {
+  window.open(url);
+};
 
-  const sendMessage = async () => {
-    appStatusStore.showLoading();
-    const validate = validateCheck();
-    if (validate === '') {
-      try {
-        const res = await contact(messageData);
-        let type = '';
-        let message = '';
+const sendMessage = async () => {
+  appStatusStore.showLoading();
+  const validate = validateCheck();
+  if (validate === '') {
+    try {
+      const res = await contact(messageData);
+      let type = '';
+      let message = '';
 
-        if (res.data.statusCode === 200) {
-          Object.keys(messageData).forEach((key) => {
-            messageData[key] = '';
-          });
-          type = 'success';
-          message = `${t('complete')}`;
-        } else {
-          type = 'error';
-          message = `${t('unknownError')}`;
-        }
-        appStatusStore.hideLoading();
-        appStatusStore.showDialog({
-          title: type,
-          description: message,
-          invisibleClose: true,
-          action: () => {
-            router.push({ name: 'MainPage' }).catch((err: any) => err);
-          },
+      if (res.data.statusCode === 200) {
+        Object.keys(messageData).forEach((key) => {
+          messageData[key] = '';
         });
-      } catch (error) {
-        appStatusStore.hideLoading();
-        appStatusStore.addToastMessage({
-          type: 'error',
-          message: `${t('unknownError')}`,
-          buttonMsg: null,
-          timeout: null,
-          buttonCallback: null,
-        });
+        type = 'success';
+        message = `${t('complete')}`;
+      } else {
+        type = 'error';
+        message = `${t('unknownError')}`;
       }
-    } else {
+      appStatusStore.hideLoading();
+      appStatusStore.showDialog({
+        title: type,
+        description: message,
+        invisibleClose: true,
+        action: () => {
+          router.push({ name: 'MainPage' }).catch((err: any) => err);
+        },
+      });
+    } catch (error) {
       appStatusStore.hideLoading();
       appStatusStore.addToastMessage({
         type: 'error',
-        message: validate as string,
+        message: `${t('unknownError')}`,
         buttonMsg: null,
         timeout: null,
         buttonCallback: null,
       });
     }
-  };
+  } else {
+    appStatusStore.hideLoading();
+    appStatusStore.addToastMessage({
+      type: 'error',
+      message: validate as string,
+      buttonMsg: null,
+      timeout: null,
+      buttonCallback: null,
+    });
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .contant-page-wrap {
-    margin-top: 50px;
-    .inner-border {
-      width: 90%;
-      height: 90%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 1.5px solid #fff8e8;
-    }
+.contant-page-wrap {
+  margin-top: 50px;
 
-    .contact-box {
-      background-color: rgba(20, 20, 20, 0.6);
-      justify-content: left;
-      display: block;
-      width: 100%;
-      border-radius: 30px;
-      font-weight: 200;
-      color: #d5d5d5;
-      background-image: linear-gradient(
-          rgba(10, 10, 10, 0.99),
-          rgba(30, 30, 30, 0.2)
-        ),
-        url('../../assets/images/contactBackground.png');
-    }
+  .inner-border {
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1.5px solid #fff8e8;
   }
+
+  .contact-box {
+    background-color: rgba(20, 20, 20, 0.6);
+    justify-content: left;
+    display: block;
+    width: 100%;
+    border-radius: 30px;
+    font-weight: 200;
+    color: #d5d5d5;
+    background-image: linear-gradient(rgba(10, 10, 10, 0.99),
+        rgba(30, 30, 30, 0.2)),
+      url('../../assets/images/contactBackground.png');
+  }
+}
 </style>

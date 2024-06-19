@@ -3,6 +3,7 @@ import 'vuetify/styles';
 import { createVuetify, type ThemeDefinition } from 'vuetify';
 import type { App } from 'vue';
 import { VTreeview } from 'vuetify/lib/labs/components.mjs';
+import { Ripple } from 'vuetify/lib/directives/index.mjs';
 
 const myTheme: ThemeDefinition = {
   dark: true,
@@ -30,6 +31,9 @@ const vuetify = createVuetify({
   },
   components: {
     VTreeview,
+  },
+  directives: {
+    Ripple,
   },
 });
 

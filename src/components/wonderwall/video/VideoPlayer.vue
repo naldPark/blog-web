@@ -26,7 +26,6 @@ const { hlsSource, posterUrl, vttSrc } = defineProps<{
 
 
 onMounted(() => {
-  console.log('vttSrc', vttSrc)
   const videoElement = document.querySelector('.video-js') as HTMLVideoElement;
   if (videoElement) {
     videoElement.setAttribute('playsinline', 'true');

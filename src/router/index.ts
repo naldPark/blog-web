@@ -5,7 +5,7 @@ import {
   RouteLocationNormalized,
 } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
-import WonderwallLayout from '@/layouts/WonderWallLayout.vue';
+import WonderwallLayout from '@/layouts/WonderwallLayout.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 
 const routes = [
@@ -46,7 +46,7 @@ const routes = [
           {
             path: 'main',
             name: 'WonderwallPage',
-            component: () => import('@/pages/wonderwall/WonderWallPage.vue'),
+            component: () => import('@/pages/wonderwall/WonderwallPage.vue'),
           },
           {
             path: 'sandbox',
@@ -107,8 +107,9 @@ router.beforeEach(
     from: RouteLocationNormalized,
     next: NavigationGuardNext,
   ) => {
+    console.log('감자러쉬', to);
     const accountStatusStore = useAccountStatusStore();
-    await accountStatusStore.loadAuthToken();
+    accountStatusStore.loadAuthToken();
     if (to.matched.some((route) => route.meta.anonymousAccess)) {
       next();
     } else if (accountStatusStore.isSignIn) {

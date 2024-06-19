@@ -117,8 +117,8 @@ export enum LANGUAGE_TYPE {
 import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import LoginDialog from './LoginDialog.vue';
-import EditAccountInfoDialog from './EditAccountInfoDialog.vue';
+import LoginDialog from '@/components/dialog/LoginDialog.vue';
+import EditAccountInfoDialog from '@/components/dialog/EditAccountInfoDialog.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useLanguageStatusStore } from '@/store/languageStatusStore';
 

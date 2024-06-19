@@ -27,6 +27,6 @@ declare module 'vue-router/auto-routes' {
     '/wonderwall/sandbox/SandboxTerminalPage': RouteRecordInfo<'/wonderwall/sandbox/SandboxTerminalPage', '/wonderwall/sandbox/SandboxTerminalPage', Record<never, never>, Record<never, never>>,
     '/wonderwall/streaming/StreamingListPage': RouteRecordInfo<'/wonderwall/streaming/StreamingListPage', '/wonderwall/streaming/StreamingListPage', Record<never, never>, Record<never, never>>,
     '/wonderwall/streaming/StreamingPage': RouteRecordInfo<'/wonderwall/streaming/StreamingPage', '/wonderwall/streaming/StreamingPage', Record<never, never>, Record<never, never>>,
-    '/wonderwall/WonderWallPage': RouteRecordInfo<'/wonderwall/WonderWallPage', '/wonderwall/WonderWallPage', Record<never, never>, Record<never, never>>,
+    '/wonderwall/WonderwallPage': RouteRecordInfo<'/wonderwall/WonderwallPage', '/wonderwall/WonderwallPage', Record<never, never>, Record<never, never>>,
   }
 }

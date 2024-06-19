@@ -202,7 +202,7 @@ onMounted(async () => {
       gojs(
         go.Panel,
         'Horizontal',
-        { margin: 15 },
+        { margin: 10 },
         gojs(
           go.Picture,
           { margin: mr8, visible: true, desiredSize: new go.Size(50, 50) },

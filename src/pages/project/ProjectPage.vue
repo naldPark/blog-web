@@ -6,13 +6,11 @@
       </v-tabs>
       <v-tabs-window v-model="currentTab">
         <v-tabs-window-item value="diagram" :transition=false :reverseTransition=false>
-          <project-diagram />
+          <ProjectDiagram />
         </v-tabs-window-item>
-
         <v-tabs-window-item value="kube" :transition=false :reverseTransition=false>
           <project-kube />
         </v-tabs-window-item>
-
         <v-tabs-window-item value="history" :transition=false :reverseTransition=false>
           <project-history />
         </v-tabs-window-item>

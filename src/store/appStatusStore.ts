@@ -68,7 +68,6 @@ export const useAppStatusStore = defineStore({
 
   actions: {
     setLoading(info: any) {
-      console.log('setLoading', info);
       this.showUIBlocker = info.val;
     },
 
@@ -104,12 +103,10 @@ export const useAppStatusStore = defineStore({
     },
 
     showLoading(info?: any) {
-      console.log('showLoading');
       this.setLoading({ val: true, cancel: info ? info.cancel : false });
     },
 
     hideLoading() {
-      console.log('hideLoading');
       this.setLoading({ val: false, cancel: false });
     },
 

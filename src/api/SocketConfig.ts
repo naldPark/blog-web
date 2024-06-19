@@ -7,7 +7,6 @@ class SocketConfig {
 
   // 생성자에서는 환경 변수를 통해 소켓 URL을 가져와 소켓을 초기화.
   constructor() {
-    console.log('??');
     this.url = `${location.protocol}//${location.host}/nodeterm`;
     this.socket = io(this.url, {
       transports: ['websocket'],

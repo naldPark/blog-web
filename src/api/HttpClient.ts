@@ -24,13 +24,12 @@ const createHttpClient = (): AxiosInstance => {
   const requestInterceptorHandler = async (
     request: AxiosRequestConfig,
   ): Promise<AxiosRequestConfig<any>> => {
+    console.log('요청인터셉터');
     const accountStatusStore = useAccountStatusStore();
     const authToken = await accountStatusStore.getAuthToken();
-    console.log('adasd');
     if (!request.headers) {
       request.headers = {};
     }
-    console.log('Config.AUTH_TOKEN_HEADER_KEY', Config.AUTH_TOKEN_HEADER_KEY);
     if (!request.headers[Config.AUTH_TOKEN_HEADER_KEY]) {
       if (typeof authToken === 'string' && !isEmpty(authToken)) {
         request.headers[Config.AUTH_TOKEN_HEADER_KEY] = `${authToken}`;

@@ -1,6 +1,18 @@
 <template>
   <div>
     <div v-if="!lazyShow">
+      <v-card class="mx-auto pa-5" color="#121212">
+        <v-row class="justify-align-center">
+          <v-col class="d-flex pa-1" cols="12" sm="4">
+            <v-select class="input-custom" item-title="label" item-value="value" v-model="searchCategory" solo
+              :items="categories" filled :label="$t('category')"></v-select>
+          </v-col>
+          <v-col class="d-flex pa-1" cols="12" sm="8">
+            <v-text-field class="input-custom" solo :label="$t('searchPlaceHolder')" append-icon="mdi-magnify"
+              v-model="searchText" @keyup.enter="searchVideo" @click:append="searchVideo"></v-text-field>
+          </v-col>
+        </v-row>
+      </v-card>
       <div id="vue-core-video-player-box" class="movie-player text-center" :preload="'metadata'"
         style="vertical-align: middle">
         <VideoPlayer :hlsSource='currentMovie.fileSrc' :posterUrl='currentMovie.fileCover'
@@ -8,7 +20,7 @@
         <Subtitles />
       </div>
       <div class="movie-detail pl-3">
-        <v-chip small color="grey" outlined class="mb-2">
+        <v-chip small color="grey" veriant='outlined' class="mb-2">
           {{ currentMovie.fileType }}
         </v-chip>
         <v-row>
@@ -20,9 +32,10 @@
           </v-col>
           <v-col cols="12" sm="4">
             <div class="download mb-5">
-              <v-btn variant="outlined" rounded color="primary" class="pa-4 mb-3"
-                :disabled="currentMovie.downloadable === 'N'" x-small @click="clickToDownload()">
-                <v-icon>mdi-download</v-icon> {{ $t('video.download') }}
+              <v-btn color="primary" rounded variant="outlined" :disabled="currentMovie.downloadable === 'N'"
+                @click="clickToDownload()">
+                <v-icon>mdi-download</v-icon>
+                {{ $t('video.download') }}
               </v-btn>
             </div>
           </v-col>

@@ -4,7 +4,7 @@
       @click="changeMovie">
       <div class="d-flex flex-no-wrap align-start">
         <v-avatar class="ma-3" size="120" tile>
-          <v-img contain :src="`src/assets/images/streaming/${item.fileCover}`"></v-img>
+          <v-img cover aspect-ratio="2/4" :src="item.fileCover"></v-img>
         </v-avatar>
         <div class="movie-card">
           <v-card-title class="mb-3 body-1">{{ item.fileName }}</v-card-title>

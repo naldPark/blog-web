@@ -44,7 +44,6 @@ export default class SocketTerminal {
   }
 
   _onKeyHandler(e: { key: string; domEvent: KeyboardEvent }) {
-    console.log('??');
     const printable: boolean =
       !e.domEvent.altKey && !e.domEvent.ctrlKey && !e.domEvent.metaKey;
 
