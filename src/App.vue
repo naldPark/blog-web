@@ -52,10 +52,10 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useAppStatusStore, useLanguageStatusStore, useAccountStatusStore } from '@/store';
+import { useAppStatusStore, useLanguageStatusStore, } from '@/store';
 import Config from "@/config";
 import { storeToRefs } from "pinia";
 

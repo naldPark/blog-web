@@ -42,14 +42,15 @@
     <VideoSlider :category="'ani'" :cardList="movieList.filter((f: any) => f.fileType === 'ani')"
       @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
-    <resource-manage-dialog v-if="showResourceManageDialog" v-model="showResourceManageDialog"
-      @fetchVideoList="fetchVideoList"></resource-manage-dialog>
+    <VideoUploadDialog v-if="showResourceManageDialog" v-model="showResourceManageDialog"
+      @fetchVideoList="fetchVideoList" />
   </v-container>
 </template>
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import VideoUploadDialog from '@/components/dialog/VideoUploadDialog.vue'
 import storageService from '@/api/storageService';
 import { useI18n } from 'vue-i18n';
 import VideoSlider from '@/components/wonderwall/video/VideoSlider.vue'

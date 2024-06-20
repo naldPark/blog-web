@@ -11,7 +11,7 @@ import { useAccountStatusStore } from '@/store/accountStatusStore';
 const routes = [
   {
     path: '/main',
-    component: () => import('./../pages/MainPage.vue'),
+    component: () => import('@/pages/MainPage.vue'),
     name: 'MainPage',
     meta: {
       anonymousAccess: true,
