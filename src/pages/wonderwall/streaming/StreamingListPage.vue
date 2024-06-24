@@ -10,7 +10,7 @@
             <v-btn color="btnPrimary mb-5" dark @click="playAny()">
               <v-icon class="mr-2">mdi-play-circle-outline</v-icon>{{ t('video.playAny') }}
             </v-btn>
-            <v-btn color="background" @click="showResourceManageDialog = true">
+            <v-btn color="background" @click="updateShowUploadDialog(true)">
               <v-icon class="mr-2">mdi-cloud-upload-outline</v-icon>{{ t('video.uploadVideo') }}
             </v-btn>
           </div>
@@ -42,8 +42,7 @@
     <VideoSlider :category="'ani'" :cardList="movieList.filter((f: any) => f.fileType === 'ani')"
       @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
-    <VideoUploadDialog v-if="showResourceManageDialog" v-model="showResourceManageDialog"
-      @fetchVideoList="fetchVideoList" />
+    <VideoUploadDialog :isMultiple='true' v-model:modelValue="showUploadDialog" @fetchVideoList="fetchVideoList" />
   </v-container>
 </template>
 
@@ -66,10 +65,15 @@ const categories: any = [
   { label: t('video.nald'), value: 'nald', hint: t('video.nald') },
 ];
 
-const showResourceManageDialog: any = ref(false);
 const movieList: any = ref([]);
 const searchText: any = ref('');
 const searchCategory: any = ref('');
+
+const showUploadDialog = ref(false); // 다이얼로그가 열린 상태로 초기화
+// v-model에 대한 update 이벤트를 처리하는 함수를 정의합니다.
+const updateShowUploadDialog = (newValue: boolean) => {
+  showUploadDialog.value = newValue;
+};
 
 const router = useRouter();
 
@@ -122,12 +126,6 @@ const onClickMovie = (item: any) => {
   }
 };
 
-// watchEffect(() => {
-//   fetchVideoList();
-// });
-
-// // 초기 마운트 시 실행
-// fetchVideoList();
 </script>
 
 <style lang="scss" scoped>

@@ -1,16 +1,16 @@
 <template>
-  <v-dialog max-width="1200">
+  <v-dialog @update:model-value="updateShowValue" max-width="1200">
     <v-card color="#161616">
       <v-card-title>
         <h4 class="mb-5">
-          <v-icon class="primary--text mr-3">mdi-video</v-icon>{{ $t('video.uploadVideo') }}
+          <v-icon class="text-primary mr-3">mdi-video</v-icon>{{ $t('video.uploadVideo') }}
         </h4>
       </v-card-title>
       <v-card-text>
-        <import-local-file selected-type="nan" :fileTypes="availableFileTypes" :isMultiple="multiple"
+        <ImportLocalFile selected-type="nan" :fileTypes="availableFileTypes" :isMultiple="isMultiple"
           @updatedUploadfiles="updatedUploadfiles" />
         <v-divider class="mt-10"></v-divider>
-        <upload-file-form @closeDialog="closeDialog" v-model="movieInfo" />
+        <FileUpload @closeDialog="closeDialog" v-model="movieInfo" />
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -20,28 +20,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, computed } from 'vue';
-import ImportLocalFile from "@/components/admin/ImportLocalFile.vue";
-import UploadFileForm from "@/components/admin/UploadFileForm.vue";
+import { ref, computed, watch } from 'vue';
+import ImportLocalFile from "@/components/wonderwall/video/ImportLocalFIle.vue";
+import FileUpload from "@/components/wonderwall/video/FileUpload.vue";
 
-defineProps({
-  showResourceManageDialog: {
+
+const { isMultiple } = defineProps({
+  isMultiple: {
     type: Boolean,
     required: true,
   },
-  isMobile: {
-    type: Boolean,
-    default: false,
-  },
-  multiple: {
-    type: Boolean,
-    default: false,
-  },
 });
 
-const emit = defineEmits(['update:showResourceManageDialog', 'fetchVideoList']);
+const emit = defineEmits(['close', 'fetchVideoList', 'update:modelValue']);
+function updateShowValue(value: any) {
+  emit('update:modelValue', value);
+}
 
 const availableFileTypes = ['.mp4'];
+
+
+
 
 const movieInfo = ref({
   category: null,
@@ -58,12 +57,12 @@ const movieInfo = ref({
   fileAuth: false,
 });
 
-function closeDialog() {
+const closeDialog = () => {
   // lazyShow.value = false;
   emit('fetchVideoList');
 }
 
-function updatedUploadfiles(files: any) {
+const updatedUploadfiles = (files: any) => {
   movieInfo.value.file = files[0].file;
   movieInfo.value.originName = files[0].name;
   movieInfo.value.name = files[0].name.substring(0, files[0].name.lastIndexOf('.'));

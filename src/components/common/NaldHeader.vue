@@ -101,7 +101,7 @@
       </template>
     </v-list>
   </v-navigation-drawer>
-  <login-dialog v-model:modelValue="showLoginDialog" msg="Vue 3 + TypeScript + Vite + Vuetify 3"></login-dialog>
+  <LoginDialog v-model:modelValue="showLoginDialog" msg="Vue 3 + TypeScript + Vite + Vuetify 3" />
   <edit-account-info-dialog v-model="showEditAccountInfoDialog" v-if="accountInfo?.accountId"
     :accountId="accountInfo.accountId"></edit-account-info-dialog>
 </template>
