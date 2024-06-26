@@ -31,9 +31,11 @@ const createHttpClient = (): AxiosInstance => {
       request.headers = {};
     }
     if (!request.headers[Config.AUTH_TOKEN_HEADER_KEY]) {
+      console.log('????', authToken);
       if (typeof authToken === 'string' && !isEmpty(authToken)) {
         request.headers[Config.AUTH_TOKEN_HEADER_KEY] = `${authToken}`;
       }
+
       request.headers['requestPath'] = location.pathname;
     }
     return request as AxiosRequestConfig<any>;

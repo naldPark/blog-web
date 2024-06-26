@@ -91,22 +91,25 @@ function dragoverHover(value: boolean) {
 }
 
 async function onDropFiles(e: DragEvent) {
+  console.log('???')
   onProgressing.value = true;
   e.stopPropagation();
   e.preventDefault();
   dragover.value = false;
   let dragFiles = null;
   let isFolder = false;
-
+  console.log('??2??2')
   if (props.isMultiple) {
     if (e.dataTransfer?.types[0] !== 'Files' || !e.dataTransfer.items) {
       return;
     }
+    console.log('??2??3')
     const entries = [...e.dataTransfer.items].map((item) => item.webkitGetAsEntry());
     const allEntries = await checkFileTree(entries);
     isFolder = allEntries.depth ? true : false;
     dragFiles = await Promise.all(allEntries.files.map((entry) => new Promise((resolve, reject) => entry.file(resolve, reject))));
   } else {
+    console.log('??2??4')
     if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
       if (e.dataTransfer.files[0].type === '') {
         isFolder = true;
@@ -116,6 +119,7 @@ async function onDropFiles(e: DragEvent) {
   }
 
   if (dragFiles) {
+    console.log('555')
     selectedLocalFiles.value = [];
     for (const file of dragFiles) {
       selectedLocalFiles.value.push({
@@ -153,9 +157,9 @@ function onClickBrowse() {
 
 function onFileSelected() {
   onProgressing.value = true;
-  if (fileInput?.files && fileInput.files.length > 0) {
+  if (fileInput && fileInput.length > 0) {
     selectedLocalFiles.value = [];
-    for (const file of fileInput.files) {
+    for (const file of fileInput) {
       selectedLocalFiles.value.push({
         status: 'checking',
         file

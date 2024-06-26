@@ -10,7 +10,9 @@ import '@/styles/settings.scss';
 import 'xterm/css/xterm.css';
 
 // 앱 생성
-const app = createApp(App);
+const app = createApp(App, {
+  suspense: false, // Suspense 비활성화
+});
 
 // 플러그인 등록
 app.use(i18n);

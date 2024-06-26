@@ -63,11 +63,14 @@ const closeDialog = () => {
 }
 
 const updatedUploadfiles = (files: any) => {
+  console.log('왔냐', files)
   movieInfo.value.file = files[0].file;
   movieInfo.value.originName = files[0].name;
   movieInfo.value.name = files[0].name.substring(0, files[0].name.lastIndexOf('.'));
   movieInfo.value.fileSize = files[0].size;
   movieInfo.value.status = files[0].status;
+
+  console.log(movieInfo.value)
 }
 </script>
 

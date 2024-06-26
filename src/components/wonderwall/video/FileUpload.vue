@@ -2,7 +2,7 @@
   <v-card color="#161616" elevation="0">
     <v-row>
       <v-col md='7'>
-        <v-text-field type="text" :label="movieInfo.file ? `${$t('video.selectedFile')}` : ''" :disabled="true"
+        <v-text-field type="text" :label="movieInfo?.file ? `${$t('video.selectedFile')}` : ''" :disabled="true"
           v-model="movieInfo.originName">
         </v-text-field>
       </v-col>
@@ -62,10 +62,29 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import StorageService from '@/api/storageService';
+import storageService from '@/api/storageService';
 import { useAppStatusStore } from '@/store';
-const props = defineProps({
-  modelValue: Object
+
+
+const { modelValue } = defineProps({
+  modelValue: {
+    type: Object,
+    required: false,
+    default: () => ({
+      category: null,
+      file: null,
+      originName: "",
+      fileSize: 0,
+      description: "",
+      name: "",
+      status: "",
+      fileType: "",
+      fileCover: null,
+      fileVtt: null,
+      fileDownload: false,
+      fileAuth: false,
+    })
+  }
 });
 
 const emit = defineEmits(['update:modelValue', 'closeDialog']);
@@ -80,13 +99,31 @@ const categories = [
   { label: t('video.etc'), value: 'etc', hint: t('video.etc') }
 ];
 
-const coverRules = [(value: { size: number; }) => !value || value.size < 2000000 || 'Cover size should be less than 2 MB!',
-];
+const coverRules = ref([
+  (value: File | null) => !value || value.size < 2000000 || 'Cover size should be less than 2 MB!',
+]);
 
-const movieInfo = ref({ ...props.modelValue });
-watch(movieInfo, (newValue) => {
-  emit('update:modelValue', newValue);
+// 초기 props 모델 값이 정의되지 않았을 경우에 대한 방어 코드
+const movieInfo = ref({
+  ...modelValue || {
+    category: null,
+    file: null,
+    originName: "",
+    fileSize: 0,
+    description: "",
+    name: "",
+    status: "",
+    fileType: "",
+    fileCover: null,
+    fileVtt: null,
+    fileDownload: false,
+    fileAuth: false,
+  }
 });
+
+watch(modelValue, (newValue) => {
+  movieInfo.value = modelValue;
+}, { immediate: true });
 
 const thumbnail = ref(null);
 
@@ -96,7 +133,6 @@ async function onSubmit() {
       thumbnail.value = result;
     });
   }
-
   const info = {
     fileName: movieInfo.value.name,
     fileSize: movieInfo.value.fileSize,
@@ -106,9 +142,8 @@ async function onSubmit() {
     fileAuth: movieInfo.value.fileAuth,
     fileCover: thumbnail.value
   };
-
   appStatusStore.showLoading();
-  await StorageService.localUploadFiles(info, movieInfo.value).then((res: any) => {
+  await storageService.localUploadFiles(info, movieInfo.value).then((res: any) => {
     appStatusStore.hideLoading();
     let title = `${t('complete')}`;
     let msg = `${t('confirmMsg')}`;
@@ -116,6 +151,7 @@ async function onSubmit() {
       title = `${t('error')}`;
       msg = res.data.message;
     }
+
     appStatusStore.showDialog({
       title: title,
       description: msg,

@@ -1,6 +1,5 @@
 import HttpClient from '@/api/HttpClient';
 import Config from '@/config';
-import sha256 from 'crypto-js/sha256';
 
 const storageService = {
   dafaultAPI: `${Config.backend}`,
@@ -41,10 +40,6 @@ const storageService = {
     bodyForm.append('info', blob);
     bodyForm.append('fileVtt', files.fileVtt);
     bodyForm.append('file', files.file);
-    // bodyForm.append('fileCover', files.fileCover);
-    // files.forEach((file: any) => {
-    //   bodyForm.append('files', file.file);
-    // });
     return HttpClient.post(
       `${this.dafaultAPI}/storage/uploadLocal`,
       bodyForm,
