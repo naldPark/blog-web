@@ -94,9 +94,7 @@ const { t } = useI18n();
 const categories = [
   { label: t('video.movie'), value: 'movie', hint: t('video.movie') },
   { label: t('video.tomAndJerry'), value: 'ani', hint: t('video.tomAndJerry') },
-  { label: t('video.personal'), value: 'personal', hint: t('video.personal') },
   { label: t('video.nald'), value: 'nald', hint: t('video.nald') },
-  { label: t('video.etc'), value: 'etc', hint: t('video.etc') }
 ];
 
 const coverRules = ref([

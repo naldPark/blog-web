@@ -46,8 +46,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'https://nald.me/backend',
-        target: 'http://localhost:8000',
+        target: 'https://nald.me/backend',
+        // target: 'http://localhost:8000',
         rewrite: (path) => path.replace(/^\/api/, ''),
         changeOrigin: true,
         secure: false,

@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, computed } from 'vue';
+import { ref, computed } from 'vue';
 
 import Config from '@/config';
 import { useI18n } from 'vue-i18n';

@@ -31,15 +31,15 @@
     </v-card>
     <v-divider class="mb-10"></v-divider>
     <h2 class="text-primary mb-3">{{ t('video.nald') }}</h2>
-    <VideoSlider :category="'nald'" :cardList="movieList.filter((f: any) => f.fileType === 'nald')"
+    <VideoSlider :category="'nald'" :videoList="movieList.filter((f: any) => f.fileType === 'nald')"
       @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
     <h2 class="text-primary mb-3 ml-2">{{ t('video.movie') }}</h2>
-    <VideoSlider :category="'movie'" :cardList="movieList.filter((f: any) => f.fileType === 'movie')"
+    <VideoSlider :category="'movie'" :videoList="movieList.filter((f: any) => f.fileType === 'movie')"
       @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
     <h2 class="text-primary mb-3">{{ t('video.tomAndJerry') }}</h2>
-    <VideoSlider :category="'ani'" :cardList="movieList.filter((f: any) => f.fileType === 'ani')"
+    <VideoSlider :category="'ani'" :videoList="movieList.filter((f: any) => f.fileType === 'ani')"
       @onClickMovie="onClickMovie($event)"></VideoSlider>
     <v-divider class="mb-10 mt-10"></v-divider>
     <VideoUploadDialog :isMultiple='true' v-model:modelValue="showUploadDialog" @fetchVideoList="fetchVideoList" />
@@ -54,6 +54,7 @@ import storageService from '@/api/storageService';
 import { useI18n } from 'vue-i18n';
 import VideoSlider from '@/components/wonderwall/video/VideoSlider.vue'
 import { shuffleArray } from '@/utils/common';
+import { VideoDetailtData } from '@/types/wonderwall/video';
 const { t } = useI18n();
 const categories: any = [
   { label: t('video.movie'), value: 'movie', hint: t('video.movie') },
@@ -65,9 +66,9 @@ const categories: any = [
   { label: t('video.nald'), value: 'nald', hint: t('video.nald') },
 ];
 
-const movieList: any = ref([]);
-const searchText: any = ref('');
-const searchCategory: any = ref('');
+const movieList: Ref<VideoDetailtData[]> = ref([]);
+const searchText: Ref<string> = ref('');
+const searchCategory: Ref<string> = ref('');
 
 const showUploadDialog = ref(false); // 다이얼로그가 열린 상태로 초기화
 // v-model에 대한 update 이벤트를 처리하는 함수를 정의합니다.
@@ -98,8 +99,8 @@ const fetchVideoList = async () => {
 };
 
 const playAny = () => {
-  const list: any[] = movieList.value.filter(
-    (f: any) => f.fileSrc !== null && f.fileSrc !== '',
+  const list: VideoDetailtData[] = movieList.value.filter(
+    (f: VideoDetailtData) => f.fileSrc !== null && f.fileSrc !== '',
   );
   console.log('list', list)
   console.log('shuffleArray(list),', shuffleArray(list))
@@ -112,7 +113,7 @@ const playAny = () => {
     .catch((err) => err);
 };
 
-const onClickMovie = (item: any) => {
+const onClickMovie = (item: VideoDetailtData) => {
   // console.log('엄마 클릭', item.fileC)
   if (item.fileSrc !== null && item.fileSrc !== '') {
     router

@@ -6,14 +6,14 @@
       </v-btn>
     </div>
     <ul class="movie-items" :id="`movie-items-${category}`" :class="{ 'scroll-smooth': !isDraggingMode }">
-      <li class="movie-item" @click="onClickMovie(item)" v-for="item in cardList" :key="item.fileId"
-        :class="{ 'disabled': !item.fileSrc }" :style="{
-          'background-image': `url('${item.fileCover}')`
-        }">
+
+      <li class="movie-item" @click="onClickMovie(item)" v-for="item in videoList" :key="item.storageId"
+        :class="{ 'disabled': !item.fileSrc }" :style="{ 'background-image': `url('${item.fileCover}')` }">
+
         <div class="movie-content" v-if="!item.fileSrc">
-          <v-chip class="mb-2 mr-2" color="rgb(30, 30, 30)" :disabled="true">
+          <v-chip class="mb-2 mr-2" color="lightgrey">
             not converted yet
-            <v-icon right>mdi-upload-off</v-icon>
+            <v-icon>mdi-upload-off</v-icon>
           </v-chip>
         </div>
         <div class="movie-content movie-desc" v-else>{{ item.fileDesc }}</div>
@@ -31,11 +31,12 @@
 </template>
 
 <script setup lang="ts">
+import { VideoDetailtData } from '@/types/wonderwall/video';
 import { ref } from 'vue';
 
 const props = defineProps<{
   category: string;
-  cardList: Array<any>;
+  videoList: Array<VideoDetailtData>;
 }>();
 const emits = defineEmits(['onClickMovie']);
 let isMouseDown = ref(false);

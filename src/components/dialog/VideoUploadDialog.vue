@@ -1,12 +1,10 @@
 <template>
   <v-dialog @update:model-value="updateShowValue" max-width="1200">
     <v-card color="#161616">
-      <v-card-title>
+      <v-card-text>
         <h4 class="mb-5">
           <v-icon class="text-primary mr-3">mdi-video</v-icon>{{ $t('video.uploadVideo') }}
         </h4>
-      </v-card-title>
-      <v-card-text>
         <ImportLocalFile selected-type="nan" :fileTypes="availableFileTypes" :isMultiple="isMultiple"
           @updatedUploadfiles="updatedUploadfiles" />
         <v-divider class="mt-10"></v-divider>
