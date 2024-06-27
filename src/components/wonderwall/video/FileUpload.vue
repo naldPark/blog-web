@@ -7,8 +7,7 @@
         </v-text-field>
       </v-col>
       <v-col md='5'>
-        <v-text-field type="text" :label="`${$t('video.uploadFileSize')}`" :disabled="true"
-          v-model="movieInfo.fileSize">
+        <v-text-field type="text" :label="`${$t('video.uploadFileSize')}`" :disabled="true" v-model="movieInfo.fileSize">
         </v-text-field>
       </v-col>
     </v-row>
@@ -48,11 +47,11 @@
     </v-row>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn outlined rounded text color="grey lighten-1" min-width="100" @click="$emit('closeDialog')">
+      <v-btn outlined rounded variant="text" color="grey lighten-1" min-width="100" @click="$emit('closeDialog')">
         {{ $t('cancel') }}
       </v-btn>
-      <v-btn outlined rounded text color="btnPrimary" :disabled="movieInfo.name === '' || movieInfo.file === null"
-        min-width="100" @click="onSubmit">
+      <v-btn outlined rounded variant="text" color="btnPrimary"
+        :disabled="movieInfo.name === '' || movieInfo.file === null" min-width="100" @click="onSubmit">
         {{ $t('confirm') }} <v-icon right dark>mdi-cloud-upload</v-icon>
       </v-btn>
     </v-card-actions>

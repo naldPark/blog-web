@@ -19,13 +19,11 @@ declare module 'vue' {
     ProjectDiagram: typeof import('./components/project/ProjectDiagram.vue')['default']
     ProjectHistory: typeof import('./components/project/ProjectHistory.vue')['default']
     ProjectKube: typeof import('./components/project/ProjectKube.vue')['default']
-    ResourceManageDialog: typeof import('./components/dialog/ResourceManageDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Subtitles: typeof import('./components/wonderwall/video/Subtitles.vue')['default']
     TerminalItem: typeof import('./components/terminal/TerminalItem.vue')['default']
     VideoPlayer: typeof import('./components/wonderwall/video/VideoPlayer.vue')['default']
-    VideoResourceManageDialog: typeof import('./components/dialog/VideoResourceManageDialog.vue')['default']
     VideoSlider: typeof import('./components/wonderwall/video/VideoSlider.vue')['default']
     VideoUploadDialog: typeof import('./components/dialog/VideoUploadDialog.vue')['default']
   }
