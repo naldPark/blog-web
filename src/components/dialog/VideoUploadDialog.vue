@@ -31,7 +31,7 @@ const { isMultiple } = defineProps({
 });
 
 const emit = defineEmits(['close', 'fetchVideoList', 'update:modelValue']);
-function updateShowValue(value: any) {
+const updateShowValue = (value: boolean) => {
   emit('update:modelValue', value);
 }
 
@@ -56,7 +56,8 @@ const movieInfo = ref({
 });
 
 const closeDialog = () => {
-  // lazyShow.value = false;
+  console.log()
+  updateShowValue(false);
   emit('fetchVideoList');
 }
 

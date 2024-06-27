@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <h1>패키지 버전 검사기</h1>
         <FileUpload />
@@ -14,4 +14,4 @@ export default defineComponent({
         FileUpload,
     },
 });
-</script>
+</script> -->
