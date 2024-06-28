@@ -7,7 +7,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import VueRouter from 'unplugin-vue-router/vite';
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import sassDts from 'vite-plugin-sass-dts';
-import { fileURLToPath } from 'node:url';
 import path from 'path';
 
 // Utilities
@@ -73,9 +72,9 @@ export default defineConfig({
   },
   root: './',
   resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
+     alias: {
+    '@': path.resolve(__dirname, 'src')
+  }
   },
   server: {
     host: '0.0.0.0',
