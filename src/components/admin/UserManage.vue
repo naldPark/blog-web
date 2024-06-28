@@ -1,6 +1,6 @@
 <template>
   <div class="contents">
-    <v-data-table show-select :headers="userHeaders" :items="userList" class="custom-table use-head" @click="onClickRow"
+    <!-- <v-data-table show-select :headers="userHeaders" :items="userList" class="custom-table use-head" @click="onClickRow"
       :single-select="false" :options.sync="listOptions" v-model="selectedItems" item-key="accountId"
       hide-default-footer>
       <template v-slot:item="{ item }">
@@ -28,11 +28,11 @@
                 <span class="text-h5">{{ $t('editUser') }}</span>
               </v-card-title>
               <v-card-text v-if="editUserDialog === true && selectedItems[0]">
-                <!-- <v-text-field v-model="selectedItems[0].accountId" :counter="15" label="Id" required></v-text-field>
+                <v-text-field v-model="selectedItems[0].accountId" :counter="15" label="Id" required></v-text-field>
                 <v-text-field v-model="selectedItems[0].accountName" :counter="10" label="Name" required></v-text-field>
                 <v-text-field v-model="selectedItems[0].email" label="E-mail" required></v-text-field>
                 <v-select v-model="selectedItems[0].authority" :items="authority" item-text="label" item-value="value"
-                  label="Item" required></v-select> -->
+                  label="Item" required></v-select>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -116,7 +116,7 @@
           </div>
         </div>
       </template>
-    </v-data-table>
+    </v-data-table> -->
     <!-- <edit-account-info-dialog v-if="selectedItems[0]" v-model="showEditAccountPasswordDialog"
       :accountId="selectedItems[0].accountId"></edit-account-info-dialog> -->
   </div>
