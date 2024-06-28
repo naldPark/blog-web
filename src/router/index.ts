@@ -78,6 +78,11 @@ const routes = [
             component: () =>
               import('@/pages/wonderwall/streaming/StreamingPage.vue'),
           },
+          {
+            path: 'chat',
+            name: 'ChatRoomPage',
+            component: () => import('@/pages/wonderwall/chat/ChatRoomPage.vue'),
+          },
         ],
       },
       {

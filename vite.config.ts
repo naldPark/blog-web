@@ -36,7 +36,10 @@ export default defineConfig({
       autoImport: true,
     }),
   ],
-  define: { 'process.env': {} },
+  define: {
+    'process.env': {},
+    global: 'globalThis', // to find variable on socktjs global
+  },
   root: './',
   resolve: {
     alias: {
@@ -53,7 +56,8 @@ export default defineConfig({
         secure: false,
       },
       '/chatEndPoint': {
-        target: 'https://nald.me/chatEndPoint',
+        target: 'http://nald.me:30913',
+        // target: 'http://localhost:8100/',
         changeOrigin: true,
         secure: false,
       },

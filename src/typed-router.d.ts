@@ -23,6 +23,7 @@ declare module 'vue-router/auto-routes' {
     '/FileUpload': RouteRecordInfo<'/FileUpload', '/FileUpload', Record<never, never>, Record<never, never>>,
     '/MainPage': RouteRecordInfo<'/MainPage', '/MainPage', Record<never, never>, Record<never, never>>,
     '/project/ProjectPage': RouteRecordInfo<'/project/ProjectPage', '/project/ProjectPage', Record<never, never>, Record<never, never>>,
+    '/wonderwall/chat/ChatRoomPage': RouteRecordInfo<'/wonderwall/chat/ChatRoomPage', '/wonderwall/chat/ChatRoomPage', Record<never, never>, Record<never, never>>,
     '/wonderwall/sandbox/SandboxPage': RouteRecordInfo<'/wonderwall/sandbox/SandboxPage', '/wonderwall/sandbox/SandboxPage', Record<never, never>, Record<never, never>>,
     '/wonderwall/sandbox/SandboxTerminalPage': RouteRecordInfo<'/wonderwall/sandbox/SandboxTerminalPage', '/wonderwall/sandbox/SandboxTerminalPage', Record<never, never>, Record<never, never>>,
     '/wonderwall/streaming/StreamingListPage': RouteRecordInfo<'/wonderwall/streaming/StreamingListPage', '/wonderwall/streaming/StreamingListPage', Record<never, never>, Record<never, never>>,

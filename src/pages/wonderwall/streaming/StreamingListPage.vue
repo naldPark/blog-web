@@ -29,25 +29,18 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-divider class="mb-10"></v-divider>
-    <h2 class="text-primary mb-3">{{ t('video.nald') }}</h2>
-    <VideoSlider :category="'nald'" :videoList="movieList.filter((f: any) => f.fileType === 'nald')"
-      @onClickMovie="onClickMovie($event)"></VideoSlider>
-    <v-divider class="mb-10 mt-10"></v-divider>
-    <h2 class="text-primary mb-3 ml-2">{{ t('video.movie') }}</h2>
-    <VideoSlider :category="'movie'" :videoList="movieList.filter((f: any) => f.fileType === 'movie')"
-      @onClickMovie="onClickMovie($event)"></VideoSlider>
-    <v-divider class="mb-10 mt-10"></v-divider>
-    <h2 class="text-primary mb-3">{{ t('video.tomAndJerry') }}</h2>
-    <VideoSlider :category="'ani'" :videoList="movieList.filter((f: any) => f.fileType === 'ani')"
-      @onClickMovie="onClickMovie($event)"></VideoSlider>
-    <v-divider class="mb-10 mt-10"></v-divider>
+    <template v-for="(category, index) in categories" :key="index">
+      <v-divider class="mb-10 mt-10"></v-divider>
+      <h2 class="text-primary mb-3">{{ t(category.label) }}</h2>
+      <VideoSlider :category="category.value" :videoList="movieList.filter((f: any) => f.fileType === category.value)"
+        @onClickMovie="onClickMovie($event)"></VideoSlider>
+    </template>
     <VideoUploadDialog :isMultiple='true' v-model:modelValue="showUploadDialog" @fetchVideoList="fetchVideoList" />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import VideoUploadDialog from '@/components/dialog/VideoUploadDialog.vue'
 import storageService from '@/api/storageService';

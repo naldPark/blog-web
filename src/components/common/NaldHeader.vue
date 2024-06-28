@@ -198,10 +198,10 @@ const menuItems = [
         value: 'StreamingListPage',
       },
       {
-        name: 'clilendor',
+        name: 'chat',
         icon: 'mdi-gamepad',
         title: t('menubar.clilendor'),
-        value: 'CliLendorPage',
+        value: 'ChatRoomPage',
       },
       {
         name: 'characterTest',
