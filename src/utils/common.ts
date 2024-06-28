@@ -1,18 +1,14 @@
-import { useDisplay } from 'vuetify/lib/framework.mjs';
-import { ref } from 'vue';
 
-// 이 함수는 현재 디바이스가 모바일인지 여부를 결정합니다.
-export function isMobile(): boolean {
-  const { smAndDown } = ref(useDisplay()).value;
-  console.log('smAndDown', smAndDown);
-  return smAndDown;
+
+/**
+ * 
+ * @param path /src/assets/svgs
+ * @param name argocd.svg
+ * @returns 
+ */
+export const getImageUrl = (path: string, name: string) => {
+  return new URL(`${path}/${name}`, import.meta.url).href;
 }
-
-// 이 함수는 현재 디바이스의 크기 이름을 반환합니다.
-// export function getSize(): string {
-//     const vuetify = useVuetify();
-//     return vuetify.framework.breakpoint.name;
-// }
 
 // 이 함수는 토큰을 디코딩합니다.
 export function decodeToken(payload: string): any {

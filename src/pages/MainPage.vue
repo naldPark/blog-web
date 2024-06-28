@@ -19,7 +19,7 @@
             <v-chip v-for="(item, index) in badges" :key="index" size="small" class="ma-1" :color="item.backgroundColor"
               variant="flat" :style="`color: ${item.color}`">
               <div class="text-center d-flex align-center justify-space-around">
-                <img style="width: 17px; height: 17px" :src="getImageUrl(item.src)" alt="Badge icon" />
+                <img style="width: 17px; height: 17px" :src="getImageUrl('/src/assets/svgs', item.src)" alt="Badge icon" />
                 <span class="pl-1" v-if="appSize !== 'xs'">{{
                   item.name
                 }}</span>
@@ -43,6 +43,7 @@ import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useAppStatusStore } from '@/store/appStatusStore';
 import { useDisplay } from 'vuetify';
 import { getBadgeList } from '@/api/commonService';
+import { getImageUrl } from '../utils/common';
 class TypeWriter {
   txtElement: HTMLElement | null = null;
   words: string[] = [];
@@ -122,10 +123,6 @@ const typingAnimation = () => {
   typeWriter.value.wait = wait;
   typingRun();
 };
-
-function getImageUrl(name: string) {
-  return new URL(`/src/assets/svgs/${name}`, import.meta.url).href;
-}
 onMounted(async () => {
 
   appStatusStore.showLoading();

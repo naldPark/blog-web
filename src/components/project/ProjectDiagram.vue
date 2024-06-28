@@ -10,7 +10,7 @@
         <v-card-text>
           <v-row class="mb-4 align-center">
             <v-avatar rounded class="mr-4" size="30">
-              <v-img :src="`src/assets/diagram/${selectedNode.icon}.png`"></v-img>
+              <v-img :src="getImageUrl('/src/assets/diagram/', `${selectedNode.icon}.png`)"></v-img>
             </v-avatar>
             <strong class="text-h6">{{ selectedNode.name }}</strong>
             <v-spacer></v-spacer>
@@ -45,6 +45,7 @@ import { ref } from 'vue';
 import DiagramItem from './DiagramItem.vue';
 import story from '@/assets/data/story';
 import { useDisplay } from 'vuetify';
+import { getImageUrl } from '@/utils/common';
 interface Node {
   icon: string;
   name: string;
