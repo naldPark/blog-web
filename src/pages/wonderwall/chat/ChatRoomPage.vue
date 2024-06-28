@@ -16,14 +16,26 @@
     <div class="mt-3" v-else>
       <v-card max-width="1000" class="mx-auto">
         <v-toolbar dark>
-          <v-toolbar-title class="primary--text">{{ $t('chat.chatRoom') }} [{{ roomId }}]</v-toolbar-title>
+          <v-toolbar-title class="text-primary">{{ $t('chat.chatRoom') }} [{{ roomId }}]</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn class="ma-1" color="secondary" plain @click="leave">{{ $t('leave') }}</v-btn>
         </v-toolbar>
-        <div class="connecting ml-3" v-if="!roomId">
+        <!-- <div class="connecting ml-3" v-if="!roomId">
           {{ $t('chat.connecting') }}
-        </div>
+        </div> -->
+
         <v-list id="msgList" style="height:500px; overflow: auto;">
+          <v-list-subheader v-if="!roomId"> {{ $t('chat.connecting') }}</v-list-subheader>
+
+          <v-list-item v-for="(item, index) in messageList" :key="index" :title="item.id" :subtitle="item.content">
+            <template v-slot:prepend>
+              <v-avatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id.charAt(0) }}</v-avatar>
+            </template>
+          </v-list-item>
+        </v-list>
+
+
+        <!-- <v-list id="msgList" style="height:500px; overflow: auto;">
           <template v-for="(item, index) in messageList" :key="index">
             <v-list-item v-if="item.type !== 'chat-message'">
               <div>{{ item.content }}</div>
@@ -34,15 +46,15 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
-                  <span v-html="item.id"></span>
+                  <span>{{ item.id }}</span>
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  <span v-html="item.content"></span>
+                  <span>{{ item.content }}</span>
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </template>
-        </v-list>
+        </v-list> -->
         <div class="chat-container pa-2 pl-3 pr-3">
           <v-text-field outlined dense v-model="messageInput" :append-outer-icon="'mdi-send'"
             :label="`${$t('typeMessage')}`" type="text" @click:append-outer="sendMessage"
@@ -88,13 +100,6 @@ const connect = (event: Event) => {
     });
     client = new Client({
       webSocketFactory: () => socket,
-      connectHeaders: {
-        login: 'user', // Replace with your login
-        passcode: 'password', // Replace with your password
-      },
-      debug: (str) => {
-        console.log(new Date(), str);
-      },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,

@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ChangePasswordDialog: typeof import('./components/dialog/ChangePasswordDialog.vue')['default']
     DiagramItem: typeof import('./components/project/DiagramItem.vue')['default']
     EditAccountInfoDialog: typeof import('./components/dialog/EditAccountInfoDialog.vue')['default']
     FileUpload: typeof import('./components/wonderwall/video/FileUpload.vue')['default']
@@ -23,6 +24,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Subtitles: typeof import('./components/wonderwall/video/Subtitles.vue')['default']
     TerminalItem: typeof import('./components/terminal/TerminalItem.vue')['default']
+    UserManage: typeof import('./components/admin/UserManage.vue')['default']
     VideoPlayer: typeof import('./components/wonderwall/video/VideoPlayer.vue')['default']
     VideoSlider: typeof import('./components/wonderwall/video/VideoSlider.vue')['default']
     VideoUploadDialog: typeof import('./components/dialog/VideoUploadDialog.vue')['default']

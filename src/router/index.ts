@@ -40,6 +40,14 @@ const routes = [
         },
       },
       {
+        path: 'admin',
+        name: 'AdminPage',
+        component: () => import('@/pages/admin/AdminPage.vue'),
+        meta: {
+          anonymousAccess: false,
+        },
+      },
+      {
         path: 'wonderwall',
         component: WonderwallLayout,
         children: [

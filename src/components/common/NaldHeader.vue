@@ -20,7 +20,7 @@
         <v-list>
           <v-list-subheader>{{ accountInfo.accountName }}</v-list-subheader>
           <v-list-item class="right-panel-item" v-if="accountInfo.authority === 0">
-            <v-list-item-title>
+            <v-list-item-title @click="clickToChangeAccountInfo">
               <v-icon :icon="'mdi-account-edit-outline'" />
               {{ t('editPassword') }}
             </v-list-item-title>
@@ -102,8 +102,8 @@
     </v-list>
   </v-navigation-drawer>
   <LoginDialog v-model:modelValue="showLoginDialog" msg="Vue 3 + TypeScript + Vite + Vuetify 3" />
-  <edit-account-info-dialog v-model="showEditAccountInfoDialog" v-if="accountInfo?.accountId"
-    :accountId="accountInfo.accountId"></edit-account-info-dialog>
+  <ChangePasswordDialog v-model="showEditAccountInfoDialog" v-if="accountInfo?.accountId"
+    :accountId="accountInfo.accountId" />
 </template>
 
 <script lang="ts">
@@ -118,7 +118,7 @@ import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import LoginDialog from '@/components/dialog/LoginDialog.vue';
-import EditAccountInfoDialog from '@/components/dialog/EditAccountInfoDialog.vue';
+import ChangePasswordDialog from '@/components/dialog/ChangePasswordDialog.vue';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useLanguageStatusStore } from '@/store/languageStatusStore';
 
@@ -269,6 +269,11 @@ const lang = computed(
 const clickShowLoginDialog = () => {
   showLoginDialog.value = !showLoginDialog.value;
 };
+
+const clickToChangeAccountInfo = () => {
+  showEditAccountInfoDialog.value = true;
+}
+
 
 // 언어 변경 함수
 const clickToChangeLang = () => {
