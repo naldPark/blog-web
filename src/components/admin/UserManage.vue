@@ -273,7 +273,7 @@ const fetchUserList = () => {
       }
       resolve({ finish: true });
       appStatusStore.hideLoading();
-    }).catch((error) => {
+    }).catch((error: any) => {
       appStatusStore.hideLoading();
       resolve({ finish: true });
     });
