@@ -4,7 +4,7 @@
     "jsx": "preserve",
     "typeRoots": ["src/types", "node_modules/@types"],
     "lib": ["esnext", "dom", "dom.iterable"],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
@@ -27,6 +27,6 @@
     "noEmit": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./typed-router.d.ts", "./vite.config.*", "./env.d.ts", "./shims.d.ts", "./src/**/*", "./src/**/*.vue", "./auto-imports.d.ts", "./components.d.ts"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["src", "vite.config.ts"],
+  "exclude": [ "node_modules"]
 }

@@ -35,7 +35,7 @@ spec:
             defaultMode: 420
       containers:
         - name: main-page
-          image: nas.nald.me:35003/docker/main/frontend:__DOCKER_IMG_VER__
+          image: nas.nald.me:35003/docker/main/front-web:__DOCKER_IMG_VER__
           imagePullPolicy: Always
           ports:
             - containerPort: 80
