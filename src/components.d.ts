@@ -9,7 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     ChangePasswordDialog: typeof import('./components/dialog/ChangePasswordDialog.vue')['default']
     DiagramItem: typeof import('./components/project/DiagramItem.vue')['default']
-    EditAccountInfoDialog: typeof import('./components/dialog/EditAccountInfoDialog.vue')['default']
     FileUpload: typeof import('./components/wonderwall/video/FileUpload.vue')['default']
     HeaderDrawer: typeof import('./components/common/HeaderDrawer.vue')['default']
     ImportLocalFIle: typeof import('./components/wonderwall/video/ImportLocalFIle.vue')['default']

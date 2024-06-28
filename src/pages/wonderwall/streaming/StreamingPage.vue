@@ -270,4 +270,8 @@ onMounted(() => {
     text-align: right;
   }
 }
+
+.title {
+  font-size: 1.25rem;
+}
 </style>
