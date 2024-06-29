@@ -78,7 +78,7 @@ const diagramChange = (item: any) => {
 };
 
 const changedSelection = (e: any) => {
-  // console.log('체인지드셀렉션');
+  // console.log('체인지드셀렉션.');
   selectedNode.value = e;
 };
 
