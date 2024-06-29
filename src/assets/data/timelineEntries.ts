@@ -13,8 +13,7 @@ const timelineEntries = [
   {
     icon: '📺💻🕋',
     cardTitle: '리펙토링',
-    cardText:
-      '시대의 흐름에 따라 Vue3 + nuxt.js + Typescript 로 리팩토링 (진행중)',
+    cardText: 'Vue3 + pinia 로 리팩토링',
     link: 'https://daylog.nald.me/retrospect/vue2-greater-than-vue3',
   },
   {

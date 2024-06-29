@@ -10,7 +10,7 @@
         <v-card-text>
           <v-row class="mb-4 align-center">
             <v-avatar rounded class="mr-4" size="30">
-              <v-img :src="getImageUrl('/src/assets/diagram', `${selectedNode.icon}.png`)"></v-img>
+              <v-img :src="getImageUrl('/assets/diagram', `${selectedNode.icon}.png`)"></v-img>
             </v-avatar>
             <strong class="text-h6">{{ selectedNode.name }}</strong>
             <v-spacer></v-spacer>
@@ -28,7 +28,7 @@
         <v-card-text>
           <v-row class="mb-4 align-center">
             <v-avatar rounded class="mr-4" size="30">
-              <v-img :src="`@/assets/diagram/nald.png`"></v-img>
+              <v-img :src="getImageUrl('/assets/diagram', 'nald.png')"></v-img>
             </v-avatar>
             <strong class="text-h6">Nald.me</strong>
             <v-spacer></v-spacer>

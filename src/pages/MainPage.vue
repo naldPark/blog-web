@@ -19,7 +19,7 @@
             <v-chip v-for="(item, index) in badges" :key="index" size="small" class="ma-1" :color="item.backgroundColor"
               variant="flat" :style="`color: ${item.color}`">
               <div class="text-center d-flex align-center justify-space-around">
-                <img style="width: 17px; height: 17px" :src="getImageUrl('/src/assets/svgs', item.src)" alt="Badge icon" />
+                <img style="width: 17px; height: 17px" :src="getImageUrl('/assets/svgs', item.src)" alt="Badge icon" />
                 <span class="pl-1" v-if="appSize !== 'xs'">{{
                   item.name
                 }}</span>
@@ -139,10 +139,10 @@ html {
   overflow-y: hidden;
 
   .main-page {
-    height: 100vh;
+    height: 100dvh;
 
     .main-cover {
-      height: 100vh;
+      height: 100dvh;
       background:
         linear-gradient(to top, rgba(20, 20, 20, 0.8), rgb(0, 0, 0)),
         url('./../assets/images/network.gif') no-repeat;

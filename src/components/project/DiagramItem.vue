@@ -10,7 +10,7 @@
         <v-btn color="primary" :disabled="!selectedNode || !selectedNode.icon" variant="outlined" size="small"
           @click="showSelectedNodeInfo = !showSelectedNodeInfo">
           <v-avatar rounded class="mr-2" size="20" v-if="selectedNode?.icon">
-            <v-img :src="`src/assets/diagram/${selectedNode.icon}.png`"></v-img>
+            <v-img :src="getImageUrl('/assets/diagram', `${selectedNode.icon}.png`)"></v-img>
           </v-avatar>
           {{ selectedNode ? selectedNode.name : 'Please select node' }}
           <v-icon v-if="selectedNode?.icon" small class="ml-2 blinking">
@@ -21,7 +21,7 @@
           <v-card>
             <v-card-actions>
               <v-avatar rounded class="mr-2" size="20" v-if="selectedNode?.icon">
-                <v-img :src="`src/assets/diagram/${selectedNode.icon}.png`"></v-img>
+                <v-img :src="getImageUrl('/assets/diagram', `${selectedNode.icon}.png`)"></v-img>
               </v-avatar>
               <span style="color: #ffb800">{{
                 selectedNode ? selectedNode.name : 'Please select node'
@@ -49,6 +49,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getImageUrl } from '@/utils/common';
 import go, { Diagram } from 'gojs';
 import { ref, onMounted, toRaw } from 'vue';
 import infraService from '@/api/infraService';
@@ -341,7 +342,7 @@ const textStyle = (field: any) => {
 };
 
 const iconConverter = (icon: any) => {
-  return 'src/assets/diagram/' + icon + '.png';
+  return '/assets/diagram/' + icon + '.png';
 };
 </script>
 
