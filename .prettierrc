@@ -1,4 +1,5 @@
 {
+  "parser": "",
   "arrowParens": "always",
   "bracketSpacing": true,
   "endOfLine": "auto",
@@ -8,7 +9,7 @@
   "printWidth": 80,
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
-  "semi": true, 
+  "semi": true,
   "singleQuote": true,
   "tabWidth": 2,
   "trailingComma": "all",
@@ -17,6 +18,7 @@
   "rangeStart": 0,
   "requirePragma": false,
   "insertPragma": false,
+  "vetur.validation.template": false,
   "overrides": [
     {
       "files": "*.json",

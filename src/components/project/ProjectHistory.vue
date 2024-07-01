@@ -1,5 +1,5 @@
 <template>
-  <div class="project-history-wrap">
+  <div class="project-history-wrap" :class="{ 'is-mobile': isMobile }">
     <v-timeline side="end">
       <v-timeline-item
         v-for="(entry, index) in timelineEntries"
@@ -11,16 +11,17 @@
         dot-color="grey"
         fill-dot
         size="15"
-        min-width="100%"
       >
         <template v-if="entry.title">
-          <h2 class="timeline-title-text">{{ entry.title }}</h2>
+          <h2>{{ entry.title }}</h2>
         </template>
         <template v-else>
-          <v-card variant="outlined" class="history-card">
-            <v-card-title class="text-subtitle-1 text-secondary">
-              {{ entry.icon }} {{ entry.cardTitle }}
-            </v-card-title>
+          <v-card class="mx-auto history-card" variant="outlined">
+            <template v-slot:title>
+              <span class="text-subtitle-1 text-secondary">
+                {{ entry.icon }} {{ entry.cardTitle }}</span
+              >
+            </template>
             <v-card-text class="font-weight-light text-white">
               <div>{{ entry.cardText }}</div>
               <v-btn
@@ -32,7 +33,8 @@
                 class="mt-3"
                 color="btnPrimary"
               >
-                More detail here <i class="mdi mdi-link-variant"></i>
+                <span>More detail here </span
+                ><i class="mdi mdi-link-variant"></i>
               </v-btn>
             </v-card-text>
           </v-card>
@@ -44,6 +46,10 @@
 
 <script lang="ts" setup>
   import timelineEntries from '@/assets/data/timelineEntries';
+
+  const props = defineProps<{ isMobile?: boolean }>();
+
+  const isMobile = props.isMobile ?? false;
 </script>
 
 <style lang="scss" scoped>
@@ -52,6 +58,10 @@
     margin: auto;
     padding: 50px;
     background-color: #1e1e1e;
+
+    &.is-mobile {
+      padding: 5px;
+    }
 
     .history-card {
       border: 0.5px solid dimgrey;

@@ -13,7 +13,7 @@
           <ProjectKube />
         </v-tabs-window-item>
         <v-tabs-window-item value="history" :transition=false :reverseTransition=false>
-          <ProjectHistory />
+          <ProjectHistory :isMobile="isMobile" />
         </v-tabs-window-item>
       </v-tabs-window>
     </v-sheet>
@@ -26,7 +26,11 @@ import { ref } from "vue";
 import ProjectKube from '@/components/project/ProjectKube.vue';
 import ProjectDiagram from '@/components/project/ProjectDiagram.vue';
 import ProjectHistory from '@/components/project/ProjectHistory.vue';
+import { useDisplay } from 'vuetify';
 
+
+const display = useDisplay();
+const isMobile: Ref<boolean> = display.smAndDown;
 const currentTab = ref<string>('diagram');
 const tabs: any = [
   {
