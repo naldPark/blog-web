@@ -8,6 +8,7 @@ import { vuetifyPlugins } from './plugins/vuetify';
 import router from './router';
 import '@/styles/settings.scss';
 import 'xterm/css/xterm.css';
+import { globalConfigPlugins } from './plugins/global';
 
 // 앱 생성
 const app = createApp(App, {
@@ -22,6 +23,7 @@ app.use(router);
 // 플러그인 등록
 piniaPlugins(app);
 vuetifyPlugins(app);
+globalConfigPlugins(app);
 
 // 애플리케이션을 마운트
 app.mount('#app');

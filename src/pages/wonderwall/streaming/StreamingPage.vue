@@ -91,12 +91,10 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch, onMounted, nextTick } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import StorageService from '@/api/storageService';
   import MovieItem from '@/components/wonderwall/video/MovieItem.vue';
-  import { useDisplay } from 'vuetify';
-  import { useI18n } from 'vue-i18n';
   import VideoPlayer from '@/components/wonderwall/video/VideoPlayer.vue';
   import { useAppStatusStore } from '@/store/appStatusStore';
   const playerOptions = ref({
@@ -114,17 +112,16 @@
     },
   });
 
-  const { t } = useI18n();
+  /** globalConfig 사용 */
+  const { proxy: pxy } = getCurrentInstance()!;
 
   const categories = [
-    { label: t('all'), value: '' },
-    { label: t('movie'), value: 'movie' },
-    { label: t('personal'), value: 'personal' },
-    { label: t('etc'), value: 'etc' },
+    { label: pxy!.$t('all'), value: '' },
+    { label: pxy!.$t('movie'), value: 'movie' },
+    { label: pxy!.$t('personal'), value: 'personal' },
+    { label: pxy!.$t('etc'), value: 'etc' },
   ];
   const searchCategory = ref('');
-
-  const videoPlayer: any = ref(null);
   const currentMovie: any = ref(null);
   const movieList: any = ref([]);
   const searchText: Ref<string> = ref('');
@@ -133,48 +130,7 @@
   const router = useRouter();
   const appStatusStore = useAppStatusStore();
 
-  function player() {
-    return videoPlayer.value.player;
-  }
-
-  function onPlayerPlay(player: any) {
-    // console.log("온플레이어플레이", player);
-  }
-
-  function onPlayerReady(player: any) {
-    // console.log("온플레이어레디", player);
-    player().play;
-  }
-
-  function playVideo(movieSrc: any, vttSrc: any) {
-    const video = {
-      withCredentials: true,
-      type: 'application/x-mpegurl',
-      src: movieSrc,
-    };
-    player().reset();
-    player().addRemoteTextTrack(
-      {
-        kind: 'subtitles',
-        language: 'ko',
-        label: 'Korean',
-        src: vttSrc,
-        default: true,
-        mode: 'showing',
-      },
-      true,
-    );
-    player().src(video);
-    const tracks = player().remoteTextTracks();
-    // console.log("날드!!!", tracks.length); // print out greater than 0
-    player().play;
-  }
-
-  function loaded(data: any, event: any) {
-    // console.log("로디드", data);
-  }
-
-  function searchVideo() {
+  const searchVideo = () => {
     router
       .push({
         name: 'StreamingListPage',
@@ -184,9 +140,9 @@
         },
       })
       .catch((err) => err);
-  }
+  };
 
-  async function onClickMovie(storageId: any) {
+  const onClickMovie = async (storageId: any) => {
     router
       .replace({
         name: 'StreamingPage',
@@ -209,24 +165,18 @@
         });
       }
       const videoSrc = `/api/storage${res.data.data.fileSrc}`;
-      console.log('videoSrc', videoSrc);
       currentMovie.value = {
         ...res.data.data,
         fileSrc: videoSrc,
         vttSrc: vttSrc,
       };
-      lazyShow.value = false; // 비디오 컴포넌트 먼저 만들고
-      console.log('22222');
-      // nextTick(() => {
-      //   playVideo(videoSrc, vttSrc); // 컴포넌트 플레이하라고 보냄
-      // });
+      lazyShow.value = false;
       fetchVideoList();
-      console.log('3333', currentMovie.value);
       appStatusStore.hideLoading();
     });
-  }
+  };
 
-  async function clickToDownload() {
+  const clickToDownload = async () => {
     appStatusStore.showLoading();
     await StorageService.download(currentMovie.value.storageId).then(
       (res: any) => {
@@ -239,9 +189,9 @@
       },
     );
     appStatusStore.hideLoading();
-  }
+  };
 
-  function fetchVideoList() {
+  const fetchVideoList = () => {
     return new Promise((resolve) => {
       const param: any = {
         limit: 4,
@@ -268,12 +218,11 @@
           resolve({ finish: true });
         });
     });
-  }
+  };
 
   onMounted(() => {
     lazyShow.value = true;
     appStatusStore.showLoading();
-    // onChangeSize();
     fetchVideoList();
     appStatusStore.hideLoading();
     if (!currentMovie.value) {
@@ -281,7 +230,6 @@
     } else {
       lazyShow.value = false;
     }
-    console.log('currentMovie', currentMovie);
   });
 </script>
 
