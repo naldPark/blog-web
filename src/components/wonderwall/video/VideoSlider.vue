@@ -1,15 +1,22 @@
 <template>
-  <div class="movie-scoll">
+  <div class='d-flex  justify-end px-6 py-3'>
     <div class="arrow-left">
-      <v-btn variant="plain" color="primary" @click="onClickMove('left')">
-        <v-icon>mdi-arrow-left</v-icon>
+      <v-btn block variant="plain" color="primary" @click="onClickMove('left')">
+        <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
     </div>
+    <div class="arrow-right">
+      <v-btn block variant="plain" color="primary" @click="onClickMove('right')">
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+    </div>
+  </div>
+
+  <div class="movie-scoll">
     <ul class="movie-items" :id="`movie-items-${category}`" :class="{ 'scroll-smooth': !isDraggingMode }">
-
       <li class="movie-item" @click="onClickMovie(item)" v-for="item in videoList" :key="item.storageId"
-        :class="{ 'disabled': !item.fileSrc }" :style="{ 'background-image': `url('${item.fileCover}')` }">
-
+        :class="{ 'disabled': !item.fileSrc, 'is-mobile': isMobile }"
+        :style="{ 'background-image': `url('${item.fileCover}')` }">
         <div class="movie-content" v-if="!item.fileSrc">
           <v-chip class="mb-2 mr-2" color="lightgrey">
             not converted yet
@@ -22,17 +29,14 @@
         </div>
       </li>
     </ul>
-    <div class="arrow-right">
-      <v-btn variant="plain" color="primary" @click="onClickMove('right')">
-        <v-icon>mdi-arrow-right</v-icon>
-      </v-btn>
-    </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { VideoDetailtData } from '@/types/wonderwall/video';
 import { ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
 const props = defineProps<{
   category: string;
@@ -42,6 +46,8 @@ const emits = defineEmits(['onClickMovie']);
 let isMouseDown = ref(false);
 let scrollLeft = ref(0);
 let isDraggingMode = ref(false);
+const display = useDisplay();
+const isMobile: Ref<boolean> = display.smAndDown;
 
 const onClickMove = (direction: 'left' | 'right') => {
   const slider = document.getElementById(`movie-items-${props.category}`);
@@ -55,7 +61,6 @@ const onClickMove = (direction: 'left' | 'right') => {
 };
 
 const onClickMovie = (item: any) => {
-  console.log("무비클릭")
   if (!isDraggingMode.value) {
     emits('onClickMovie', item);
   }
@@ -133,8 +138,19 @@ onMounted(() => {
 
 
 </script>
-
 <style scoped lang="scss">
+.arrow-left,
+.arrow-right {
+
+  button {
+    // width: 50px;
+    // background-color: transparent !important;
+    // min-width: 0 !important;
+    font-size: 40px !important;
+    padding: 0 !important;
+  }
+}
+
 .movie-scoll {
   overflow: auto;
   padding: 1rem;
@@ -146,16 +162,6 @@ onMounted(() => {
   align-items: center;
   margin: 0 auto;
 
-  .arrow-left,
-  .arrow-right {
-    button {
-      width: 50px;
-      background-color: transparent !important;
-      min-width: 0px !important;
-      font-size: 50px !important;
-      padding: 0px 0px !important;
-    }
-  }
 
   .movie-items {
     display: flex;
@@ -170,7 +176,6 @@ onMounted(() => {
     overflow: hidden;
     cursor: pointer;
 
-
     &.scroll-smooth {
       scroll-behavior: smooth;
     }
@@ -179,10 +184,8 @@ onMounted(() => {
       border-radius: 20px;
       background-size: cover;
       background-position: center;
-      flex: 1 1 240px;
+      flex: 1;
       min-width: 200px;
-      width: 200px;
-      min-height: 300px;
       height: 300px;
       padding: 1rem;
       animation: auto ease-in-out intro forwards, auto ease-in-out outro forwards;
@@ -195,6 +198,11 @@ onMounted(() => {
       overflow: hidden;
       font-weight: 300;
 
+      &.is-mobile {
+        min-width: 100px;
+        height: 150px;
+      }
+
       &.disabled {
         cursor: default !important;
         background-color: black;
@@ -206,12 +214,10 @@ onMounted(() => {
         overflow: hidden;
         word-break: break-all;
         display: -webkit-box;
-        bottom: 5%;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         font-size: 1.2rem;
         color: rgb(210, 210, 210);
-
       }
 
       .movie-content {
@@ -267,34 +273,6 @@ onMounted(() => {
         }
       }
     }
-  }
-}
-
-@keyframes intro {
-  from {
-    transform-origin: center left;
-    opacity: 0;
-    scale: 0;
-  }
-
-  to {
-    transform-origin: center left;
-    opacity: 1;
-    scale: 1;
-  }
-}
-
-@keyframes outro {
-  from {
-    transform-origin: center right;
-    opacity: 1;
-    scale: 1;
-  }
-
-  to {
-    transform-origin: center right;
-    opacity: 0;
-    scale: 0;
   }
 }
 </style>

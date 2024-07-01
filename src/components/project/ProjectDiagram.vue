@@ -62,7 +62,6 @@ const isMobile: Ref<boolean> = display.smAndDown;
 const selectedNode: Ref<Node> = ref({ icon: '', name: '', value: '' });
 const selectedNodeDesc: Ref<NodeDesc> = ref({ title: '', content: '' });
 const modelData = ref(null);
-const images = import.meta.glob('@/assets/diagram/*.png');
 let diagram: Ref<any> = ref(null);
 
 const onChangeDiagram = (e: any) => {
