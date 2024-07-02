@@ -36,7 +36,6 @@
       >
         <VideoPlayer
           :hlsSource="currentMovie.fileSrc"
-          :posterUrl="currentMovie.fileCover"
           :vttSrc="currentMovie.vttSrc"
         />
       </div>
@@ -79,7 +78,7 @@
         <div class="title">
           {{ $t('video.recommendedMovie') }}
         </div>
-        <movie-item
+        <MovieItem
           v-for="movie in movieList"
           :key="movie.storageId"
           :item="movie"
@@ -97,20 +96,7 @@
   import MovieItem from '@/components/wonderwall/video/MovieItem.vue';
   import VideoPlayer from '@/components/wonderwall/video/VideoPlayer.vue';
   import { useAppStatusStore } from '@/store/appStatusStore';
-  const playerOptions = ref({
-    autoplay: false,
-    controls: true,
-    playbackRates: [0.5, 0.75, 1, 1.25, 1.5],
-    preload: 'auto',
-    poster: '',
-    controlBar: {
-      playToggle: true,
-      pictureInPictureToggle: true,
-      remainingTimeDisplay: true,
-      progressControl: true,
-      qualitySelector: true,
-    },
-  });
+  import { VideoDetailtData } from '@/types/wonderwall/video';
 
   /** globalConfig 사용 */
   const { proxy: pxy } = getCurrentInstance()!;
@@ -121,11 +107,17 @@
     { label: pxy!.$t('personal'), value: 'personal' },
     { label: pxy!.$t('etc'), value: 'etc' },
   ];
-  const searchCategory = ref('');
-  const currentMovie: any = ref(null);
-  const movieList: any = ref([]);
+  const searchCategory: Ref<string> = ref('');
+  const currentMovie: Ref<VideoDetailtData> = ref({
+    storageId: 0,
+    fileName: '',
+    fileSrc: '',
+    fileSize: 0,
+    fileType: '',
+  });
+  const movieList: Ref<VideoDetailtData[]> = ref([]);
   const searchText: Ref<string> = ref('');
-  const lazyShow = ref(true);
+  const lazyShow: Ref<boolean> = ref(true);
 
   const router = useRouter();
   const appStatusStore = useAppStatusStore();
@@ -142,7 +134,7 @@
       .catch((err) => err);
   };
 
-  const onClickMovie = async (storageId: any) => {
+  const onClickMovie = async (storageId: number) => {
     router
       .replace({
         name: 'StreamingPage',
@@ -219,6 +211,7 @@
         });
     });
   };
+  const route = useRoute();
 
   onMounted(() => {
     lazyShow.value = true;
@@ -226,7 +219,8 @@
     fetchVideoList();
     appStatusStore.hideLoading();
     if (!currentMovie.value) {
-      onClickMovie(Number(router.currentRoute.value.query.movieId));
+      const movieId: number = Number(route.query.movieId);
+      onClickMovie(movieId);
     } else {
       lazyShow.value = false;
     }

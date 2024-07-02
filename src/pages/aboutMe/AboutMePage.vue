@@ -43,13 +43,13 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                v-for="(social, i) in socials"
+                v-for="(social, i) in aboutDataAsset.snsList"
                 :key="i"
                 :color="social.color"
                 icon
                 small
               >
-                <v-icon size="x-large" @click="exploreSNS(social.link)">{{
+                <v-icon size="x-large" @click="onClickVisit(social.link)">{{
                   social.icon
                 }}</v-icon>
               </v-btn>
@@ -69,7 +69,7 @@
         <h2 class="text-primary mb-3">WORK EXPERIENCE</h2>
         <v-timeline>
           <v-timeline-item
-            v-for="(item, index) in workExperience"
+            v-for="(item, index) in aboutDataAsset.workExperience"
             :key="index"
             :dot-color="item.dotColor"
             size="x-small"
@@ -167,7 +167,10 @@
     <h2 class="text-primary mb-3">BLOG EXPLORE</h2>
     <v-row>
       <v-col cols="12" md="4" v-for="(item, index) in cardList" :key="index">
-        <div class="blog-wrapper-box mx-auto pa-5" @click="onClickVisit(item)">
+        <div
+          class="blog-wrapper-box mx-auto pa-5"
+          @click="onClickVisit(item.href)"
+        >
           <div>
             <div class="text-overline mb-4">
               {{ item.title }} / {{ item.header }}
@@ -196,57 +199,13 @@
   import { useAppStatusStore } from '@/store/appStatusStore';
   import { getBlogList } from '@/api/commonService';
   import { useI18n } from 'vue-i18n';
+  import { BlogData } from '@/types/about';
+  import aboutDataAsset from '@/assets/data/about';
   const appStatusStore = useAppStatusStore();
   const display = useDisplay();
   const isMobile: Ref<boolean> = display.smAndDown;
   const { t } = useI18n();
-  const cardList: any = ref([]);
-  function getImageUrl(name: string) {
-    return new URL(`/src/assets/images/${name}`, import.meta.url).href;
-  }
-  const socials = [
-    {
-      icon: 'mdi-linkedin',
-      color: '#0A66C2',
-      link: 'https://www.linkedin.com/in/naldpark/',
-    },
-    {
-      icon: 'mdi-instagram',
-      color: '#FF5A51',
-      link: 'https://www.instagram.com/youngik_nald/',
-    },
-    {
-      icon: 'mdi-facebook',
-      color: 'indigo',
-      link: 'https://www.facebook.com/nald873',
-    },
-  ];
-  const workExperience = ref([
-    {
-      title: 'Web Developer',
-      subtitle: 'Frontend, Backend, DevOps',
-      date: '2021.10 - present',
-      dotColor: 'primary',
-      class: 'text-left',
-    },
-    {
-      title: 'Java Programming Courses',
-      subtitle: 'KH Information Educational Institute',
-      date: '2021.01 - 2021.08',
-      dotColor: 'grey',
-      class: 'text-right',
-    },
-    {
-      title: 'HR Manager',
-      date: '- 2020.10',
-      dotColor: 'grey-darken-4',
-      class: 'text-left',
-    },
-  ]);
-
-  function exploreSNS(url: string) {
-    window.open(url);
-  }
+  const cardList: Ref<BlogData[]> = ref([]);
 
   onMounted(() => {
     appStatusStore.showLoading();
@@ -260,9 +219,13 @@
     });
   });
 
-  function onClickVisit(item: any) {
-    window.open(item.href, '_blank');
-  }
+  const getImageUrl = (name: string) => {
+    return new URL(`/src/assets/images/${name}`, import.meta.url).href;
+  };
+
+  const onClickVisit = (url: any) => {
+    window.open(url, '_blank');
+  };
 </script>
 
 <style lang="scss" scoped>

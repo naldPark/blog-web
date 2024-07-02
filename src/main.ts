@@ -2,8 +2,6 @@ import { piniaPlugins } from './plugins/pinia';
 import App from './App.vue';
 import { createApp } from 'vue';
 import i18n from './i18n/i18n';
-import { createPinia } from 'pinia';
-import piniaPersist from 'pinia-plugin-persist';
 import { vuetifyPlugins } from './plugins/vuetify';
 import router from './router';
 import '@/styles/settings.scss';
@@ -15,9 +13,7 @@ const app = createApp(App, {
   suspense: false, // Suspense 비활성화
 });
 
-// 플러그인 등록
 app.use(i18n);
-
 app.use(router);
 
 // 플러그인 등록
