@@ -78,24 +78,20 @@
   function updateShowValue(value: any) {
     emits('update:modelValue', value);
   }
-  // function onContainerMounted(el) {
-  //   //init the widget here
-  // }
-
   async function onClickLogin() {
     appStatusStore.showLoading();
     try {
       const res = await login(accountId.value, accountPassword.value);
       console.log('res', res);
-      if (res.http_status_code === 200) {
+      if (res.status_code === 200) {
         const token = res.data.access_token;
         cookies.set('access_token', token);
         const tokenInfo = JSON.parse(decodeToken(token));
 
-        cookies.set('accountId', tokenInfo.user_id);
-        cookies.set('accountName', tokenInfo.user_name);
-        cookies.set('authority', tokenInfo.authority);
-        cookies.set('email', tokenInfo.user_email);
+        // cookies.set('accountId', tokenInfo.user_id);
+        // cookies.set('accountName', tokenInfo.user_name);
+        // cookies.set('authority', tokenInfo.authority);
+        // cookies.set('email', tokenInfo.user_email);
 
         accountStatusStore.setAuthToken(token);
         accountStatusStore.setAccountInfo({
