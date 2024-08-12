@@ -1,5 +1,6 @@
 import HttpClient from '@/api/HttpClient';
 import Config from '@/config';
+import { get, post } from './axiosMethod';
 
 const storageService = {
   dafaultAPI: `${Config.backend}`,
@@ -8,25 +9,20 @@ const storageService = {
     const config: any = {
       responseType: 'blob',
     };
-    return HttpClient.get(
-      `${this.dafaultAPI}/storage/download/${fileId}`,
-      config,
-    );
+    return get(`${this.dafaultAPI}/storage/download/${fileId}`, config);
   },
 
   getVideoList(params?: any) {
     const config: any = {
       params: params,
     };
-    return HttpClient.get(`${this.dafaultAPI}/storage/videoList`, config);
+    return get(`${this.dafaultAPI}/storage/videoList`, config);
   },
   getVideoDetail(fileId: any) {
-    return HttpClient.get(
-      `${this.dafaultAPI}/storage/getVideoDetail/${fileId}`,
-    );
+    return get(`${this.dafaultAPI}/storage/getVideoDetail/${fileId}`);
   },
   videoVtt(vttPath: any) {
-    return HttpClient.get(`${this.dafaultAPI}/storage/vtt/${vttPath}.vtt`);
+    return get(`${this.dafaultAPI}/storage/vtt/${vttPath}.vtt`);
   },
 
   localUploadFiles(info: any, files: any) {
@@ -40,11 +36,7 @@ const storageService = {
     bodyForm.append('info', blob);
     bodyForm.append('fileVtt', files.fileVtt);
     bodyForm.append('file', files.file);
-    return HttpClient.post(
-      `${this.dafaultAPI}/storage/uploadLocal`,
-      bodyForm,
-      config,
-    );
+    return post(`${this.dafaultAPI}/storage/uploadLocal`, bodyForm, config);
   },
 };
 

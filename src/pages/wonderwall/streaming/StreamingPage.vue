@@ -149,16 +149,16 @@
     lazyShow.value = true;
     await StorageService.getVideoDetail(fileId).then(async (res: any) => {
       let vttSrc = '';
-      if (res.data.data.vttSrc) {
+      if (res.data.vttSrc) {
         await StorageService.videoVtt(fileId).then((res: any) => {
           vttSrc = URL.createObjectURL(
             new Blob([res.data], { type: 'text/vtt;charset=utf-8;' }),
           );
         });
       }
-      const videoSrc = `/api/storage${res.data.data.fileSrc}`;
+      const videoSrc = `/api/storage${res.data.fileSrc}`;
       currentMovie.value = {
-        ...res.data.data,
+        ...res.data,
         fileSrc: videoSrc,
         vttSrc: vttSrc,
       };

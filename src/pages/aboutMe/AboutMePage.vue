@@ -211,7 +211,7 @@
     appStatusStore.showLoading();
     getBlogList().then((res: any) => {
       console.log(res.data);
-      cardList.value = res.data.data.map((v: any) => ({
+      cardList.value = res.data.map((v: any) => ({
         ...v,
         text: t(v.text),
       }));

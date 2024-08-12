@@ -1,7 +1,7 @@
 import HttpClient from '@/api/HttpClient';
 import Config from '@/config';
 import CryptoJS from 'crypto-js';
-import { post } from './axiosMethod';
+import { get, post, put } from './axiosMethod';
 
 const defaultAPI = `${Config.backend}`;
 
@@ -22,7 +22,7 @@ const editPassword = async (userId: string, password: string): Promise<any> => {
     accountId: userId,
     password: pw,
   };
-  return await HttpClient.put(`${defaultAPI}/editPassword`, requestParam);
+  return await put(`${defaultAPI}/editPassword`, requestParam);
 };
 
 // 상태 변경 메서드
@@ -34,27 +34,27 @@ const changeStatus = async (
     userIds,
     status,
   };
-  return await HttpClient.put(`${defaultAPI}/changeStatus`, requestParam);
+  return await put(`${defaultAPI}/changeStatus`, requestParam);
 };
 
 // 사용자 생성 메서드
 const createUser = async (body: Record<string, any>): Promise<any> => {
-  return await HttpClient.post(`${defaultAPI}/createUser`, body);
+  return await post(`${defaultAPI}/createUser`, body);
 };
 
 // 사용자 수정 메서드
 const editUser = async (body: Record<string, any>): Promise<any> => {
-  return await HttpClient.put(`${defaultAPI}/editUser`, body);
+  return await put(`${defaultAPI}/editUser`, body);
 };
 
 // 메시지 전송 메서드
 const sendMessage = async (body: Record<string, any>): Promise<any> => {
-  return await HttpClient.post(`${defaultAPI}/message`, body);
+  return await post(`${defaultAPI}/message`, body);
 };
 
 // 사용자 목록을 가져오는 메서드
 const getUserList = async (): Promise<any> => {
-  return await HttpClient.get(`${defaultAPI}/list`);
+  return await get(`${defaultAPI}/list`);
 };
 
 // 모듈로 내보내기

@@ -107,7 +107,7 @@
       } else {
         appStatusStore.showDialog({
           title: t('loginFailed'),
-          description: res.data.data.error,
+          description: res.data.error,
           invisibleClose: true,
           action: () => {},
         });

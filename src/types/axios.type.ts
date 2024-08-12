@@ -1,6 +1,5 @@
 export interface ApiResponse<T = any> {
   status_code: number;
-  success: true;
   data: T;
 }
 
