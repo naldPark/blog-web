@@ -264,7 +264,7 @@
       appStatusStore.showLoading();
       getUserList()
         .then((res: any) => {
-          if (res.data.statusCode === 200) {
+          if (res.status_code === 200) {
             console.log(res.data);
             userList.value = res.data.list.map((v: any) => ({
               ...v,

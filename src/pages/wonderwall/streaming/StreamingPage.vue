@@ -192,7 +192,7 @@
       };
       StorageService.getVideoList(param)
         .then((response: any) => {
-          if (response.status == 200) {
+          if (response.status_code == 200) {
             movieList.value = response.data.list;
           } else {
             appStatusStore.hideLoading();

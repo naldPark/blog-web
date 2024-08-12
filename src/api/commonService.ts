@@ -1,4 +1,3 @@
-import HttpClient from '@/api/HttpClient';
 import Config from '@/config';
 import { get, post } from './axiosMethod';
 

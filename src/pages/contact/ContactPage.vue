@@ -176,7 +176,7 @@
         let type = '';
         let message = '';
 
-        if (res.data.statusCode === 200) {
+        if (res.status_code === 200) {
           Object.keys(messageData).forEach((key) => {
             messageData[key] = '';
           });

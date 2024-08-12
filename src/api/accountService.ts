@@ -1,4 +1,3 @@
-import HttpClient from '@/api/HttpClient';
 import Config from '@/config';
 import CryptoJS from 'crypto-js';
 import { get, post, put } from './axiosMethod';
