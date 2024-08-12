@@ -18,9 +18,10 @@ const createHttpClient = (): AxiosInstance => {
       Pragma: 'no-cache',
       Expires: '0',
     },
+    timeout: 300000, // 5 minutes timeout
   });
 
-  // 요청 인터셉터 핸들러
+  // Request interceptor handler
   const requestInterceptorHandler = async (
     request: AxiosRequestConfig,
   ): Promise<AxiosRequestConfig<any>> => {
@@ -33,13 +34,12 @@ const createHttpClient = (): AxiosInstance => {
       if (typeof authToken === 'string' && !isEmpty(authToken)) {
         request.headers[Config.AUTH_TOKEN_HEADER_KEY] = `${authToken}`;
       }
-
       request.headers['requestPath'] = location.pathname;
     }
     return request as AxiosRequestConfig<any>;
   };
 
-  // 응답 인터셉터 핸들러
+  // Response interceptor handler
   const responseInterceptorHandler = async (
     response: AxiosResponse,
   ): Promise<AxiosResponse> => {
@@ -59,7 +59,7 @@ const createHttpClient = (): AxiosInstance => {
     return response;
   };
 
-  // 오류 응답 인터셉터 핸들러
+  // Error response interceptor handler
   const errorResponseInterceptorHandler = async (error: any): Promise<any> => {
     const appStatusStore = useAppStatusStore();
 
@@ -83,14 +83,14 @@ const createHttpClient = (): AxiosInstance => {
     throw error;
   };
 
-  // 요청 인터셉터 추가
+  // Add request interceptor
   axiosInstance.interceptors.request.use(
     requestInterceptorHandler as unknown as (
       request: AxiosRequestConfig<any>,
     ) => Promise<InternalAxiosRequestConfig<any>>,
   );
 
-  // 응답 인터셉터 추가
+  // Add response interceptor
   axiosInstance.interceptors.response.use(
     responseInterceptorHandler,
     errorResponseInterceptorHandler,
@@ -99,7 +99,7 @@ const createHttpClient = (): AxiosInstance => {
   return axiosInstance;
 };
 
-// 싱글톤 패턴을 사용하여 Axios 인스턴스를 반환합니다.
+// Singleton pattern to return Axios instance
 const httpClient = createHttpClient();
 
 export default httpClient;

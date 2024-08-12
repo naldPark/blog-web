@@ -1,6 +1,7 @@
 import HttpClient from '@/api/HttpClient';
 import Config from '@/config';
 import CryptoJS from 'crypto-js';
+import { post } from './axiosMethod';
 
 const defaultAPI = `${Config.backend}`;
 
@@ -11,7 +12,7 @@ const login = async (userId: string, password: string): Promise<any> => {
     accountId: userId,
     password: pw,
   };
-  return await HttpClient.post(`${defaultAPI}/login`, requestParam);
+  return await post(`${defaultAPI}/login`, requestParam);
 };
 
 // 비밀번호 변경 메서드

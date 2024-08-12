@@ -86,8 +86,9 @@
     appStatusStore.showLoading();
     try {
       const res = await login(accountId.value, accountPassword.value);
-      if (res.data.statusCode === 200) {
-        const token = res.data.data.access_token;
+      console.log('res', res);
+      if (res.http_status_code === 200) {
+        const token = res.data.access_token;
         cookies.set('access_token', token);
         const tokenInfo = JSON.parse(decodeToken(token));
 

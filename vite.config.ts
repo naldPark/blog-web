@@ -72,17 +72,17 @@ export default defineConfig({
   },
   root: './',
   resolve: {
-     alias: {
-    '@': path.resolve(__dirname, 'src')
-  }
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   server: {
     host: '0.0.0.0',
     port: 8082,
     proxy: {
       '/api': {
-        target: 'https://nald.me/backend',
-        // target: 'http://localhost:8000',
+        // target: 'https://nald.me/backend',
+        target: 'http://localhost:8000',
         rewrite: (path) => path.replace(/^\/api/, ''),
         changeOrigin: true,
         secure: false,

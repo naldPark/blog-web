@@ -105,7 +105,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { useAppStatusStore } from '@/store/appStatusStore';
-  import { contact } from '@/api/commonService';
+  import { sendMail } from '@/api/commonService';
   import router from '@/router';
   import { useI18n } from 'vue-i18n';
   import { useDisplay } from 'vuetify';
@@ -172,7 +172,7 @@
     const validate = validateCheck();
     if (validate === '') {
       try {
-        const res = await contact(messageData.value);
+        const res = await sendMail(messageData.value);
         let type = '';
         let message = '';
 
