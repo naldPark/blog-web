@@ -1,25 +1,32 @@
 import Config from '@/config';
-import CryptoJS from 'crypto-js';
 import { get, post, put } from './axiosMethod';
+import { JSEncrypt } from 'jsencrypt';
 
 const defaultAPI = `${Config.backend}`;
 
 // 로그인 메서드
+const getRsa = async (): Promise<any> => {
+  return await get(`${defaultAPI}/user/rsa`);
+};
+
+// 로그인 메서드
 const login = async (userId: string, password: string): Promise<any> => {
-  const pw = CryptoJS.SHA256(password).toString();
+  // const pw = CryptoJS.SHA256(password).toString();
+  // const rsa = new JSEncrypt({ default_key_size: '2048' });
+  // rsa.setPublicKey(response.data.publicKeyStr);
+  // const encryptedValue = btoa((rsa as JSEncrypt).encrypt(value) as string);
   const requestParam = {
     accountId: userId,
-    password: pw,
+    password: password,
   };
   return await post(`${defaultAPI}/user/login`, requestParam);
 };
 
 // 비밀번호 변경 메서드
 const editPassword = async (userId: string, password: string): Promise<any> => {
-  const pw = CryptoJS.SHA256(password).toString();
   const requestParam = {
     accountId: userId,
-    password: pw,
+    password: password,
   };
   return await put(`${defaultAPI}/user/editPassword`, requestParam);
 };
@@ -57,4 +64,12 @@ const getUserList = async (): Promise<any> => {
 };
 
 // 모듈로 내보내기
-export { login, editPassword, changeStatus, createUser, editUser, getUserList };
+export {
+  login,
+  editPassword,
+  changeStatus,
+  createUser,
+  editUser,
+  getUserList,
+  getRsa,
+};

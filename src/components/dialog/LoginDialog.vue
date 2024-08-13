@@ -59,11 +59,12 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
-  import { login } from '@/api/accountService';
+  import { login, getRsa } from '@/api/accountService';
   import { useAccountStatusStore } from '@/store/accountStatusStore';
   import { useAppStatusStore } from '@/store/appStatusStore';
   import { decodeToken } from '@/utils/common';
   import { useCookies } from '@vueuse/integrations/useCookies';
+  import JSEncrypt from 'jsencrypt';
 
   const { t } = useI18n(); // t 함수 가져오기
   const accountId = ref('');
@@ -81,7 +82,14 @@
   async function onClickLogin() {
     appStatusStore.showLoading();
     try {
-      const res = await login(accountId.value, accountPassword.value);
+      const rsaRes = await getRsa();
+      console.log(rsaRes.data);
+      const rsa = new JSEncrypt({ default_key_size: '2048' });
+      rsa.setPublicKey(rsaRes.data);
+      const encryptedValue = btoa(
+        (rsa as JSEncrypt).encrypt(accountPassword.value) as string,
+      );
+      const res = await login(accountId.value, encryptedValue);
       console.log('res', res);
       if (res.status_code === 200) {
         const token = res.data.access_token;
