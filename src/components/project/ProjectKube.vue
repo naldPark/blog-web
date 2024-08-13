@@ -22,7 +22,7 @@
             <span>{{ item.cpu }}</span>
             <v-progress-linear
               color="blue"
-              :model-value="item.cpu.replace('%', '')"
+              :model-value="item.cpu"
             ></v-progress-linear>
           </div>
         </template>
@@ -31,7 +31,7 @@
             <span>{{ item.memory }}</span>
             <v-progress-linear
               color="purple"
-              :model-value="item.memory.replace('%', '')"
+              :model-value="item.memory"
             ></v-progress-linear>
           </div>
         </template>
