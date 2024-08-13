@@ -1,5 +1,4 @@
 import { get } from './axiosMethod';
-import HttpClient from './HttpClient';
 import Config from '@/config';
 
 const infraService = {

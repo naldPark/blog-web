@@ -43,19 +43,21 @@ const createHttpClient = (): AxiosInstance => {
   const responseInterceptorHandler = async (
     response: AxiosResponse,
   ): Promise<AxiosResponse> => {
-    if (response.data.spec && response.data.spec === 'AccessDeniedException') {
-      const appStatusStore = useAppStatusStore();
-      appStatusStore.showDialog({
-        title: '로그아웃',
-        description: '다시 로그인 해주세요',
-        invisibleClose: true,
-        action: () => {},
-      });
+    console.log('responsddde', response);
+    // if (response.data.spec && response.data.spec === 'AccessDeniedException') {
+    //   const appStatusStore = useAppStatusStore();
+    //   appStatusStore.showDialog({
+    //     title: '로그아웃',
+    //     description: '다시 로그인 해주세요',
+    //     invisibleClose: true,
+    //     action: () => {},
+    //   });
 
-      const accountStatusStore = useAccountStatusStore();
-      accountStatusStore.setAuthToken(null);
-      history.go(-1);
-    }
+    //   const accountStatusStore = useAccountStatusStore();
+    //   accountStatusStore.setAuthToken(null);
+    //   console.log('2');
+    //   history.go(-1);
+    // }
     return response;
   };
 
@@ -63,23 +65,45 @@ const createHttpClient = (): AxiosInstance => {
   const errorResponseInterceptorHandler = async (error: any): Promise<any> => {
     const appStatusStore = useAppStatusStore();
 
-    if (error.message === 'Network Error') {
-      console.error('Network Error');
+    const errorData = error.response.data;
+
+    if (errorData.status_code === 401) {
+      appStatusStore.addToastMessage({
+        type: 'error',
+        message: errorData.error_i18n,
+        buttonMsg: null,
+        timeout: null,
+        buttonCallback: null,
+      });
+      if (location.pathname !== '/' && location.pathname !== '/main') {
+        location.href = `${location.origin}`;
+      }
     }
+    // appStatusStore.showDialog({
+    //   title: '로그아웃',
+    //   description: '다시 로그인 해주세요',
+    //   invisibleClose: true,
+    //   action: () => {},
+    // });
 
-    appStatusStore.addToastMessage({
-      type: 'error',
-      message: 'Network Error',
-      buttonMsg: null,
-      timeout: null,
-      buttonCallback: null,
-    });
+    // const accountStatusStore = useAccountStatusStore();
+    // accountStatusStore.setAuthToken(null);
+    // history.go(-1);
 
+    // if (errorData.status_code === 401) {
+    //   appStatusStore.addToastMessage({
+    //     type: 'error',
+    //     message: errorData.error_i18n,
+    //     buttonMsg: null,
+    //     timeout: null,
+    //     buttonCallback: null,
+    //   });
+    //   if (location.pathname !== '/' && location.pathname !== '/main') {
+    //     location.href = `${location.origin}`;
+    //   }
+    // }
     appStatusStore.hideLoading();
 
-    if (location.pathname !== '/' && location.pathname !== '/main') {
-      location.href = `${location.origin}`;
-    }
     throw error;
   };
 

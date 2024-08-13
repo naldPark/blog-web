@@ -1,6 +1,6 @@
 import { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import { ApiErrorResponse, ApiResponse } from '@/types/axios.type';
-import HttpClient from '@/api/HttpClient';
+import httpClient from '@/api/httpClient';
 
 /**
  * get
@@ -12,7 +12,7 @@ export const get = async <TData = any, TResponse = ApiResponse<TData>>(
   config: AxiosRequestConfig = {},
 ): Promise<TResponse> => {
   try {
-    return ((await HttpClient.get(url, config)) as AxiosResponse<TResponse>)
+    return ((await httpClient.get(url, config)) as AxiosResponse<TResponse>)
       .data;
   } catch (error) {
     const typeAssertedError = error as AxiosError<ApiErrorResponse>;
@@ -33,7 +33,7 @@ export const post = async <TData = any, TResponse = ApiResponse<TData>>(
 ): Promise<TResponse> => {
   try {
     return (
-      (await HttpClient.post(url, body, config)) as AxiosResponse<TResponse>
+      (await httpClient.post(url, body, config)) as AxiosResponse<TResponse>
     ).data;
   } catch (error) {
     const typeAssertedError = error as AxiosError<ApiErrorResponse>;
@@ -54,7 +54,7 @@ export const put = async <TData = any, TResponse = ApiResponse<TData>>(
 ): Promise<TResponse> => {
   try {
     return (
-      (await HttpClient.put(url, data, config)) as AxiosResponse<TResponse>
+      (await httpClient.put(url, data, config)) as AxiosResponse<TResponse>
     ).data;
   } catch (error) {
     const typeAssertedError = error as AxiosError<ApiErrorResponse>;
@@ -72,7 +72,7 @@ export const del = async <TData = any, TResponse = ApiResponse<TData>>(
   config: AxiosRequestConfig = {},
 ): Promise<TResponse> => {
   try {
-    return ((await HttpClient.delete(url, config)) as AxiosResponse<TResponse>)
+    return ((await httpClient.delete(url, config)) as AxiosResponse<TResponse>)
       .data;
   } catch (error) {
     const typeAssertedError = error as AxiosError<ApiErrorResponse>;
