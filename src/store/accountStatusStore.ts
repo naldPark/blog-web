@@ -8,7 +8,7 @@ const ACCOUNT_INFO_KEY = 'ACCOUNT_INFO';
 // `useCookies`를 사용하여 쿠키 관련 기능을 제공합니다.
 const cookies = useCookies();
 
-export interface IAccountInfo {
+export interface AccountInfo {
   accountId: string | null;
   accountName: string | null;
   authority: number | null;
@@ -25,7 +25,7 @@ export const useAccountStatusStore = defineStore({
       accountName: null,
       authority: null,
       email: null,
-    } as IAccountInfo,
+    } as AccountInfo,
     authToken: null as string | null,
   }),
   persist: {
@@ -78,7 +78,7 @@ export const useAccountStatusStore = defineStore({
     },
 
     // 계정 정보를 설정합니다.
-    setAccountInfo(info: IAccountInfo) {
+    setAccountInfo(info: AccountInfo) {
       this.accountInfo = info;
       localStorage.setItem(ACCOUNT_INFO_KEY, JSON.stringify(info));
     },

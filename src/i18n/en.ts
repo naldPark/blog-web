@@ -34,6 +34,7 @@ export default {
   changePwd: 'Please set a password',
   changePwdConfirm: 'Please re-enter your password',
   requiredError: '{0} is required',
+  loginFailed: 'login failed',
   idRulesError: 'Id is allowed lowercase letters and numbers ',
   lengthRulesError: '{0} must be less than {1} characters',
   emailRulesError: 'E-mail must be valid',

@@ -7,6 +7,7 @@ import router from './router';
 import '@/styles/settings.scss';
 import 'xterm/css/xterm.css';
 import { globalConfigPlugins } from './plugins/global';
+import { VueQueryPlugin } from 'vue-query';
 
 // 앱 생성
 const app = createApp(App, {
@@ -20,6 +21,7 @@ app.use(router);
 piniaPlugins(app);
 vuetifyPlugins(app);
 globalConfigPlugins(app);
+app.use(VueQueryPlugin);
 
 // 애플리케이션을 마운트
 app.mount('#app');

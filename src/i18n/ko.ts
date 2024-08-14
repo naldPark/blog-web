@@ -34,6 +34,7 @@ export default {
   loggedOut: '로그아웃 되었습니다',
   noGuestAccess: '게스트는 접근이 제한됩니다',
   changePwd: '변경할 Password를 입력해주세요',
+  loginFailed: 'login failed',
   changePwdConfirm: '다시한번 Password를 입력해주세요',
   requiredError: '{0} 는 필수항목입니다.',
   idRulesError: 'Id는 소문자, 숫자 조합만 가능합니다',
