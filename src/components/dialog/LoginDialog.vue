@@ -86,9 +86,19 @@
       console.log(rsaRes.data);
       const rsa = new JSEncrypt({ default_key_size: '2048' });
       rsa.setPublicKey(rsaRes.data);
-      const encryptedValue = btoa(
-        (rsa as JSEncrypt).encrypt(accountPassword.value) as string,
-      );
+      // const encryptedValue = btoa(
+      //   (rsa as JSEncrypt).encrypt(accountPassword.value) as string,
+      // );
+
+      const chunkSize = 117; // 128 bytes - 11 bytes for padding
+      const chunks = [];
+      for (let i = 0; i < accountPassword.value.length; i += chunkSize) {
+        const chunk = accountPassword.value.slice(i, i + chunkSize);
+        const encryptedChunk = rsa.encrypt(chunk);
+        chunks.push(encryptedChunk);
+      }
+      const encryptedValue = chunks.join(':');
+
       const res = await login(accountId.value, encryptedValue);
       console.log('res', res);
       if (res.status_code === 200) {
