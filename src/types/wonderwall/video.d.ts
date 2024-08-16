@@ -1,4 +1,4 @@
-export interface VideoDetailtData {
+export interface VideoDetailData {
   storageId: number;
   fileName: string;
   fileSrc: string;

@@ -5,8 +5,8 @@ export interface ApiResponse<T = any> {
 
 export interface ApiErrorResponse {
   error_message: string;
-  code: string;
-  http_status_code: number;
+  error_i18n: string;
+  status_code: number;
   error_code: number;
-  error: true;
+  success: boolean;
 }

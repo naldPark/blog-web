@@ -1,4 +1,5 @@
 import Axios, {
+  AxiosError, AxiosHeaders,
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
@@ -8,6 +9,7 @@ import { useAccountStatusStore } from '@/store/accountStatusStore';
 import { useAppStatusStore } from '@/store/useAppStatusStore';
 import { isEmpty } from 'ramda';
 import Config from '@/config';
+import { ApiErrorResponse } from '@/types/axios';
 
 const createHttpClient = (): AxiosInstance => {
   const axiosInstance: AxiosInstance = Axios.create({
@@ -17,18 +19,19 @@ const createHttpClient = (): AxiosInstance => {
       'Cache-Control': 'no-cache',
       Pragma: 'no-cache',
       Expires: '0',
-    },
+    } as unknown as AxiosHeaders, // 여기서 unknown으로 변환 후 AxiosHeaders로 변환
     timeout: 300000, // 5 minutes timeout
   });
 
+
   // Request interceptor handler
   const requestInterceptorHandler = async (
-    request: AxiosRequestConfig,
-  ): Promise<AxiosRequestConfig<any>> => {
+    request: InternalAxiosRequestConfig,
+  ): Promise<InternalAxiosRequestConfig> => {
     const accountStatusStore = useAccountStatusStore();
-    const authToken = await accountStatusStore.getAuthToken();
+    const authToken = accountStatusStore.getAuthToken();
     if (!request.headers) {
-      request.headers = {};
+      request.headers = {} as AxiosHeaders;
     }
     if (!request.headers[Config.AUTH_TOKEN_HEADER_KEY]) {
       if (typeof authToken === 'string' && !isEmpty(authToken)) {
@@ -36,14 +39,13 @@ const createHttpClient = (): AxiosInstance => {
       }
       request.headers['requestPath'] = location.pathname;
     }
-    return request as AxiosRequestConfig<any>;
+    return request;
   };
 
   // Response interceptor handler
   const responseInterceptorHandler = async (
     response: AxiosResponse,
   ): Promise<AxiosResponse> => {
-    console.log('responsddde', response);
     // if (response.data.spec && response.data.spec === 'AccessDeniedException') {
     //   const appStatusStore = useAppStatusStore();
     //   appStatusStore.showDialog({
@@ -62,21 +64,26 @@ const createHttpClient = (): AxiosInstance => {
   };
 
   // Error response interceptor handler
-  const errorResponseInterceptorHandler = async (error: any): Promise<any> => {
+  const errorResponseInterceptorHandler = async (
+    error: AxiosError,
+  ): Promise<never> => {
     const appStatusStore = useAppStatusStore();
 
-    const errorData = error.response.data;
+    if (error.response && error.response.data) {
+      const errorData = error.response.data as ApiErrorResponse;
 
-    if (errorData.status_code === 401) {
-      appStatusStore.addToastMessage({
-        type: 'error',
-        message: errorData.error_i18n,
-        buttonMsg: null,
-        timeout: null,
-        buttonCallback: null,
-      });
-      if (location.pathname !== '/' && location.pathname !== '/main') {
-        location.href = `${location.origin}`;
+      if (errorData.status_code === 401) {
+        appStatusStore.addToastMessage({
+          type: 'error',
+          message: errorData.error_i18n,
+          buttonMsg: null,
+          timeout: null,
+          buttonCallback: null,
+        });
+
+        if (location.pathname !== '/' && location.pathname !== '/main') {
+          location.href = `${location.origin}`;
+        }
       }
     }
     // appStatusStore.showDialog({
@@ -110,8 +117,8 @@ const createHttpClient = (): AxiosInstance => {
   // Add request interceptor
   axiosInstance.interceptors.request.use(
     requestInterceptorHandler as unknown as (
-      request: AxiosRequestConfig<any>,
-    ) => Promise<InternalAxiosRequestConfig<any>>,
+      request: InternalAxiosRequestConfig,
+    ) => Promise<InternalAxiosRequestConfig>,
   );
 
   // Add response interceptor

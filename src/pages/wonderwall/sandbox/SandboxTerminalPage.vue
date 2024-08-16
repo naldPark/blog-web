@@ -19,16 +19,16 @@
 <script lang="ts" setup>
 import 'xterm/css/xterm.css';
 import 'xterm/lib/xterm.js';
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import TerminalItem from '@/features/terminal/TerminalItem.vue';
 
-const message = ref('');
+// const message = ref('');
 
-const action = (type: string, data: Record<string, any>) =>
-  JSON.stringify({
-    type,
-    ...data,
-  });
+// const action = (type: string, data: Record<string, any>) =>
+//   JSON.stringify({
+//     type,
+//     ...data,
+//   });
 </script>
 
 <style lang="scss" scoped>

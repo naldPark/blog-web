@@ -1,17 +1,17 @@
 <template>
-  <div class="contant-page-wrap">
+  <div class="contact-page-wrap">
     <VRow justify="center" no-gutters>
       <VCol cols="10" md="4" lg="4">
-        <VCard color="rgba(0, 0, 0, 0)" elevation="0" max-width="400" style="display: block; margin: 0px auto">
+        <VCard color="rgba(0, 0, 0, 0)" elevation="0" max-width="400" style="display: block; margin: 0 auto">
           <VCardText class="text-center">
             <h1 class="font-weight-bold mb-1 text-grey">Nald Park</h1>
             <h4 class="font-weight-light mb-3 text-grey">WEB DEVELOPER</h4>
-            <VImg max-height="400" style="display: block; margin: 0px auto" src="@/assets/images/profiles/me.jpg">
+            <VImg max-height="400" style="display: block; margin: 0 auto" src="@/assets/images/profiles/me.jpg">
               <div class="inner-border"></div>
             </VImg>
             <VCardActions>
               <VSpacer></VSpacer>
-              <VBtn v-for="(social, i) in socials" :key="i" :color="social.color" icon small>
+              <VBtn v-for="(social, i) in socials" :key="i" :color="social.color" small>
                 <VIcon @click="exploreSNS(social.link)">{{
                   social.icon
                 }}</VIcon>
@@ -67,8 +67,6 @@ import { useAppStatusStore } from '@/store/useAppStatusStore';
 import { sendMail } from '@/api/commonService';
 import router from '@/router';
 import { useI18n } from 'vue-i18n';
-import { useDisplay } from 'vuetify';
-const { mobile } = useDisplay();
 
 const appStatusStore = useAppStatusStore();
 const { t } = useI18n();
@@ -95,7 +93,7 @@ const validateCheck = () => {
       const pattern =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       res =
-        pattern.test(messageData[key]) === false
+        !pattern.test(messageData[key])
           ? `${t('emailValidate')}`
           : res;
     }
@@ -132,8 +130,8 @@ const sendMessage = async () => {
   if (validate === '') {
     try {
       const res = await sendMail(messageData.value);
-      let type = '';
-      let message = '';
+      let type: string;
+      let message: string;
 
       if (res.status_code === 200) {
         Object.keys(messageData).forEach((key) => {
@@ -178,7 +176,7 @@ const sendMessage = async () => {
 </script>
 
 <style lang="scss" scoped>
-.contant-page-wrap {
+.contact-page-wrap {
   margin-top: 50px;
 
   .inner-border {

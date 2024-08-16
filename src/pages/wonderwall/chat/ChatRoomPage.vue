@@ -29,7 +29,7 @@
 
           <VListItem v-for="(item, index) in messageList" :key="index" :title="item.id" :subtitle="item.content">
             <template v-slot:prepend>
-              <VAvatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id.charAt(0) }}</VAvatar>
+              <VAvatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id && item.id.charAt(0) }}</VAvatar>
             </template>
           </VListItem>
         </VList>
@@ -68,13 +68,11 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { useCookies } from '@vueuse/integrations/useCookies';
-import { useI18n } from 'vue-i18n';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
 
 window.global = window as any;
-const { t } = useI18n();
 const cookies = useCookies();
 const accountStatusStore = useAccountStatusStore();
 
@@ -221,15 +219,13 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .chat-wrapper {
-  background: #f6f5f7;
+  background: #f6f5f7 url('../../../assets/images/chatBackground.jpg') no-repeat center center / cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: -20px 0 0px;
-  background-image: url('../../../assets/images/chatBackground.jpg');
-  background-size: cover;
+  margin: -20px 0 0;
 
   .form-wrapper {
     border-radius: 10px;

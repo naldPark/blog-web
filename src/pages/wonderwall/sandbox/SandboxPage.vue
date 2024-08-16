@@ -227,28 +227,32 @@ const treeItems = ref<any[]>([
 ]);
 
 // Computed properties
-const sandboxMessage = computed(() => ({
-  howToUseDesc: t('sandbox.howToUseDesc'),
-  rulesDesc: t('sandbox.rulesDesc'),
-}));
+// const sandboxMessage = computed(() => ({
+//   howToUseDesc: t('sandbox.howToUseDesc'),
+//   rulesDesc: t('sandbox.rulesDesc'),
+// }));
 
 // Methods
-const copyClipboard = () => {
+const copyClipboard = async () => {
   const text = 'qwerty1234';
-  const textarea = document.createElement('textarea');
-  document.body.appendChild(textarea);
-  textarea.value = text;
-  textarea.select();
-  textarea.focus();
-  document.execCommand('copy');
-  document.body.removeChild(textarea);
-  appStatusStore.addToastMessage({
-    type: 'success',
-    message: `${t('copied')}`,
-    buttonMsg: null,
-    timeout: null,
-    buttonCallback: null,
-  });
+  try {
+    await navigator.clipboard.writeText(text);
+    appStatusStore.addToastMessage({
+      type: 'success',
+      message: `${t('copied')}`,
+      buttonMsg: null,
+      timeout: null,
+      buttonCallback: null,
+    });
+  } catch (err) {
+    appStatusStore.addToastMessage({
+      type: 'error',
+      message: `${t('copyFailed')}`,
+      buttonMsg: null,
+      timeout: null,
+      buttonCallback: null,
+    });
+  }
 };
 
 const onChangeStatus = (e: any) => {

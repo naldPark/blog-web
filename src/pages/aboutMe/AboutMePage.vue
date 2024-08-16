@@ -30,7 +30,7 @@
             </VImg>
             <VCardActions>
               <VSpacer></VSpacer>
-              <VBtn v-for="(social, i) in aboutDataAsset.snsList" :key="i" :color="social.color" icon small>
+              <VBtn v-for="(social, i) in aboutDataAsset.snsList" :key="i" :color="social.color" small>
                 <VIcon size="x-large" @click="onClickVisit(social.link)">{{
                   social.icon
                 }}</VIcon>
@@ -122,7 +122,7 @@
             <h5>{{ item.text }}</h5>
           </div>
           <div>
-            <VImg width="200" height="80" contain style="display: block; margin: 0px auto" :src="getImageUrl(item.src)">
+            <VImg width="200" height="80" contain style="display: block; margin: 0 auto" :src="getImageUrl(item.src)">
             </VImg>
           </div>
         </div>
@@ -257,8 +257,8 @@ const onClickVisit = (url: any) => {
 }
 
 .blog-wrapper-box {
-  border: 0px;
-  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.8);
+  border: 0;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.8);
   background-color: rgba(20, 20, 20, 0.3);
   border-radius: 24px;
 
