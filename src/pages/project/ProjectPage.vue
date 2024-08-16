@@ -1,31 +1,31 @@
 <template>
   <div class="mt-3">
-    <v-sheet color="#0E0E0E" elevation="3" rounded="lg">
-      <v-tabs v-model="currentTab" :fixedTabs=true align-tabs="center" color="primary" height="60"
+    <VSheet color="#0E0E0E" elevation="3" rounded="lg">
+      <VTabs v-model="currentTab" :fixedTabs=true align-tabs="center" color="primary" height="60"
         slider-color="primary">
-        <v-tab v-for="tab in tabs" :key="tab.value" :text="tab.text" :value="tab.value"> </v-tab>
-      </v-tabs>
-      <v-tabs-window v-model="currentTab">
-        <v-tabs-window-item value="diagram" :transition=false :reverseTransition=false>
+        <VTab v-for="tab in tabs" :key="tab.value" :text="tab.text" :value="tab.value"> </VTab>
+      </VTabs>
+      <VTabsWindow v-model="currentTab">
+        <VTabsWindowItem value="diagram" :transition=false :reverseTransition=false>
           <ProjectDiagram />
-        </v-tabs-window-item>
-        <v-tabs-window-item value="kube" :transition=false :reverseTransition=false>
+        </VTabsWindowItem>
+        <VTabsWindowItem value="kube" :transition=false :reverseTransition=false>
           <ProjectKube />
-        </v-tabs-window-item>
-        <v-tabs-window-item value="history" :transition=false :reverseTransition=false>
+        </VTabsWindowItem>
+        <VTabsWindowItem value="history" :transition=false :reverseTransition=false>
           <ProjectHistory :isMobile="isMobile" />
-        </v-tabs-window-item>
-      </v-tabs-window>
-    </v-sheet>
+        </VTabsWindowItem>
+      </VTabsWindow>
+    </VSheet>
   </div>
 </template>
 
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import ProjectKube from '@/components/project/ProjectKube.vue';
-import ProjectDiagram from '@/components/project/ProjectDiagram.vue';
-import ProjectHistory from '@/components/project/ProjectHistory.vue';
+import ProjectKube from '@/features/project/ProjectKube.vue';
+import ProjectDiagram from '@/features/project/ProjectDiagram.vue';
+import ProjectHistory from '@/features/project/ProjectHistory.vue';
 import { useDisplay } from 'vuetify';
 
 

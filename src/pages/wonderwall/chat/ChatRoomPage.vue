@@ -5,62 +5,62 @@
         <div class="form-container">
           <h1>Chat room</h1>
           <span>{{ $t('chat.enterInfo') }}</span>
-          <v-text-field label="ID" v-model="nameInput" flat placeholder="name" />
-          <v-text-field label="Room" :disabled="true" v-model="roomInput" flat placeholder="roomID" />
-          <v-btn @click="connect" :disabled="!nameInput || !roomInput" class="ma-2" rounded color="primary" dark>
+          <VTextField label="ID" v-model="nameInput" flat placeholder="name" />
+          <VTextField label="Room" :disabled="true" v-model="roomInput" flat placeholder="roomID" />
+          <VBtn @click="connect" :disabled="!nameInput || !roomInput" class="ma-2" rounded color="primary" dark>
             {{ $t('chat.enter') }}
-          </v-btn>
+          </VBtn>
         </div>
       </div>
     </div>
     <div class="mt-3" v-else>
-      <v-card max-width="1000" class="mx-auto">
-        <v-toolbar dark>
-          <v-toolbar-title class="text-primary">{{ $t('chat.chatRoom') }} [{{ roomId }}]</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn class="ma-1" color="secondary" plain @click="leave">{{ $t('leave') }}</v-btn>
-        </v-toolbar>
+      <VCard max-width="1000" class="mx-auto">
+        <VToolbar dark>
+          <VToolbarTitle class="text-primary">{{ $t('chat.chatRoom') }} [{{ roomId }}]</VToolbarTitle>
+          <VSpacer></VSpacer>
+          <VBtn class="ma-1" color="secondary" plain @click="leave">{{ $t('leave') }}</VBtn>
+        </VToolbar>
         <!-- <div class="connecting ml-3" v-if="!roomId">
           {{ $t('chat.connecting') }}
         </div> -->
 
-        <v-list id="msgList" style="height:500px; overflow: auto;">
-          <v-list-subheader v-if="!roomId"> {{ $t('chat.connecting') }}</v-list-subheader>
+        <VList id="msgList" style="height:500px; overflow: auto;">
+          <VListSubheader v-if="!roomId"> {{ $t('chat.connecting') }}</VListSubheader>
 
-          <v-list-item v-for="(item, index) in messageList" :key="index" :title="item.id" :subtitle="item.content">
+          <VListItem v-for="(item, index) in messageList" :key="index" :title="item.id" :subtitle="item.content">
             <template v-slot:prepend>
-              <v-avatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id.charAt(0) }}</v-avatar>
+              <VAvatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id.charAt(0) }}</VAvatar>
             </template>
-          </v-list-item>
-        </v-list>
+          </VListItem>
+        </VList>
 
 
-        <!-- <v-list id="msgList" style="height:500px; overflow: auto;">
+        <!-- <VList id="msgList" style="height:500px; overflow: auto;">
           <template v-for="(item, index) in messageList" :key="index">
-            <v-list-item v-if="item.type !== 'chat-message'">
+            <VListItem v-if="item.type !== 'chat-message'">
               <div>{{ item.content }}</div>
-            </v-list-item>
-            <v-list-item v-else>
-              <v-list-item-avatar size="30" class="justify-center">
-                <v-avatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id.charAt(0) }}</v-avatar>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>
+            </VListItem>
+            <VListItem v-else>
+              <VListItem-avatar size="30" class="justify-center">
+                <VAvatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id.charAt(0) }}</VAvatar>
+              </VListItem-avatar>
+              <VListItem-content>
+                <VListItemTitle>
                   <span>{{ item.id }}</span>
-                </v-list-item-title>
-                <v-list-item-subtitle>
+                </VListItemTitle>
+                <VListItemSubtitle>
                   <span>{{ item.content }}</span>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+                </VListItemSubtitle>
+              </VListItem-content>
+            </VListItem>
           </template>
-        </v-list> -->
+        </VList> -->
         <div class="chat-container pa-2 pl-3 pr-3">
-          <v-text-field outlined dense v-model="messageInput" :append-outer-icon="'mdi-send'"
-            :label="`${$t('typeMessage')}`" type="text" @click:append-outer="sendMessage"
-            @keyup.enter="sendMessage"></v-text-field>
+          <VTextField outlined dense v-model="messageInput" :append-outer-icon="'mdi-send'"
+            :label="`${$t('typeMessage')}`" type="text" @click:append-outer="sendMessage" @keyup.enter="sendMessage">
+          </VTextField>
         </div>
-      </v-card>
+      </VCard>
     </div>
   </div>
 </template>

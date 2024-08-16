@@ -1,7 +1,7 @@
 <template>
-  <v-dialog @update:model-value="updateShowValue" max-width="1200">
-    <v-card color="#161616">
-      <v-card-text>
+  <VDialog @update:model-value="updateShowValue" max-width="1200">
+    <VCard color="#161616">
+      <VCardText>
         <h4 class="mb-5">
           <VIcon class="text-primary mr-3">mdi-video</VIcon>{{ $t('video.uploadVideo') }}
         </h4>
@@ -9,12 +9,12 @@
           @updatedUploadfiles="updatedUploadfiles" />
         <VDivider class="mt-10"></VDivider>
         <FileUpload @closeDialog="closeDialog" v-model="movieInfo" />
-      </v-card-text>
-      <v-card-actions>
+      </VCardText>
+      <VCardActions>
         <VSpacer></VSpacer>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+      </VCardActions>
+    </VCard>
+  </VDialog>
 </template>
 
 <script setup lang="ts">

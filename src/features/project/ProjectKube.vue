@@ -7,18 +7,18 @@
     </div>
     <div class="text-md-left pa-7">
       <h2 class="text-primary mb-3">NODES</h2>
-      <v-data-table :calculate-widths="true" fixed-header class="custom-table use-head" :headers="nodesHeader"
+      <VDataTable :calculate-widths="true" fixed-header class="custom-table use-head" :headers="nodesHeader"
         :items="nodeInfo" hide-default-footer>
         <template v-slot:[`item.cpu`]="{ item }">
           <div>
             <span>{{ item.cpu }}</span>
-            <v-progress-linear color="blue" :model-value="item.cpu"></v-progress-linear>
+            <VProgressLinear color="blue" :model-value="item.cpu"></VProgressLinear>
           </div>
         </template>
         <template v-slot:[`item.memory`]="{ item }">
           <div>
             <span>{{ item.memory }}</span>
-            <v-progress-linear color="purple" :model-value="item.memory"></v-progress-linear>
+            <VProgressLinear color="purple" :model-value="item.memory"></VProgressLinear>
           </div>
         </template>
         <template v-slot:[`item.condition`]="{ item }">
@@ -26,10 +26,10 @@
             {{ item.condition }}
           </div>
         </template>
-      </v-data-table>
+      </VDataTable>
       <VDivider class="mt-5 mb-5"></VDivider>
       <h2 class="text-primary mb-3">PODS</h2>
-      <v-data-table fixed-header class="custom-table text-truncate" :headers="podsHeader" :items="podInfo">
+      <VDataTable fixed-header class="custom-table text-truncate" :headers="podsHeader" :items="podInfo">
         <template v-slot:[`item.name`]="{ item }">
           <div class="text-truncate" style="
               max-width: 30vw;
@@ -51,7 +51,7 @@
         <template v-slot:[`item.status`]="{ item }">
           <div :style="{ color: getColor(item.status) }">{{ item.status }}</div>
         </template>
-      </v-data-table>
+      </VDataTable>
     </div>
   </div>
 </template>
@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import InfraService from '@/api/infraService';
-import { useAppStatusStore } from '@/store/appStatusStore';
+import { useAppStatusStore } from '@/store/useAppStatusStore';
 
 interface NodeInfo {
   name: string;

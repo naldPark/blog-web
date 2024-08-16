@@ -5,7 +5,7 @@ import Axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
-import { useAppStatusStore } from '@/store/appStatusStore';
+import { useAppStatusStore } from '@/store/useAppStatusStore';
 import { isEmpty } from 'ramda';
 import Config from '@/config';
 

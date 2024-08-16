@@ -3,8 +3,8 @@
     <nald-header />
     <div ref="mainlayout" class="main-layout">
       <div class="router-page">
-        <router-view />
-        <v-btn v-if="scrollY > 100" class="fixed-button" icon="mdi-arrow-up" color="primary" @click="goTo(0)" />
+        <RouterView />
+        <VBtn v-if="scrollY > 100" class="fixed-button" icon="mdi-arrow-up" color="primary" @click="goTo(0)" />
         <nald-footer class="footer"></nald-footer>
       </div>
     </div>
@@ -13,8 +13,8 @@
 
 <script lang="ts" setup>
 import { ref, watch, onMounted } from 'vue';
-import NaldHeader from '@/components/common/NaldHeader.vue';
-import NaldFooter from '@/components/common/NaldFooter.vue';
+import NaldHeader from '@/features/common/NaldHeader.vue';
+import NaldFooter from '@/features/common/NaldFooter.vue';
 import { useDisplay, useGoTo } from 'vuetify';
 const mainlayout = ref<any>(null);
 const goTo = useGoTo();

@@ -1,20 +1,20 @@
 <template>
-  <v-row dense class="projectPage">
-    <v-col cols="12" md="8">
+  <VRow dense class="projectPage">
+    <VCol cols="12" md="8">
       <DiagramItem @modelData="emitData" @change="diagramChange" :selectedNodeDesc="selectedNodeDesc"
         @nodeSelected="nodeSelected" :selectedNode="selectedNode">
       </DiagramItem>
-    </v-col>
-    <v-col cols="12" md="4" v-if="!isMobile">
-      <v-card v-if="selectedNode && selectedNode.icon" class="pa-3" height="100%" width="100%">
-        <v-card-text>
-          <v-row class="mb-4 align-center">
+    </VCol>
+    <VCol cols="12" md="4" v-if="!isMobile">
+      <VCard v-if="selectedNode && selectedNode.icon" class="pa-3" height="100%" width="100%">
+        <VCardText>
+          <VRow class="mb-4 align-center">
             <VAvatar rounded class="mr-4" size="30">
               <VImg :src="getImageUrl('/assets/diagram', `${selectedNode.icon}.png`)"></VImg>
             </VAvatar>
             <strong class="text-h6">{{ selectedNode.name }}</strong>
             <VSpacer></VSpacer>
-          </v-row>
+          </VRow>
           <VDivider class="mt-2 mb-4"></VDivider>
           <p class="text-h6 font-weight-bold mb-10">
             ▶ {{ selectedNodeDesc.title }}
@@ -22,22 +22,22 @@
           <p class="text-subtitle-1 font-weight-light" style="white-space: pre-line">
             {{ selectedNodeDesc.content }}
           </p>
-        </v-card-text>
-      </v-card>
-      <v-card class="pa-3" v-else height="100%" flat>
-        <v-card-text>
-          <v-row class="mb-4 align-center">
+        </VCardText>
+      </VCard>
+      <VCard class="pa-3" v-else height="100%" flat>
+        <VCardText>
+          <VRow class="mb-4 align-center">
             <VAvatar rounded class="mr-4" size="30">
               <VImg :src="getImageUrl('/assets/diagram', 'nald.png')"></VImg>
             </VAvatar>
             <strong class="text-h6">Nald.me</strong>
             <VSpacer></VSpacer>
-          </v-row>
+          </VRow>
           <VDivider class="mt-2 mb-4"></VDivider>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+        </VCardText>
+      </VCard>
+    </VCol>
+  </VRow>
 </template>
 
 <script setup lang="ts">

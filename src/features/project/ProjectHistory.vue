@@ -1,28 +1,28 @@
 <template>
   <div class="project-history-wrap" :class="{ 'is-mobile': isMobile }">
-    <v-timeline side="end">
-      <v-timeline-item v-for="(entry, index) in timelineEntries" :key="index" :hide-dot="entry.hideDot" class="mb-1"
+    <VTimeline side="end">
+      <VTimelineItem v-for="(entry, index) in timelineEntries" :key="index" :hide-dot="entry.hideDot" class="mb-1"
         :class="entry.class" :large="entry.large" dot-color="grey" fill-dot size="15">
         <template v-if="entry.title">
           <h2>{{ entry.title }}</h2>
         </template>
         <template v-else>
-          <v-card class="mx-auto history-card" variant="outlined">
+          <VCard class="mx-auto history-card" variant="outlined">
             <template v-slot:title>
               <span class="text-subtitle-1 text-secondary">
                 {{ entry.icon }} {{ entry.cardTitle }}</span>
             </template>
-            <v-card-text class="font-weight-light text-white">
+            <VCardText class="font-weight-light text-white">
               <div>{{ entry.cardText }}</div>
               <VBtn v-if="entry.link" :href="entry.link" target="_blank" variant="outlined" size="small" class="mt-3"
                 color="btnPrimary">
                 <span>More detail here </span><i class="mdi mdi-link-variant"></i>
               </VBtn>
-            </v-card-text>
-          </v-card>
+            </VCardText>
+          </VCard>
         </template>
-      </v-timeline-item>
-    </v-timeline>
+      </VTimelineItem>
+    </VTimeline>
   </div>
 </template>
 

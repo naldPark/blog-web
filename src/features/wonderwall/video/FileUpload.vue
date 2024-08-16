@@ -1,52 +1,51 @@
 <template>
-  <v-card color="#161616" elevation="0">
-    <v-row>
-      <v-col md="7">
-        <v-text-field type="text" :label="movieInfo?.file ? `${$t('video.selectedFile')}` : ''" :disabled="true"
+  <VCard color="#161616" elevation="0">
+    <VRow>
+      <VCol md="7">
+        <VTextField type="text" :label="movieInfo?.file ? `${$t('video.selectedFile')}` : ''" :disabled="true"
           v-model="movieInfo.originName">
-        </v-text-field>
-      </v-col>
-      <v-col md="5">
-        <v-text-field type="text" :label="`${$t('video.uploadFileSize')}`" :disabled="true"
-          v-model="movieInfo.fileSize">
-        </v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col md="6">
-        <v-text-field class="input-aster" required counter="40" :label="`${$t('video.movieName')}`"
-          prepend-icon="mdi-pen" v-model="movieInfo.name">
-        </v-text-field>
-      </v-col>
-      <v-col md="6">
-        <v-select required v-model="movieInfo.category" :label="`${$t('video.category')}`" prepend-icon="mdi-shape"
+        </VTextField>
+      </VCol>
+      <VCol md="5">
+        <VTextField type="text" :label="`${$t('video.uploadFileSize')}`" :disabled="true" v-model="movieInfo.fileSize">
+        </VTextField>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol md="6">
+        <VTextField class="input-aster" required counter="40" :label="`${$t('video.movieName')}`" prepend-icon="mdi-pen"
+          v-model="movieInfo.name">
+        </VTextField>
+      </VCol>
+      <VCol md="6">
+        <VSelect required v-model="movieInfo.category" :label="`${$t('video.category')}`" prepend-icon="mdi-shape"
           item-title="label" item-value="value" :items="categories" persistent-hint return-object single-line>
-        </v-select>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col md="12">
-        <v-text-field type="text" :label="`${$t('video.description')}`" counter="100" prepend-icon="mdi-text-box"
+        </VSelect>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol md="12">
+        <VTextField type="text" :label="`${$t('video.description')}`" counter="100" prepend-icon="mdi-text-box"
           v-model="movieInfo.description">
-        </v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col md="3">
-        <v-file-input v-model="movieInfo.fileCover" :rules="coverRules" accept="image/png"
-          :label="`${$t('video.fileCover')}`" prepend-icon="mdi-camera"></v-file-input>
-      </v-col>
-      <v-col md="3">
-        <v-file-input v-model="movieInfo.fileVtt" :label="`${$t('video.subtitle')}`" accept=".vtt"></v-file-input>
-      </v-col>
-      <v-col md="3">
-        <v-switch v-model="movieInfo.fileDownload" inset :label="`${$t('video.ableToDownload')}`"></v-switch>
-      </v-col>
-      <v-col md="3">
-        <v-switch v-model="movieInfo.fileAuth" inset :label="`${$t('video.private')}`"></v-switch>
-      </v-col>
-    </v-row>
-    <v-card-actions>
+        </VTextField>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol md="3">
+        <VFileInput v-model="movieInfo.fileCover" :rules="coverRules" accept="image/png"
+          :label="`${$t('video.fileCover')}`" prepend-icon="mdi-camera"></VFileInput>
+      </VCol>
+      <VCol md="3">
+        <VFileInput v-model="movieInfo.fileVtt" :label="`${$t('video.subtitle')}`" accept=".vtt"></VFileInput>
+      </VCol>
+      <VCol md="3">
+        <VSwitch v-model="movieInfo.fileDownload" inset :label="`${$t('video.ableToDownload')}`"></VSwitch>
+      </VCol>
+      <VCol md="3">
+        <VSwitch v-model="movieInfo.fileAuth" inset :label="`${$t('video.private')}`"></VSwitch>
+      </VCol>
+    </VRow>
+    <VCardActions>
       <VSpacer></VSpacer>
       <VBtn outlined rounded variant="text" color="grey lighten-1" min-width="100" @click="$emit('closeDialog')">
         {{ $t('cancel') }}
@@ -55,8 +54,8 @@
         :disabled="movieInfo.name === '' || movieInfo.file === null" min-width="100" @click="onSubmit">
         {{ $t('confirm') }} <VIcon right dark>mdi-cloud-upload</VIcon>
       </VBtn>
-    </v-card-actions>
-  </v-card>
+    </VCardActions>
+  </VCard>
 </template>
 
 <script lang="ts" setup>

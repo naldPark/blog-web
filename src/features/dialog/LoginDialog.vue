@@ -1,35 +1,35 @@
 <template>
-  <v-dialog :model-value="showValue" @update:model-value="updateShowValue" width="444px" content-class="app-g-dialog">
-    <v-card>
-      <v-toolbar density="compact" dark color="grey-darken-3">
+  <VDialog :model-value="showValue" @update:model-value="updateShowValue" width="444px" content-class="app-g-dialog">
+    <VCard>
+      <VToolbar density="compact" dark color="grey-darken-3">
         <VToolbarTitle>
           <VIcon class="text-primary">mdi-key</VIcon>
           {{ t('login') }}
         </VToolbarTitle>
         <VSpacer></VSpacer>
-      </v-toolbar>
-      <v-card-text class="mt-5">
-        <v-container>
-          <v-row>
-            <v-col cols="12" class="pa-0">
-              <v-text-field color="primary" v-model="accountId" :label="t('id')" :placeholder="t('idDes')" flat
-                required></v-text-field>
-            </v-col>
-            <v-col cols="12" class="pa-0">
-              <v-text-field color="primary" v-model="accountPassword" :label="t('password')" :placeholder="t('pwdDes')"
+      </VToolbar>
+      <VCardText class="mt-5">
+        <VContainer>
+          <VRow>
+            <VCol cols="12" class="pa-0">
+              <VTextField color="primary" v-model="accountId" :label="t('id')" :placeholder="t('idDes')" flat required>
+              </VTextField>
+            </VCol>
+            <VCol cols="12" class="pa-0">
+              <VTextField color="primary" v-model="accountPassword" :label="t('password')" :placeholder="t('pwdDes')"
                 flat required @keyup.enter="onClickLogin"
                 :append-inner-icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
-                :type="passwordVisible ? 'text' : 'password'"
-                @click:append-inner="passwordVisible = !passwordVisible"></v-text-field>
-            </v-col>
-          </v-row>
-        </v-container>
+                :type="passwordVisible ? 'text' : 'password'" @click:append-inner="passwordVisible = !passwordVisible">
+              </VTextField>
+            </VCol>
+          </VRow>
+        </VContainer>
         <VBtn class="mb-3" color="primary" variant="tonal" block @click="onClickLogin">
           Log In
         </VBtn>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+      </VCardText>
+    </VCard>
+  </VDialog>
 </template>
 
 <script setup lang="ts">
@@ -37,7 +37,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { login, getRsa } from '@/api/accountService';
 import { useAccountStatusStore } from '@/store/accountStatusStore';
-import { useAppStatusStore } from '@/store/appStatusStore';
+import { useAppStatusStore } from '@/store/useAppStatusStore';
 import { decodeToken } from '@/utils/common';
 import { useCookies } from '@vueuse/integrations/useCookies';
 import JSEncrypt from 'jsencrypt';

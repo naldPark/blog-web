@@ -18,10 +18,10 @@
         :class="{ 'disabled': !item.fileSrc, 'is-mobile': isMobile }"
         :style="{ 'background-image': `url('${item.fileCover}')` }">
         <div class="movie-content" v-if="!item.fileSrc">
-          <v-chip class="mb-2 mr-2" color="lightgrey">
+          <VChip class="mb-2 mr-2" color="lightgrey">
             not converted yet
             <VIcon>mdi-upload-off</VIcon>
-          </v-chip>
+          </VChip>
         </div>
         <div class="movie-content movie-desc" v-else>{{ item.fileDesc }}</div>
         <div class="movie-title" v-if="item.fileName">

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-card outlined v-if="!onProgressing" class="file-drop-area" @dragenter.prevent
+    <VCard outlined v-if="!onProgressing" class="file-drop-area" @dragenter.prevent
       :class="{ 'grey darken-3': dragover }" @dragover="dragoverHover(true)" @dragleave="dragoverHover(false)"
       @dragover.prevent @drop="onDropFiles" @click="onClickBrowse">
-      <v-card-text>
-        <v-row class="d-flex flex-column align-center" dense justify="center">
+      <VCardText>
+        <VRow class="d-flex flex-column align-center" dense justify="center">
           <VIcon v-if="selectedLocalFiles.length === 0" size="60" color="secondary">
             mdi-cloud-upload
           </VIcon>
@@ -17,17 +17,17 @@
           <p class="pt-3" v-else>
             {{ $t('video.uploadedDetail') }}
           </p>
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card v-else class="file-drop-area">
-      <v-card-text>
+        </VRow>
+      </VCardText>
+    </VCard>
+    <VCard v-else class="file-drop-area">
+      <VCardText>
         <div class="text-center">
-          <v-progress-circular indeterminate color="amber"></v-progress-circular>
+          <VProgressCircular indeterminate color="amber"></VProgressCircular>
         </div>
-      </v-card-text>
-    </v-card>
-    <v-file-input v-model="fileInput" ref="fileInput" type="file" :multiple="isMultiple" style="display: none"
+      </VCardText>
+    </VCard>
+    <VFileInput v-model="fileInput" ref="fileInput" type="file" :multiple="isMultiple" style="display: none"
       :accept="availableFileTypes.join(',')" @change="onFileSelected" />
   </div>
 </template>

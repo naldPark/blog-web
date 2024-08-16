@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <router-view />
+  <VApp>
+    <RouterView />
     <div class="toast-wrapper">
       <div v-for="(info, index) in toastMessages" :key="index" :class="{ hide: info.info.hide }" class="toast-message">
         <div class="message-wrapper">
@@ -18,11 +18,11 @@
         </div>
       </div>
     </div>
-    <v-overlay :model-value="showUIBlocker" class="align-center justify-center" z-index="1000">
-      <v-progress-circular color="primary" indeterminate></v-progress-circular>
-    </v-overlay>
+    <VOverlay :model-value="showUIBlocker" class="align-center justify-center" z-index="1000">
+      <VProgressCircular color="primary" indeterminate></VProgressCircular>
+    </VOverlay>
 
-    <v-dialog v-model="showDialog" max-width="500px" overlay-color="black" overlay-opacity="0.8"
+    <VDialog v-model="showDialog" max-width="500px" overlay-color="black" overlay-opacity="0.8"
       @click:outside="onClickDialogClose">
       <div class="dialog-wrapper pa-3">
         <div class="dialog-title">
@@ -47,14 +47,12 @@
           </VBtn>
         </div>
       </div>
-    </v-dialog>
-  </v-app>
+    </VDialog>
+  </VApp>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
 import { useAppStatusStore, useLanguageStatusStore } from '@/store';
 import Config from "@/config";
 import { storeToRefs } from "pinia";

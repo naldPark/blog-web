@@ -17,9 +17,9 @@
             mdi-open-in-new
           </VIcon>
         </VBtn>
-        <v-bottom-sheet scrollable v-model="showSelectedNodeInfo">
-          <v-card>
-            <v-card-actions>
+        <VBottomSheet scrollable v-model="showSelectedNodeInfo">
+          <VCard>
+            <VCardActions>
               <VAvatar rounded class="mr-2" size="20" v-if="selectedNode?.icon">
                 <VImg :src="getImageUrl('/assets/diagram', `${selectedNode.icon}.png`)
                   "></VImg>
@@ -31,9 +31,9 @@
               <VBtn class="justify-end" color="primary" small @click="showSelectedNodeInfo = !showSelectedNodeInfo">
                 Close
               </VBtn>
-            </v-card-actions>
+            </VCardActions>
             <VDivider></VDivider>
-            <v-card-text>
+            <VCardText>
               <div class="py-3">
                 <p class="text-h6 font-weight-bold mb-10">
                   ▶ {{ selectedNodeDesc?.title }}
@@ -42,9 +42,9 @@
                   {{ selectedNodeDesc?.content }}
                 </p>
               </div>
-            </v-card-text>
-          </v-card>
-        </v-bottom-sheet>
+            </VCardText>
+          </VCard>
+        </VBottomSheet>
       </div>
     </div>
   </div>
@@ -55,7 +55,7 @@ import { getImageUrl } from '@/utils/common';
 import go, { Diagram } from 'gojs';
 import { ref, onMounted, toRaw } from 'vue';
 import infraService from '@/api/infraService';
-import { useAppStatusStore } from '@/store/appStatusStore';
+import { useAppStatusStore } from '@/store/useAppStatusStore';
 import { useDisplay } from 'vuetify';
 
 const display = useDisplay();

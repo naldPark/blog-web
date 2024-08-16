@@ -1,6 +1,7 @@
 export interface ApiResponse<T = any> {
   status_code: number;
   data: T;
+  success: boolean;
 }
 
 export interface ApiErrorResponse {

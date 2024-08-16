@@ -1,6 +1,6 @@
 <template>
   <div class="contents">
-    <!-- <v-data-table show-select :headers="userHeaders" :items="userList" class="custom-table use-head" @click="onClickRow"
+    <!-- <VDataTable show-select :headers="userHeaders" :items="userList" class="custom-table use-head" @click="onClickRow"
       :single-select="false" :options.sync="listOptions" v-model="selectedItems" item-key="accountId"
       hide-default-footer>
       <template v-slot:item="{ item }">
@@ -14,27 +14,27 @@
         </tr>
       </template>
 <template v-slot:top>
-        <v-toolbar flat>
+        <VToolbar flat>
           <VSpacer></VSpacer>
-          <v-dialog v-model="editUserDialog" max-width="500px" v-if="selectedItems.length === 1">
+          <VDialog v-model="editUserDialog" max-width="500px" v-if="selectedItems.length === 1">
             <template v-slot:activator="{ on, attrs }">
               <VBtn class="ma-2" color="secondary" outlined rounded text small v-bind="attrs" v-on="on"
                 @click="resetInput">
                 {{ $t('editUser') }}
               </VBtn>
             </template>
-<v-card ref="form">
-  <v-card-title>
+<VCard ref="form">
+  <VCardTitle>
     <span class="text-h5">{{ $t('editUser') }}</span>
-  </v-card-title>
-  <v-card-text v-if="editUserDialog === true && selectedItems[0]">
-    <v-text-field v-model="selectedItems[0].accountId" :counter="15" label="Id" required></v-text-field>
-    <v-text-field v-model="selectedItems[0].accountName" :counter="10" label="Name" required></v-text-field>
-    <v-text-field v-model="selectedItems[0].email" label="E-mail" required></v-text-field>
-    <v-select v-model="selectedItems[0].authority" :items="authority" item-text="label" item-value="value" label="Item"
-      required></v-select>
-  </v-card-text>
-  <v-card-actions>
+  </VCardTitle>
+  <VCardText v-if="editUserDialog === true && selectedItems[0]">
+    <VTextField v-model="selectedItems[0].accountId" :counter="15" label="Id" required></VTextField>
+    <VTextField v-model="selectedItems[0].accountName" :counter="10" label="Name" required></VTextField>
+    <VTextField v-model="selectedItems[0].email" label="E-mail" required></VTextField>
+    <VSelect v-model="selectedItems[0].authority" :items="authority" item-text="label" item-value="value" label="Item"
+      required></VSelect>
+  </VCardText>
+  <VCardActions>
     <VSpacer></VSpacer>
     <VBtn class="ma-2" large @click="clickToChangeAccountInfo" color="primary" outlined rounded text>
       {{ $t('editPassword') }}
@@ -45,43 +45,43 @@
     <VBtn class="ma-2" large color="primary" outlined rounded text dark @click="onClickEdit">
       {{ $t('confirm') }}
     </VBtn>
-  </v-card-actions>
-</v-card>
-</v-dialog>
+  </VCardActions>
+</VCard>
+</VDialog>
 <VBtn class="ma-2" color="error" @click="clickDeleteUsers" small outlined rounded text>
   {{ $t('deleteUsers') }}
 </VBtn>
-<v-dialog v-model="addUserDialog" max-width="500px">
+<VDialog v-model="addUserDialog" max-width="500px">
   <template v-slot:activator="{ on, attrs }">
               <VBtn class="ma-2" color="primary" outlined rounded text small v-bind="attrs" v-on="on"
                 @click="resetInput">
                 {{ $t('addUser') }}
               </VBtn>
             </template>
-  <v-card ref="form">
-    <v-card-title>
+  <VCard ref="form">
+    <VCardTitle>
       <span class="text-h5">{{ $t('addUser') }}</span>
-    </v-card-title>
-    <v-card-text v-if="addUserDialog === true">
-      <v-text-field v-model="newUserInfo.accountId" :counter="15" label="Id" required></v-text-field>
-      <v-text-field v-model="newUserInfo.accountName" :counter="10" label="Name" required></v-text-field>
-      <v-row>
-        <v-col cols="12" sm="6">
-          <v-text-field v-model="newUserInfo.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+    </VCardTitle>
+    <VCardText v-if="addUserDialog === true">
+      <VTextField v-model="newUserInfo.accountId" :counter="15" label="Id" required></VTextField>
+      <VTextField v-model="newUserInfo.accountName" :counter="10" label="Name" required></VTextField>
+      <VRow>
+        <VCol cols="12" sm="6">
+          <VTextField v-model="newUserInfo.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'" name="input-10-1" label="Password" counter
-            @click:append="showPassword = !showPassword"></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6">
-          <v-text-field v-model="confirmPassword" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="showPassword = !showPassword"></VTextField>
+        </VCol>
+        <VCol cols="12" sm="6">
+          <VTextField v-model="confirmPassword" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'" name="input-10-2" label="PasswordConfirm"
-            class="input-group--focused" @click:append="showPassword = !showPassword"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-text-field v-model="newUserInfo.email" label="E-mail" required></v-text-field>
-      <v-select v-model="newUserInfo.authority" :items="authority" item-text="label" item-value="value" label="Item"
-        required></v-select>
-    </v-card-text>
-    <v-card-actions>
+            class="input-group--focused" @click:append="showPassword = !showPassword"></VTextField>
+        </VCol>
+      </VRow>
+      <VTextField v-model="newUserInfo.email" label="E-mail" required></VTextField>
+      <VSelect v-model="newUserInfo.authority" :items="authority" item-text="label" item-value="value" label="Item"
+        required></VSelect>
+    </VCardText>
+    <VCardActions>
       <VSpacer></VSpacer>
       <VBtn class="ma-2" large @click="addUserDialog = false" color="primary" outlined rounded text>
         {{ $t('cancel') }}
@@ -89,10 +89,10 @@
       <VBtn class="ma-2" large color="primary" outlined rounded text dark @click="onClickCreate">
         {{ $t('confirm') }}
       </VBtn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
-</v-toolbar>
+    </VCardActions>
+  </VCard>
+</VDialog>
+</VToolbar>
 </template>
 <template v-slot:footer>
         <div class="pagination-wrapper">
@@ -110,13 +110,13 @@
             </VBtn>
           </div>
           <div v-if="!isMobile" class="page-select grey--text" style="align-items : center;">
-            <v-select class="selectPageCount" dense v-model="listOptions.pageItem" :items="listOptions.pageItems"
-              @change="changePageItem"></v-select>
+            <VSelect class="selectPageCount" dense v-model="listOptions.pageItem" :items="listOptions.pageItems"
+              @change="changePageItem"></VSelect>
             <span class="caption text-end ml-2 grey--text">{{ $t('countPerPage') }}</span>
           </div>
         </div>
       </template>
-</v-data-table> -->
+</VDataTable> -->
     <!-- <edit-account-info-dialog v-if="selectedItems[0]" v-model="showEditAccountPasswordDialog"
       :accountId="selectedItems[0].accountId"></edit-account-info-dialog> -->
   </div>
@@ -133,7 +133,7 @@ import {
   editUser,
 } from '@/api/accountService';
 import ChangePasswordDialog from '@/features/dialog/ChangePasswordDialog.vue';
-import { useAppStatusStore } from '@/store/appStatusStore';
+import { useAppStatusStore } from '@/store/useAppStatusStore';
 
 const appStatusStore = useAppStatusStore();
 const { t } = useI18n();

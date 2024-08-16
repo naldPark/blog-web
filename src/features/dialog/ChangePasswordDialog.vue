@@ -1,28 +1,28 @@
 <template>
-  <v-dialog width="444px" content-class="app-g-dialog" @update:model-value="updateShowValue">
-    <v-card>
-      <v-toolbar density="compact" dark color="grey-darken-3">
+  <VDialog width="444px" content-class="app-g-dialog" @update:model-value="updateShowValue">
+    <VCard>
+      <VToolbar density="compact" dark color="grey-darken-3">
         <VToolbarTitle>
           <VIcon class="text-primary">mdi-security</VIcon>
           {{ $t('editPassword') }}
         </VToolbarTitle>
         <VSpacer></VSpacer>
-      </v-toolbar>
-      <v-card-text class="mt-5">
-        <v-container>
-          <v-row>
-            <v-col cols="12" class="pa-0">
-              <v-text-field v-model="accountPassword" :label="$t('password')" :placeholder="$t('changePwd')"
+      </VToolbar>
+      <VCardText class="mt-5">
+        <VContainer>
+          <VRow>
+            <VCol cols="12" class="pa-0">
+              <VTextField v-model="accountPassword" :label="$t('password')" :placeholder="$t('changePwd')"
                 type="password" required @keyup.enter="onClickEdit" flat />
-            </v-col>
-            <v-col cols="12" class="pa-0">
-              <v-text-field v-model="accountPasswordConfirm" :label="$t('passwordConfirm')"
+            </VCol>
+            <VCol cols="12" class="pa-0">
+              <VTextField v-model="accountPasswordConfirm" :label="$t('passwordConfirm')"
                 :placeholder="$t('changePwdConfirm')" type="password" required @keyup.enter="onClickEdit" flat />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-      <v-card-actions>
+            </VCol>
+          </VRow>
+        </VContainer>
+      </VCardText>
+      <VCardActions>
         <VSpacer />
         <VBtn class="ma-2" color="primary" rounded variant="outlined">
           {{ $t('cancel') }}
@@ -31,14 +31,14 @@
           " color="primary" rounded variant="outlined" dark @click="onClickEdit">
           {{ $t('confirm') }}
         </VBtn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+      </VCardActions>
+    </VCard>
+  </VDialog>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useAppStatusStore } from '@/store/appStatusStore';
+import { useAppStatusStore } from '@/store/useAppStatusStore';
 import { useI18n } from 'vue-i18n';
 import { editPassword } from '@/api/accountService';
 
