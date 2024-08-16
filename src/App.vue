@@ -4,17 +4,17 @@
     <div class="toast-wrapper">
       <div v-for="(info, index) in toastMessages" :key="index" :class="{ hide: info.info.hide }" class="toast-message">
         <div class="message-wrapper">
-          <v-icon v-if="info.info.type === 'success'">mdi-check-circle-outline</v-icon>
-          <v-icon v-if="info.info.type === 'error'">mdi-close-circle-outline</v-icon>
-          <v-icon v-if="info.info.type === 'warning'">mdi-alert-circle-outline</v-icon>
+          <VIcon v-if="info.info.type === 'success'">mdi-check-circle-outline</VIcon>
+          <VIcon v-if="info.info.type === 'error'">mdi-close-circle-outline</VIcon>
+          <VIcon v-if="info.info.type === 'warning'">mdi-alert-circle-outline</VIcon>
           <span class="message" style="white-space: pre;">
             <span v-if="info.info.inputMsg" class="input-message">{{ info.info.inputMsg }}&nbsp;</span>
             {{ info.info.message }}
           </span>
-          <v-btn v-if="info.info.buttonCallback" @click="info.info.buttonCallback" style="margin-left: 16px"
+          <VBtn v-if="info.info.buttonCallback" @click="info.info.buttonCallback" style="margin-left: 16px"
             class="app-g-button line-button size-xsmall">
             {{ info.info.buttonMsg ? info.info.buttonMsg : $t('showNow') }}
-          </v-btn>
+          </VBtn>
         </div>
       </div>
     </div>
@@ -27,24 +27,24 @@
       <div class="dialog-wrapper pa-3">
         <div class="dialog-title">
           <span>
-            <v-icon class="text-primary mr-3">mdi-information</v-icon>{{ dialogInfo.title }}
+            <VIcon class="text-primary mr-3">mdi-information</VIcon>{{ dialogInfo.title }}
           </span>
-          <v-spacer></v-spacer>
-          <v-btn fab plain small right @click="onClickDialogClose">
-            <v-icon dark>mdi-close-circle-outline</v-icon>
-          </v-btn>
+          <VSpacer></VSpacer>
+          <VBtn fab plain small right @click="onClickDialogClose">
+            <VIcon dark>mdi-close-circle-outline</VIcon>
+          </VBtn>
         </div>
-        <v-divider></v-divider>
+        <VDivider></VDivider>
         <div class="dialog-description">
           {{ dialogInfo.description }}
         </div>
         <div class="button-wrapper">
-          <v-btn class="ma-1" color="grey" plain v-if="!dialogInfo.invisibleClose" @click="onClickDialogClose">
+          <VBtn class="ma-1" color="grey" plain v-if="!dialogInfo.invisibleClose" @click="onClickDialogClose">
             {{ dialogInfo.cancelButtonText }}
-          </v-btn>
-          <v-btn class="ma-1" color="primary" plain @click="onClickDialog">
+          </VBtn>
+          <VBtn class="ma-1" color="primary" plain @click="onClickDialog">
             {{ dialogInfo.buttonText }}
-          </v-btn>
+          </VBtn>
         </div>
       </div>
     </v-dialog>
@@ -59,19 +59,17 @@ import { useAppStatusStore, useLanguageStatusStore, } from '@/store';
 import Config from "@/config";
 import { storeToRefs } from "pinia";
 
-const router = useRouter();
-const { t } = useI18n();
-
 const appStatusStore: any = useAppStatusStore();
 
 const languageStatusStore = useLanguageStatusStore();
 const showDialog = ref(false);
-
+// const appStatusStore = useAppStatusStore();
+const { showUIBlocker, dialogInfo, toastMessages } = storeToRefs(appStatusStore);
 // const { showUIBlocker } = storeToRefs(appStatusStore);
 
 // const showUIBlocker = appStatusStore.showUIBlocker;
-const dialogInfo = appStatusStore.dialogInfo;
-const toastMessages = appStatusStore.toastMessages;
+// const dialogInfo = appStatusStore.dialogInfo;
+// const toastMessages = appStatusStore.toastMessages;
 
 
 
@@ -89,86 +87,6 @@ const onClickDialog = () => {
   showDialog.value = true;
 };
 
-// const blockDevtool = () => {
-//   window.addEventListener("contextmenu", (e) => {
-//     e.preventDefault();
-//     return false;
-//   });
-
-//   const handleMouseEvent = (e: any) => {
-//     if (e.which === 3 || e.button === 2) {
-//       e.preventDefault();
-//       return false;
-//     }
-//   };
-
-//   window.onkeydown = handleMouseEvent;
-//   window.onkeyup = handleMouseEvent;
-
-//   const logOutFrom = document.createElement("form");
-//   logOutFrom.name = "logOutFrom";
-//   logOutFrom.id = "logOutFrom";
-//   logOutFrom.action = `DevToolsDisabled?lang=${t("lang")}`;
-//   logOutFrom.method = "POST";
-//   const input = document.createElement("input");
-//   input.type = "hidden";
-//   input.name = "nald";
-//   input.value = "bb";
-//   logOutFrom.appendChild(input);
-//   document.body.appendChild(logOutFrom);
-
-//   console.log(
-//     Object.defineProperties(new Error(), {
-//       toString: {
-//         value() {
-//           // new Error().stack.includes("toString@") && alert("Safari devtools");
-//         },
-//       },
-//       message: {
-//         get() {
-//           logOutFrom.submit();
-//           return null;
-//         },
-//       },
-//     })
-//   );
-
-//   window.addEventListener("keydown", (e) => {
-//     const preventDefaultKeys = [
-//       // CMD + Alt + I (Chrome, Firefox, Safari)
-//       { metaKey: true, altKey: true, keyCode: 73 },
-//       // CMD + Alt + J (Chrome)
-//       { metaKey: true, altKey: true, keyCode: 74 },
-//       // CMD + Alt + C (Chrome)
-//       { metaKey: true, altKey: true, keyCode: 67 },
-//       // CMD + Shift + C (Chrome)
-//       { metaKey: true, shiftKey: true, keyCode: 67 },
-//       // Ctrl + Shift + I (Chrome, Firefox, Safari, Edge)
-//       { ctrlKey: true, shiftKey: true, keyCode: 73 },
-//       // Ctrl + Shift + J (Chrome, Edge)
-//       { ctrlKey: true, shiftKey: true, keyCode: 74 },
-//       // Ctrl + Shift + C (Chrome, Edge)
-//       { ctrlKey: true, shiftKey: true, keyCode: 67 },
-//       // F12 (Chome, Firefox, Edge)
-//       { keyCode: 123 },
-//       // CMD + Alt + U, Ctrl + U (View source: Chrome, Firefox, Safari, Edge)
-//       { metaKey: true, altKey: true, keyCode: 85 },
-//       { ctrlKey: true, keyCode: 85 },
-//     ];
-
-//     preventDefaultKeys.forEach((key) => {
-//       if (
-//         e.metaKey === key.metaKey &&
-//         e.altKey === key.altKey &&
-//         e.shiftKey === key.shiftKey
-//       ) {
-//         e.preventDefault();
-//         return false;
-//       }
-//     });
-//   });
-// };
-
 onMounted(() => {
   // 초기 로드
   languageStatusStore.loadLanguage(); // Pinia 스토어의 액션을 호출합니다
@@ -181,10 +99,6 @@ onMounted(() => {
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   });
 
-  // // DevTool 차단 기능
-  // if (Config.server === "prod" && accountStatusStore.accountInfo?.accountId !== "nald") {
-  //   blockDevtool();
-  // }
 });
 </script>
 
@@ -220,7 +134,7 @@ $display-breakpoints: (
   top: 0;
   align-items: center;
   width: 100%;
-  height: 0px;
+  height: 0;
   z-index: 10000;
 
   .toast-message {
@@ -245,7 +159,7 @@ $display-breakpoints: (
       float: left;
       height: 32px;
 
-      .v-icon {
+      .VIcon {
         font-size: 24px;
         margin-right: 14px;
       }
