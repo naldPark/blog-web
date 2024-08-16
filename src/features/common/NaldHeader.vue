@@ -8,6 +8,7 @@
       <span> Nald</span>
     </VToolbarTitle>
     <VSpacer></VSpacer>
+    <Button></Button>
     <VBtn v-if="!accountInfo.accountId" @click="updateShowLoginDialog(true)" color="primary" variant="outlined" rounded
       class="ma-2">
       {{ t('login') }}
@@ -115,6 +116,7 @@ export enum LANGUAGE_TYPE {
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
+import Button from '@/components/Button.vue'
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import LoginDialog from '@/features/dialog/LoginDialog.vue';

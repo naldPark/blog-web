@@ -7,11 +7,13 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Button: typeof import('./components/Button.vue')['default']
     ChangePasswordDialog: typeof import('./components/dialog/ChangePasswordDialog.vue')['default']
     DiagramItem: typeof import('./components/project/DiagramItem.vue')['default']
     FileUpload: typeof import('./components/wonderwall/video/FileUpload.vue')['default']
     HeaderDrawer: typeof import('./components/common/HeaderDrawer.vue')['default']
     ImportLocalFIle: typeof import('./components/wonderwall/video/ImportLocalFIle.vue')['default']
+    InputText: typeof import('./components/InputText.vue')['default']
     LoginDialog: typeof import('./components/dialog/LoginDialog.vue')['default']
     MovieItem: typeof import('./components/wonderwall/video/MovieItem.vue')['default']
     NaldFooter: typeof import('./components/common/NaldFooter.vue')['default']
