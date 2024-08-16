@@ -67,7 +67,7 @@ const appStatusStore: any = useAppStatusStore();
 const languageStatusStore = useLanguageStatusStore();
 const showDialog = ref(false);
 
-const { showUIBlocker } = storeToRefs(appStatusStore);
+// const { showUIBlocker } = storeToRefs(appStatusStore);
 
 // const showUIBlocker = appStatusStore.showUIBlocker;
 const dialogInfo = appStatusStore.dialogInfo;

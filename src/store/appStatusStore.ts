@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { clone } from 'ramda';
 
-export interface IDialogInfo {
+export interface DialogInfo {
   title: string;
   description: string;
   buttonText?: string | null;
@@ -11,7 +11,7 @@ export interface IDialogInfo {
   invisibleClose?: boolean;
 }
 
-interface IDialog {
+interface Dialog {
   show: boolean;
   title: string;
   description: string;
@@ -22,7 +22,7 @@ interface IDialog {
   invisibleClose: boolean;
 }
 
-export interface IToastMessageInfo {
+export interface ToastMessageInfo {
   type: string;
   hide?: boolean;
   inputMsg?: string;
@@ -33,23 +33,23 @@ export interface IToastMessageInfo {
   inputTime?: number;
 }
 
-interface IToastMessage {
+interface ToastMessage {
   key: string;
   show: boolean;
-  info: IToastMessageInfo;
+  info: ToastMessageInfo;
 }
 
-export interface IAppStatus {
+export interface AppStatus {
   timezone: string;
   showUIBlocker: boolean;
-  toastMessages: Array<IToastMessage>;
-  dialogInfo: IDialog;
+  toastMessages: Array<ToastMessage>;
+  dialogInfo: Dialog;
   prevRouteName: string | null | undefined;
 }
 
 export const useAppStatusStore = defineStore({
   id: 'app-status',
-  state: (): IAppStatus => ({
+  state: (): AppStatus => ({
     timezone: 'Asia/Seoul',
     showUIBlocker: false,
     toastMessages: [],
@@ -71,11 +71,11 @@ export const useAppStatusStore = defineStore({
       this.showUIBlocker = info.val;
     },
 
-    setDialogInfo(info: IDialog) {
+    setDialogInfo(info: Dialog) {
       this.dialogInfo = info;
     },
 
-    showDialog(info: IDialogInfo) {
+    showDialog(info: DialogInfo) {
       this.setDialogInfo({
         show: true,
         title: info.title || '알림',
@@ -110,7 +110,7 @@ export const useAppStatusStore = defineStore({
       this.setLoading({ val: false, cancel: false });
     },
 
-    addToastMessage(info: IToastMessageInfo) {
+    addToastMessage(info: ToastMessageInfo) {
       const message = {
         key: '1',
         show: true,
@@ -144,14 +144,14 @@ export const useAppStatusStore = defineStore({
 
     closeToastMessage(key: string) {
       const idx = this.toastMessages.findIndex(
-        (v: IToastMessage) => v.key === key,
+        (v: ToastMessage) => v.key === key,
       );
       if (idx > -1) {
         this.toastMessages[idx].info.hide = true;
         this.toastMessages = clone(this.toastMessages);
         setTimeout(() => {
           const index = this.toastMessages.findIndex(
-            (v: IToastMessage) => v.key === key,
+            (v: ToastMessage) => v.key === key,
           );
           this.toastMessages.splice(index, 1);
         }, 500);

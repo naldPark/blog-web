@@ -1,13 +1,7 @@
 module.exports = {
   root: true,
-
   parser: 'vue-eslint-parser', // Vue 파일의 구문을 이해할 수 있는 parser
   plugins: ['@typescript-eslint'],
-  parserOptions: {
-    parser: '@typescript-eslint/parser', // TypeScript 구문을 이해하기 위한 parser
-    ecmaVersion: 2020,
-    sourceType: 'module',
-  },
   env: {
     browser: true,
     es2020: true,

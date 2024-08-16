@@ -6,7 +6,7 @@
           <h1>Chat room</h1>
           <span>{{ $t('chat.enterInfo') }}</span>
           <v-text-field label="ID" v-model="nameInput" flat placeholder="name" />
-          <v-text-field label="Room" disabled="true" v-model="roomInput" flat placeholder="roomID" />
+          <v-text-field label="Room" :disabled="true" v-model="roomInput" flat placeholder="roomID" />
           <v-btn @click="connect" :disabled="!nameInput || !roomInput" class="ma-2" rounded color="primary" dark>
             {{ $t('chat.enter') }}
           </v-btn>
