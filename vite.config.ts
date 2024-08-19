@@ -1,5 +1,4 @@
 // Plugins
-import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import Layouts from 'vite-plugin-vue-layouts';
 import Vue from '@vitejs/plugin-vue';
@@ -18,15 +17,15 @@ export default defineConfig({
     }),
     Layouts(),
     vueJsx(),
-    AutoImport({
-      imports: ['vue', 'vue-router', 'pinia'],
-      dts: 'src/auto-imports.d.ts',
-      eslintrc: {
-        enabled: true,
-      },
-      vueTemplate: true,
-      ignore: ['useCookies', 'useStorage'],
-    }),
+    // AutoImport({
+    //   imports: ['vue', 'vue-router', 'pinia'],
+    //   dts: 'src/auto-imports.d.ts',
+    //   eslintrc: {
+    //     enabled: true,
+    //   },
+    //   vueTemplate: true,
+    //   ignore: ['useCookies', 'useStorage'],
+    // }),
     Components({
       dts: 'src/components.d.ts',
     }),
@@ -81,8 +80,8 @@ export default defineConfig({
     port: 8082,
     proxy: {
       '/api': {
-        // target: 'https://nald.me/backend',
-        target: 'http://localhost:8000',
+        target: 'https://nald.me/backend',
+        // target: 'http://localhost:8000',
         rewrite: (path) => path.replace(/^\/api/, ''),
         changeOrigin: true,
         secure: false,

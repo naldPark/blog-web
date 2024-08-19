@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue'; // Import ref from vue for reactive state
 import i18n from '@/i18n/i18n'; // Import i18n configuration
 
-export const useLanguageStatusStore = defineStore('language-status', () => {
+export const useLanguageStore = defineStore('language', () => {
   // State definition
   const language = ref('ko');
 

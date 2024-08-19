@@ -7,32 +7,32 @@
         </VCard>
       </VCol>
       <VCol cols="12" sm="auto">
-        <VCard class="text-xs" flat :class="{ 'not-mobile': !isMobile, 'pa-2': !isMobile }">
-          &copy; nald
-          &nbsp;
+        <VCard
+          class="text-xs"
+          flat
+          :class="{ 'not-mobile': !isMobile, 'pa-2': !isMobile }"
+        >
+          &copy; nald &nbsp;
         </VCard>
       </VCol>
       <VCol cols="12" sm="auto" v-if="!isMobile">
-        <VCard class="pa-2 text-xs-left" flat>
-          ALL RIGHTS RESERVED
-        </VCard>
+        <VCard class="pa-2 text-xs-left" flat> ALL RIGHTS RESERVED </VCard>
       </VCol>
     </VRow>
   </VFooter>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
-import { useDisplay } from 'vuetify';
+  import { computed, Ref, ref } from 'vue';
+  import { useDisplay } from 'vuetify';
 
-const display = useDisplay();
-const isMobile: Ref<boolean> = display.smAndDown;
-const currentYear = computed(() => new Date().getFullYear());
-
+  const display = useDisplay();
+  const isMobile: Ref<boolean> = display.smAndDown;
+  const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <style lang="scss" scoped>
-.not-mobile:after {
-  content: " | ";
-}
+  .not-mobile:after {
+    content: ' | ';
+  }
 </style>

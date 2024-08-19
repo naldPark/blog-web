@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { clone } from 'ramda';
+import { Ref, ref } from 'vue';
 
 export interface DialogInfo {
   title: string;
@@ -47,7 +48,7 @@ export interface AppStatus {
   prevRouteName: string | null | undefined;
 }
 
-export const useAppStatusStore = defineStore('app-status', () => {
+export const useAppCommonStore = defineStore('app-common', () => {
   const timezone = ref('Asia/Seoul');
   const showUIBlocker = ref(false);
   const toastMessages: Ref<ToastMessage[]> = ref([]);

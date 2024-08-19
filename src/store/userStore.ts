@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { useCookies } from '@vueuse/integrations/useCookies';
 import { isEmpty } from 'ramda';
+import { ref } from 'vue';
 
 // Constants for keys
 const AUTH_TOKEN_COOKIE_KEY = 'access_token';
@@ -13,7 +14,7 @@ export interface AccountInfo {
 }
 
 // Define your store
-export const useAccountStatusStore = defineStore('account-status', () => {
+export const useUserStore = defineStore('user', () => {
   // State definition
   const cookies = useCookies();
   const isSignIn = ref(false);

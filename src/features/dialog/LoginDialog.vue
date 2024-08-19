@@ -1,5 +1,10 @@
 <template>
-  <VDialog :model-value="showValue" @update:model-value="updateShowValue" width="444px" content-class="app-g-dialog">
+  <VDialog
+    :model-value="modelValue"
+    @update:model-value="updateModelValue"
+    width="444px"
+    content-class="app-g-dialog"
+  >
     <VCard>
       <VToolbar density="compact" dark color="grey-darken-3">
         <VToolbarTitle>
@@ -12,19 +17,28 @@
         <VContainer>
           <VRow>
             <VCol cols="12" class="pa-0">
-              <VTextField color="primary" v-model="accountId" :label="t('id')" :placeholder="t('idDes')" flat required>
-              </VTextField>
+              <InputText v-model="accountId" :label="t('id')" required />
             </VCol>
             <VCol cols="12" class="pa-0">
-              <VTextField color="primary" v-model="accountPassword" :label="t('password')" :placeholder="t('pwdDes')"
-                flat required @keyup.enter="onClickLogin"
-                :append-inner-icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
-                :type="passwordVisible ? 'text' : 'password'" @click:append-inner="passwordVisible = !passwordVisible">
-              </VTextField>
+              <InputText
+                v-model="accountPassword"
+                :label="t('password')"
+                :passwordIcon="true"
+                required
+                @enter="onClickLogin"
+                :icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+                type="password"
+              />
             </VCol>
           </VRow>
         </VContainer>
-        <VBtn class="mb-3" color="primary" variant="tonal" block @click="onClickLogin">
+        <VBtn
+          class="mb-3"
+          color="primary"
+          variant="tonal"
+          block
+          @click="onClickLogin"
+        >
           Log In
         </VBtn>
       </VCardText>
@@ -33,123 +47,91 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { login, getRsa } from '@/api/accountService';
-import { useAccountStatusStore } from '@/store/accountStatusStore';
-import { useAppStatusStore } from '@/store/useAppStatusStore';
-import { decodeToken } from '@/utils/common';
-import { useCookies } from '@vueuse/integrations/useCookies';
-import JSEncrypt from 'jsencrypt';
-import { useMutation } from "vue-query";
-const { t } = useI18n(); // t 함수 가져오기
-const accountId = ref('');
-const accountPassword = ref('');
-const passwordVisible = ref(false);
-const cookies = useCookies();
-const accountStatusStore = useAccountStatusStore();
-const appStatusStore = useAppStatusStore();
-defineProps({ showValue: Boolean });
-const emits = defineEmits(['update:modelValue']);
-function updateShowValue(value: any) {
-  emits('update:modelValue', value);
-}
+  import { ref } from 'vue';
+  import { useI18n } from 'vue-i18n';
+  import { login, getRsa } from '@/api/accountService';
+  import { useUserStore, useAppCommonStore } from '@/store';
+  import { decodeToken } from '@/utils/common';
+  import { useCookies } from '@vueuse/integrations/useCookies';
+  import JSEncrypt from 'jsencrypt';
+  import { useMutation } from 'vue-query';
 
-// function useAddTodoMutation() {
-//   return 
+  const { t } = useI18n();
+  const accountId = ref('');
+  const accountPassword = ref('');
+  const passwordVisible = ref(false);
+  const cookies = useCookies();
+  const userStore = useUserStore();
+  const appStatusStore = useAppCommonStore();
+  const emits = defineEmits(['update:modelValue']);
 
-// }
+  defineProps<{
+    modelValue: boolean;
+  }>();
 
-// const { isLoading, isError, error, isSuccess, mutate, reset } = useAddTodoMutation();
+  const updateModelValue = (value: boolean) => {
+    emits('update:modelValue', value);
+  };
 
-// function addTodo() {
-//   mutate({ id: new Date(), title: 'Do Laundry' });
-// }
+  const { mutate: postLogin } = useMutation({
+    mutationFn: (encryptedValue: string) =>
+      login({
+        accountId: accountId.value,
+        password: encryptedValue,
+      }),
+    onSuccess: (res) => {
+      const token = res.data.access_token;
+      cookies.set('access_token', token);
+      const tokenInfo = JSON.parse(decodeToken(token));
+      userStore.setAuthToken(token);
+      userStore.setAccountInfo({
+        accountId: tokenInfo.user_id,
+        accountName: tokenInfo.user_name,
+        authority: tokenInfo.authority,
+        email: tokenInfo.user_email,
+      });
+      updateModelValue(false);
+    },
+    onError: (error: any) => {
+      console.error('에러', error);
+      appStatusStore.showDialog({
+        title: t('loginFailed'),
+        description: error.error_i18n,
+        invisibleClose: true,
+        action: () => {},
+      });
+      userStore.resetAccountInfo();
+    },
+  });
 
-const { mutate: postLogin } = useMutation({
-  mutationFn: (encryptedValue: string) =>
-    login({
-      accountId: accountId.value,
-      password: encryptedValue,
-    }),
-  onSuccess: (res) => {
-    const token = res.data.access_token;
-    cookies.set('access_token', token);
-    const tokenInfo = JSON.parse(decodeToken(token));
-    accountStatusStore.setAuthToken(token);
-    accountStatusStore.setAccountInfo({
-      accountId: tokenInfo.user_id,
-      accountName: tokenInfo.user_name,
-      authority: tokenInfo.authority,
-      email: tokenInfo.user_email,
-    });
-  },
-  onError: (error: any) => {
-    console.log('에러', error)
-    appStatusStore.showDialog({
-      title: t('loginFailed'),
-      description: error.error_i18n,
-      invisibleClose: true,
-      action: () => { },
-    });
-    accountStatusStore.resetAccountInfo();
-  },
-});
-
-
-const onClickLogin = async () => {
-  appStatusStore.showLoading();
-  try {
-    const rsaRes = await getRsa();
-    console.log(rsaRes.data);
-    const rsa = new JSEncrypt({ default_key_size: '2048' });
-    rsa.setPublicKey(rsaRes.data);
-    const chunkSize = 117; // 128 bytes - 11 bytes for padding
-    const chunks = [];
-    for (let i = 0; i < accountPassword.value.length; i += chunkSize) {
-      const chunk = accountPassword.value.slice(i, i + chunkSize);
-      const encryptedChunk = rsa.encrypt(chunk);
-      chunks.push(encryptedChunk);
+  const onClickLogin = async () => {
+    appStatusStore.showLoading();
+    try {
+      const rsaRes = await getRsa();
+      const rsa = new JSEncrypt({ default_key_size: '2048' });
+      rsa.setPublicKey(rsaRes.data);
+      const chunkSize = 117;
+      const chunks = [];
+      for (let i = 0; i < accountPassword.value.length; i += chunkSize) {
+        const chunk = accountPassword.value.slice(i, i + chunkSize);
+        const encryptedChunk = rsa.encrypt(chunk);
+        chunks.push(encryptedChunk);
+      }
+      const encryptedValue = chunks.join(':');
+      postLogin(encryptedValue);
+      appStatusStore.hideLoading();
+    } catch (error) {
+      appStatusStore.showDialog({
+        title: t('error'),
+        description: 'unknown error',
+        invisibleClose: true,
+        action: () => {},
+      });
+      appStatusStore.hideLoading();
     }
-    const encryptedValue = chunks.join(':');
-    postLogin(encryptedValue);
-    // const res = await login({
-    //   userId: accountId.value,
-    //   password: encryptedValue,
-    // });
-    // if (res.status_code === 200) {
-    //   const token = res.data.access_token;
-    //   cookies.set('access_token', token);
-    //   const tokenInfo = JSON.parse(decodeToken(token));
-    //   accountStatusStore.setAuthToken(token);
-    //   accountStatusStore.setAccountInfo({
-    //     accountId: tokenInfo.user_id,
-    //     accountName: tokenInfo.user_name,
-    //     authority: tokenInfo.authority,
-    //     email: tokenInfo.user_email,
-    //   });
-    // } else {
-    //   appStatusStore.showDialog({
-    //     title: t('loginFailed'),
-    //     description: res.data.error,
-    //     invisibleClose: true,
-    //     action: () => { },
-    //   });
-    //   accountStatusStore.resetAccountInfo();
-    // }
-    updateShowValue(false);
-    appStatusStore.hideLoading();
-  } catch (error) {
-    appStatusStore.showDialog({
-      title: t('error'),
-      description: 'unknown error',
-      invisibleClose: true,
-      action: () => { },
-    });
-    updateShowValue(false);
-    appStatusStore.hideLoading();
-  }
-}
+  };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  /* 스타일 정의 부분 */
+</style>

@@ -6,7 +6,7 @@ import {
 } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
 import WonderwallLayout from '@/layouts/WonderwallLayout.vue';
-import { useAccountStatusStore } from '@/store/accountStatusStore';
+import { useUserStore } from '@/store/userStore';
 
 const routes = [
   {
@@ -121,11 +121,11 @@ router.beforeEach(
     next: NavigationGuardNext,
   ) => {
     console.log('감자러쉬', to);
-    const accountStatusStore = useAccountStatusStore();
-    accountStatusStore.loadAuthToken();
+    const userStore = useUserStore();
+    userStore.loadAuthToken();
     if (to.matched.some((route) => route.meta.anonymousAccess)) {
       next();
-    } else if (accountStatusStore.isSignIn) {
+    } else if (userStore.isSignIn) {
       next();
     } else {
       moveToMain();

@@ -34,7 +34,10 @@
         :preload="'metadata'"
         style="vertical-align: middle"
       >
-        <VideoPlayer :hlsSource="currentMovie.fileSrc" :vttSrc="currentMovie.vttSrc" />
+        <VideoPlayer
+          :hlsSource="currentMovie.fileSrc"
+          :vttSrc="currentMovie.vttSrc"
+        />
       </div>
       <div class="movie-detail pl-3">
         <VChip small color="grey" variant="outlined" class="mb-2">
@@ -75,7 +78,12 @@
         <div class="title">
           {{ $t('video.recommendedMovie') }}
         </div>
-        <MovieItem v-for="movie in movieList" :key="movie.storageId" :item="movie" @selectMovie="onClickMovie(movie.storageId)" />
+        <MovieItem
+          v-for="movie in movieList"
+          :key="movie.storageId"
+          :item="movie"
+          @selectMovie="onClickMovie(movie.storageId)"
+        />
       </div>
     </div>
   </div>
@@ -87,7 +95,7 @@
   import StorageService from '@/api/storageService';
   import MovieItem from '@/features/wonderwall/video/MovieItem.vue';
   import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
-  import { useAppStatusStore } from '@/store/useAppStatusStore';
+  import { useAppCommonStore } from '@/store/appCommonStore';
   import { VideoDetailData } from '@/types/wonderwall/video';
 
   /** globalConfig 사용 */
@@ -109,7 +117,7 @@
     createdDt: '',
     downloadable: '',
     vttSrc: '',
-    fileDesc: ''
+    fileDesc: '',
   });
   const movieList: Ref<VideoDetailData[]> = ref([]);
   const searchText: Ref<string> = ref('');
@@ -117,7 +125,7 @@
 
   const router = useRouter();
   const route = useRoute();
-  const appStatusStore = useAppStatusStore();
+  const appStatusStore = useAppCommonStore();
 
   const searchVideo = () => {
     router
@@ -167,14 +175,16 @@
 
   const clickToDownload = async () => {
     appStatusStore.showLoading();
-    await StorageService.download(currentMovie.value.storageId).then((res: any) => {
-      const blob = new Blob([res.data]);
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.target = '_self';
-      link.download = `${currentMovie.value.fileName}.mp4`;
-      link.click();
-    });
+    await StorageService.download(currentMovie.value.storageId).then(
+      (res: any) => {
+        const blob = new Blob([res.data]);
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.target = '_self';
+        link.download = `${currentMovie.value.fileName}.mp4`;
+        link.click();
+      },
+    );
     appStatusStore.hideLoading();
   };
 
