@@ -1,6 +1,6 @@
 <template>
   <div class="main-page">
-    <nald-header></nald-header>
+    <NaldHeader />
     <div class="main-cover">
       <VRow class="pt-5 align-center">
         <div class="main-content" :class="{ 'is-mobile': isMobile }">
@@ -10,15 +10,12 @@
           <p class="main-title">
             <b>{{ $t('nald') }}</b>
           </p>
-          <span class="main-title-sub"
-            >인테리어 확장공사중 (소음심한날: 빨간날, 칼퇴한날)</span
-          >
+          <span class="main-title-sub">
+            인테리어 확장공사중 (소음심한날: 빨간날, 칼퇴한날)
+          </span>
           <p class="typing text-right">
-            . . of<span
-              class="txt-type ml-1"
-              data-wait="3000"
-              data-words='["Odds and end.", "Programming.", "Operation."]'
-            ></span>
+            . . of
+            <span class="txt-type">{{ currentWord }}</span>
           </p>
           <VRow class="badges-image-wrapper mt-3" style="max-width: 600px">
             <VChip
@@ -53,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, watch, Ref } from 'vue';
   import NaldHeader from '@/features/common/NaldHeader.vue';
   import { useUserStore } from '@/store/userStore';
   import { useAppCommonStore } from '@/store/appCommonStore';
@@ -61,14 +58,6 @@
   import { getBadgeList } from '@/api/commonService';
   import { getImageUrl } from '../utils/common';
   import { ApiResponse } from '@/types/axios.type';
-  class TypeWriter {
-    txtElement: HTMLElement | null = null;
-    words: string[] = [];
-    txt: string = '';
-    wordIndex: number = 0;
-    wait: number = 3000;
-    isDeleting: boolean = false;
-  }
 
   interface Badge {
     backgroundColor: string;
@@ -86,58 +75,39 @@
   const isMobile: Ref<boolean> = display.smAndDown;
   const appSize: Ref<string> = display.name;
   const badges = ref<Badge[]>([]);
-  const typeWriter = ref<TypeWriter>(new TypeWriter());
+  const words = ref<string[]>(['Odds and end.', 'Programming.', 'Operation.']);
+  const currentWord = ref('');
+  const typingSpeed = 150;
+  const deletingSpeed = 75;
+  const pauseDuration = 3000;
 
-  const typingRun = () => {
-    const current = typeWriter.value.wordIndex % typeWriter.value.words.length;
-    const fullTxt = typeWriter.value.words[current];
+  let wordIndex = 0;
+  let isDeleting = false;
+  let typeTimeout: number;
 
-    if (typeWriter.value.isDeleting) {
-      typeWriter.value.txt = fullTxt.substring(
-        0,
-        typeWriter.value.txt.length - 1,
-      );
+  const typeEffect = () => {
+    const current = words.value[wordIndex];
+    if (isDeleting) {
+      currentWord.value = current.substring(0, currentWord.value.length - 1);
     } else {
-      typeWriter.value.txt = fullTxt.substring(
-        0,
-        typeWriter.value.txt.length + 1,
-      );
+      currentWord.value = current.substring(0, currentWord.value.length + 1);
     }
 
-    typeWriter.value.txtElement!.innerHTML = `<span class="txt" style="border-right: 0.2rem solid #FFB800 !important;">${typeWriter.value.txt}</span>`;
-
-    let typeSpeed = 300;
-
-    if (typeWriter.value.isDeleting) {
-      typeSpeed /= 2;
+    let speed = typingSpeed;
+    if (isDeleting) {
+      speed = deletingSpeed;
     }
 
-    if (!typeWriter.value.isDeleting && typeWriter.value.txt === fullTxt) {
-      typeSpeed = typeWriter.value.wait;
-      typeWriter.value.isDeleting = true;
-    } else if (typeWriter.value.isDeleting && typeWriter.value.txt === '') {
-      typeWriter.value.isDeleting = false;
-      typeWriter.value.wordIndex++;
-      typeSpeed = 500;
+    if (!isDeleting && currentWord.value === current) {
+      speed = pauseDuration;
+      isDeleting = true;
+    } else if (isDeleting && currentWord.value === '') {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.value.length;
+      speed = typingSpeed;
     }
 
-    setTimeout(typingRun, typeSpeed);
-  };
-
-  const typingAnimation = () => {
-    const txtElement = document.querySelector<HTMLElement>('.txt-type');
-    if (!txtElement) return;
-
-    const words = JSON.parse(txtElement.getAttribute('data-words') as string);
-    const wait = parseInt(txtElement.getAttribute('data-wait') as string, 10);
-
-    typeWriter.value = new TypeWriter();
-    typeWriter.value.txtElement = txtElement;
-    typeWriter.value.words = words;
-    typeWriter.value.txt = '';
-    typeWriter.value.wordIndex = 0;
-    typeWriter.value.wait = wait;
-    typingRun();
+    typeTimeout = window.setTimeout(typeEffect, speed);
   };
 
   onMounted(async () => {
@@ -146,7 +116,12 @@
       badges.value = res.data;
       appStatusStore.hideLoading();
     });
-    typingAnimation();
+    typeEffect();
+  });
+
+  watch(words, () => {
+    currentWord.value = '';
+    typeEffect();
   });
 </script>
 
@@ -193,9 +168,14 @@
             font-weight: 100;
             font-size: 1.5rem;
             color: #ccc;
-            animation:
-              typing 3.5s steps(30, end),
-              blink 0.5s step-end infinite;
+            .txt-type {
+              display: inline-block;
+              border-right: 0.2rem solid #ffb800;
+              white-space: nowrap;
+              overflow: hidden;
+              animation: blink 0.75s step-end infinite;
+              line-height: 1; /* Ensure the line-height matches the font size */
+            }
           }
 
           button {
@@ -215,6 +195,15 @@
           }
         }
       }
+    }
+  }
+
+  @keyframes blink {
+    0% {
+      border-color: transparent;
+    }
+    100% {
+      border-color: #ffb800;
     }
   }
 </style>
