@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "jsx": "preserve",
-    "typeRoots": ["src/types", "node_modules/@types"],
+    "typeRoots": ["src/types/*", "node_modules/@types"],
     "lib": ["esnext", "dom", "dom.iterable"],
     "baseUrl": "./",
     "module": "esnext",

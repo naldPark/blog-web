@@ -34,13 +34,13 @@
 </template>
 
 <script setup lang="ts">
-import { VideoDetailtData } from '@/types/wonderwall/video';
 import { ref, Ref, onMounted } from 'vue';
 import { useDisplay } from 'vuetify';
+import { VideoDetailData } from '@/types/wonderwall/video'
 
 const props = defineProps<{
   category: string;
-  videoList: Array<VideoDetailtData>;
+  videoList: Array<VideoDetailData>;
 }>();
 const emits = defineEmits(['onClickMovie']);
 let isMouseDown = ref(false);

@@ -8,15 +8,14 @@
       <span> Nald</span>
     </VToolbarTitle>
     <VSpacer></VSpacer>
-    <Button></Button>
     <VBtn v-if="!accountInfo.accountId" @click="updateShowLoginDialog(true)" color="primary" variant="outlined" rounded
       class="ma-2">
       {{ t('login') }}
       <VIcon dark right>mdi-account-outline</VIcon>
     </VBtn>
-    <VBtn v-else color="primary">
-      <VIcon class="text-secondary">mdi-face-man</VIcon>
-      <VIcon class="text-secondary">mdi-menu-down</VIcon>
+    <Button v-else>
+      <VIcon slot="icon" class="text-secondary">mdi-face-man</VIcon>
+      <VIcon slot="icon" class="text-secondary">mdi-menu-down</VIcon>
       <VMenu activator="parent">
         <VList>
           <VListSubheader>{{ accountInfo.accountName }}</VListSubheader>
@@ -50,7 +49,7 @@
           </VListItem>
         </VList>
       </VMenu>
-    </VBtn>
+    </Button>
   </VAppBar>
   <VNavigationDrawer v-model="drawer" app fixed left temporary>
     <VList dense :class="{ beforeLoginNav: !accountInfo }">
