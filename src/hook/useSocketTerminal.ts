@@ -1,4 +1,4 @@
-import { ref, onUnmounted, watch, onMounted } from 'vue';
+import { ref, onUnmounted, onMounted, watch } from 'vue';
 import { Terminal as xterm, ITerminalOptions } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 
@@ -8,10 +8,9 @@ type SocketCommand = {
 };
 
 export function useSocketTerminal(socketCommand: SocketCommand) {
-  // Reactivity for input tracking
   const input = ref(0);
   const fitAddon = new FitAddon();
-  const term = new xterm();
+  const term = ref<xterm | null>(null); // Using ref for term to allow reactivity
 
   onMounted(() => {
     const options: ITerminalOptions = {
@@ -20,87 +19,92 @@ export function useSocketTerminal(socketCommand: SocketCommand) {
       allowProposedApi: true,
     };
 
-    term.options = options;
-    socketCommand.init(term);
+    term.value = new xterm(options);
+    term.value.loadAddon(fitAddon);
+    socketCommand.init(term.value);
 
     initWebTerminal();
   });
 
   const initWebTerminal = () => {
-    term.onKey((e) => handleKey(e));
-    term.onData((e) => handleData(e));
-    term.loadAddon(fitAddon);
-    term.write("Hello Welcome to Nald's Sandbox world\r\n$ ");
+    if (!term.value) return;
+
+    term.value.onKey(handleKey);
+    term.value.onData(handleData);
+    term.value.write("Hello, Welcome to Nald's Sandbox world\r\n$ ");
   };
 
-  // Open terminal in a given element
   const open = (element: HTMLElement) => {
-    term.open(element);
+    if (!term.value) return;
+    term.value.open(element);
+    fit();
   };
 
-  // Handle terminal input
   const handleKey = (e: { key: string; domEvent: KeyboardEvent }) => {
-    const printable: boolean =
+    const isPrintable =
       !e.domEvent.altKey && !e.domEvent.ctrlKey && !e.domEvent.metaKey;
 
-    if (e.domEvent.key === 'Enter') {
-      enter();
-    } else if (e.domEvent.key === 'Backspace') {
-      backSpace();
-    } else if (e.domEvent.key === 'ArrowRight') {
-      moveRight();
-    } else if (e.domEvent.key === 'ArrowLeft') {
-      moveLeft();
-    } else if (printable) {
+    if (e.domEvent.key in keyActions) {
+      keyActions[e.domEvent.key]();
+    } else if (isPrintable) {
       input.value++;
     }
   };
 
   const handleData = (data: string) => {
-    console.log('_onDataHandler', data);
     socketCommand.execute(data);
+  };
+
+  const fit = () => {
+    if (term.value) {
+      fitAddon.fit();
+    }
   };
 
   const enter = () => {
     input.value = 0;
   };
 
-  const fit = () => {
-    fitAddon.fit();
-  };
-
   const backSpace = () => {
-    if (term.buffer.active.cursorX >= 10) {
-      term.write('\x1B[0J');
+    if (term.value && term.value.buffer.active.cursorX >= 10) {
+      term.value.write('\x1B[0J');
       input.value--;
     }
   };
 
   const moveRight = () => {
-    const isEnd: boolean = term.buffer.active.cursorX - 10 <= input.value;
-    if (!isEnd) {
-      term.write('\x1B[C');
+    if (term.value && term.value.buffer.active.cursorX - 10 <= input.value) {
+      term.value.write('\x1B[C');
     }
   };
 
   const moveLeft = () => {
-    const isStart: boolean = term.buffer.active.cursorX >= 10;
-    if (!isStart) {
-      term.write('\x1B[D');
+    if (term.value && term.value.buffer.active.cursorX >= 10) {
+      term.value.write('\x1B[D');
     }
   };
 
-  // Watch for changes in the terminal's size
+  /** key Action에 따라 terminal에 분기 주입 */
+  const keyActions: { [key: string]: () => void } = {
+    Enter: enter,
+    Backspace: backSpace,
+    ArrowRight: moveRight,
+    ArrowLeft: moveLeft,
+  };
+
+  /** 화면 크기 변경 감지 watch */
   watch(
-    () => term.element,
+    () => term.value?.element,
     () => {
-      fitAddon.fit();
+      fit();
     },
   );
 
-  // Cleanup function
+  /** 종료 후 terminal 주입값 제거 */
   onUnmounted(() => {
-    term.dispose();
+    if (term.value) {
+      term.value.dispose();
+    }
   });
 
   return {
