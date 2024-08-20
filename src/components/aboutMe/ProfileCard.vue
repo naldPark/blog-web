@@ -21,7 +21,7 @@
 <script lang="ts" setup>
   import { defineProps } from 'vue';
 
-  const props = defineProps<{
+  defineProps<{
     snsList: Array<{
       color: string;
       icon: string;
@@ -30,6 +30,4 @@
   }>();
 </script>
 
-<style scoped>
-  /* Add specific styles for ProfileCard here */
-</style>
+<style scoped></style>

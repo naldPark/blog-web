@@ -1,3 +1,35 @@
+<script lang="ts" setup>
+  import { useDisplay } from 'vuetify';
+  import { Ref } from 'vue';
+  import aboutDataAsset from '@/assets/data/about';
+  import Button from '@/components/Button.vue';
+  import { useI18n } from 'vue-i18n';
+
+  const { t } = useI18n();
+  const display = useDisplay();
+  const isMobile: Ref<boolean> = display.smAndDown;
+
+  const stars = Array(3).fill(null);
+
+  /** 애니메이션 star falling 효과 구현  */
+  const getStarStyle = (index: number) => {
+    /** 사이즈 다르게 */
+    const size = index === 2 ? '4px' : '3px';
+    /** 속도 다르게 */
+    const duration = index === 2 ? '30s' : index === 1 ? '20s' : '10s';
+    /** 위치 다르게 */
+    const left = `${(index + 1) * 20}%`;
+    const top = `${(index + 1) * 30}%`;
+    return {
+      width: size,
+      height: size,
+      animationDuration: duration,
+      left,
+      top,
+    };
+  };
+</script>
+
 <template>
   <div class="intro-wrapper">
     <VRow class="ma-0">
@@ -59,38 +91,6 @@
     ></div>
   </div>
 </template>
-
-<script lang="ts" setup>
-  import { useDisplay } from 'vuetify';
-  import { Ref } from 'vue';
-  import aboutDataAsset from '@/assets/data/about';
-  import Button from '@/components/Button.vue';
-  import { useI18n } from 'vue-i18n';
-
-  const { t } = useI18n();
-  const display = useDisplay();
-  const isMobile: Ref<boolean> = display.smAndDown;
-
-  const stars = Array(3).fill(null);
-
-  /** 애니메이션 star falling 효과 구현  */
-  const getStarStyle = (index: number) => {
-    /** 사이즈 다르게 */
-    const size = index === 2 ? '4px' : '3px';
-    /** 속도 다르게 */
-    const duration = index === 2 ? '30s' : index === 1 ? '20s' : '10s';
-    /** 위치 다르게 */
-    const left = `${(index + 1) * 20}%`;
-    const top = `${(index + 1) * 30}%`;
-    return {
-      width: size,
-      height: size,
-      animationDuration: duration,
-      left,
-      top,
-    };
-  };
-</script>
 
 <style lang="scss" scoped>
   .intro-wrapper {

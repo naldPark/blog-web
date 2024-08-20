@@ -1,8 +1,8 @@
 <template>
   <IntroSection />
-  <VDivider class="mt-5"></VDivider>
+  <VDivider class="mt-5" />
   <Experience />
-  <VDivider class="mt-5"></VDivider>
+  <VDivider class="mt-5" />
   <div class="text-md-left pa-7 blog-wrapper">
     <h2 class="text-primary mb-3">BLOG EXPLORE</h2>
     <VRow>
@@ -41,11 +41,8 @@
   import { getBlogList } from '@/api/commonService';
   import { useI18n } from 'vue-i18n';
   import { BlogData } from '@/types/about';
-  import aboutDataAsset from '@/assets/data/about';
-  import Button from '@/components/Button.vue';
   const appStatusStore = useAppCommonStore();
   const display = useDisplay();
-  const isMobile: Ref<boolean> = display.smAndDown;
   const { t } = useI18n();
   const cardList: Ref<BlogData[]> = ref([]);
 

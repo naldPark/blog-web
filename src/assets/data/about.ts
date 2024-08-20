@@ -16,6 +16,7 @@ const aboutDataAsset = {
       link: 'https://www.facebook.com/nald873',
     },
   ],
+
   workExperience: [
     {
       title: 'Web Developer',
@@ -38,6 +39,39 @@ const aboutDataAsset = {
       class: 'text-left',
     },
   ],
+  skills: {
+    frontend: [
+      {
+        icon: 'mdi-react',
+        name: 'React',
+        value: 80,
+      },
+      {
+        icon: 'mdi-vuejs',
+        name: 'Vue.js',
+        value: 70,
+      },
+      {
+        icon: 'mdi-angular',
+        name: 'Angular',
+        value: 30,
+      },
+    ],
+    backend: [
+      {
+        icon: 'mdi-language-java',
+        name: 'Java',
+        value: 60,
+      },
+    ],
+    operation: [
+      {
+        icon: 'mdi-kubernetes',
+        name: 'Kubernetes',
+        value: 60,
+      },
+    ],
+  },
 };
 
 export default aboutDataAsset;
