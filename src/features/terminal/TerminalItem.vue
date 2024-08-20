@@ -6,16 +6,15 @@
   import { ref, onMounted } from 'vue';
   import 'xterm/css/xterm.css';
   import SocketTerminal from './SocketTerminal';
-  import SocketConfig from '@/api/SocketConfig';
+  import useSocketConfig from '@/hook/useSocketConfig';
 
   // Reactive style object
   const style = ref({
-           height: '100vh',
-
+    height: '100vh',
   });
 
   onMounted(() => {
-    const socketConfig = new SocketConfig();
+    const socketConfig = useSocketConfig();
     const terminal = new SocketTerminal(socketConfig);
 
     terminal.open(document.getElementById('terminal') as HTMLElement);
@@ -23,11 +22,12 @@
   });
 </script>
 <style lang="scss" scoped>
-.console {
-  margin-top: 40px;
+  .console {
+    margin-top: 40px;
 
-  :deep(.xterm-text-layer) {
-    width: 100%;
-    height: 100%;
+    :deep(.xterm-text-layer) {
+      width: 100%;
+      height: 100%;
+    }
   }
-}</style>
+</style>

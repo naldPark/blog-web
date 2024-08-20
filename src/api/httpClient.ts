@@ -45,6 +45,7 @@ const createHttpClient = (): AxiosInstance => {
   const responseInterceptorHandler = async (
     response: AxiosResponse,
   ): Promise<AxiosResponse> => {
+    console.log('리스폰스');
     // if (response.data.spec && response.data.spec === 'AccessDeniedException') {
     //   const appStatusStore = useAppCommonStore();
     //   appStatusStore.showDialog({

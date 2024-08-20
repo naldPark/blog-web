@@ -1,46 +1,40 @@
+<script lang="ts" setup>
+  import { computed } from 'vue';
+
+  /** Props정의 */
+  const { shape, href } = defineProps({
+    color: { type: String, default: 'primary', required: false },
+    href: { type: String, required: false },
+    variant: { type: String, default: 'outlined', required: false },
+    label: { type: String, required: false },
+    size: { type: String, required: false },
+    icon: { type: String, required: false },
+    shape: { type: String, default: 'rounded', required: false },
+  });
+
+  /** computed로 기본 placeholder 값 설정 */
+  const computedRounded = computed(() => {
+    console.log('computed');
+    if (!shape || shape == 'rounded') return 'xl';
+    return 0;
+  });
+</script>
+
 <template>
+  <!-- 최상단에 baseComponent가 오는 경우 props필요없음 -->
   <VBtn
+    :rounded="computedRounded"
     :color="color"
+    :href="href"
+    :icon="icon"
+    :variant="variant"
+    :target="href != undefined ? '_blank' : undefined"
     @click="$emit('onClick')"
     class="app-g-button line-button size-xsmall"
   >
-    <slot name="icon"> </slot>
-    <template v-if="label">
-      <slot name="text">{{ label }}</slot>
-    </template>
-    <slot></slot>
+    <slot name="text" v-if="label">{{ label }}</slot>
+    <VIcon v-if="icon">{{ icon }}</VIcon>
   </VBtn>
 </template>
-
-<script lang="ts" setup>
-  import { useSlots } from 'vue';
-  defineProps({
-    color: { type: String, default: 'red', required: false },
-    label: { type: String, required: false },
-  });
-
-  // const slots = defineSlots<{
-  //   default(props: { msg: string }): any,
-  //   text: string,
-  //   icon: string,
-  // }>()
-
-  // onMounted(() => {
-  //   console.log('slots,', slots.text)
-  //   console.log('slots,', slots.icon)
-  //   // console.log('color', color)
-  // })
-
-  // watch([requiredAtry, userAtry], ([newRequiredAtry, newUserAtry], [oldRequiredAtry, oldUserAtry]) => {
-  //   checkAtry(newRequiredAtry, newUserAtry);
-  // }, {
-  //   immediate: true // 컴포넌트가 처음 렌더링될 때도 호출되도록 설정
-  // });
-
-  // watchEffect를 사용하여 데이터의 변화를 감시
-  // watchEffect(() => {
-  //   checkAtry(requiredAtry.value, userAtry.value);
-  // });
-</script>
 
 <style lang="scss" scoped></style>

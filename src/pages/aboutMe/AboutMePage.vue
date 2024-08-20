@@ -14,17 +14,12 @@
             {{ t('prMessage') }}
           </h4>
           <div class="mt-2 pt-2">
-            <VBtn
-              color="primary"
+            <Button
               href="https://www.linkedin.com/in/naldpark/"
-              target="_blank"
-              variant="outlined"
-              rounded
-              large
-            >
-              <VIcon class="mr-2">mdi-linkedin</VIcon>
-              Explore me <i class="mdi mdi-arrow-right"></i>
-            </VBtn>
+              prepend-icon="mdi-linkedin"
+              append-icon="mdi-arrow-right"
+              label="Explore me"
+            />
           </div>
         </div>
       </VCol>
@@ -42,16 +37,13 @@
             </VImg>
             <VCardActions>
               <VSpacer></VSpacer>
-              <VBtn
+              <Button
                 v-for="(social, i) in aboutDataAsset.snsList"
                 :key="i"
                 :color="social.color"
-                small
-              >
-                <VIcon size="x-large" @click="onClickVisit(social.link)">{{
-                  social.icon
-                }}</VIcon>
-              </VBtn>
+                :icon="social.icon"
+                :href="social.link"
+              />
             </VCardActions>
           </VCardText>
         </VCard>
@@ -201,6 +193,7 @@
   import { useI18n } from 'vue-i18n';
   import { BlogData } from '@/types/about';
   import aboutDataAsset from '@/assets/data/about';
+  import Button from '@/components/Button.vue';
   const appStatusStore = useAppCommonStore();
   const display = useDisplay();
   const isMobile: Ref<boolean> = display.smAndDown;

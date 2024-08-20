@@ -14,24 +14,16 @@
     <Button
       v-if="!accountInfo.accountId"
       @onClick="updateShowLoginDialog(true)"
-      color="primary"
-      variant="outlined"
       :label="t('login')"
-      rounded
+      prepend-icon="mdi-account-outline"
       class="ma-2"
+    />
+    <Button
+      v-else
+      color="primary"
+      prepend-icon="mdi-account-outline"
+      append-icon="mdi-menu-down"
     >
-      <!-- <template #text>
-      </template> -->
-      <template #icon>
-        <VIcon dark right>mdi-account-outline</VIcon>
-      </template>
-    </Button>
-    <Button v-else color="primary">
-      <template #icon>
-        <VIcon slot="icon" class="text-secondary">mdi-face-man</VIcon>
-      </template>
-
-      <VIcon slot="icon" class="text-secondary">mdi-menu-down</VIcon>
       <VMenu activator="parent">
         <VList>
           <VListSubheader>{{ accountInfo.accountName }}</VListSubheader>
