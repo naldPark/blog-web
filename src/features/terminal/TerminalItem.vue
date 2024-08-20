@@ -1,24 +1,23 @@
 <template>
-  <div class="console" id="terminal" :style="style"></div>
+  <div
+    class="console"
+    id="terminal"
+    style="height: 100dvh; max-height: 1000px"
+  ></div>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  import { onMounted } from 'vue';
   import 'xterm/css/xterm.css';
-  import SocketTerminal from './SocketTerminal';
   import useSocketConfig from '@/hook/useSocketConfig';
+  import { useSocketTerminal } from '@/hook/useSocketTerminal';
 
-  // Reactive style object
-  const style = ref({
-    height: '100vh',
-  });
+  const socketConfig = useSocketConfig();
+  const socketTerminal = useSocketTerminal(socketConfig);
 
   onMounted(() => {
-    const socketConfig = useSocketConfig();
-    const terminal = new SocketTerminal(socketConfig);
-
-    terminal.open(document.getElementById('terminal') as HTMLElement);
-    terminal.fit();
+    socketTerminal.open(document.getElementById('terminal') as HTMLElement);
+    socketTerminal.fit();
   });
 </script>
 <style lang="scss" scoped>

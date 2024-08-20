@@ -100,6 +100,7 @@ const routes = [
         meta: {
           anonymousAccess: true,
         },
+        beforeEnter: [perRouteGuardForLogging],
       },
     ],
   },
@@ -113,6 +114,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
+
+function perRouteGuardForLogging(to: { path: any }, from: { path: any }) {
+  console.log(`from: ${from.path} => to: ${to.path}`);
+  return true;
+}
 
 router.beforeEach(
   async (

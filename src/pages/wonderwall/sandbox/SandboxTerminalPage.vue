@@ -10,26 +10,14 @@
           <VIcon>mdi-checkbox-blank-outline</VIcon>
           <VIcon>mdi-close</VIcon>
         </VSystemBar>
-        <TerminalItem></TerminalItem>
+        <TerminalItem />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import 'xterm/css/xterm.css';
-import 'xterm/lib/xterm.js';
-// import { ref } from 'vue';
-import TerminalItem from '@/features/terminal/TerminalItem.vue';
-
-// const message = ref('');
-
-// const action = (type: string, data: Record<string, any>) =>
-//   JSON.stringify({
-//     type,
-//     ...data,
-//   });
+  import TerminalItem from '@/features/terminal/TerminalItem.vue';
 </script>
 
-<style lang="scss" scoped>
-//   @import 'xterm/css/xterm.css';</style>
+<style lang="scss" scoped></style>

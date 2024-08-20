@@ -1,4 +1,4 @@
-import { ref, onUnmounted, watch } from 'vue';
+import { ref, onUnmounted, watch, onMounted } from 'vue';
 import { Terminal as xterm, ITerminalOptions } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 
@@ -10,25 +10,32 @@ type SocketCommand = {
 export function useSocketTerminal(socketCommand: SocketCommand) {
   // Reactivity for input tracking
   const input = ref(0);
-
-  // Create xterm terminal instance
-  const term = new xterm({
-    cursorBlink: true,
-    scrollSensitivity: 2,
-    allowProposedApi: true,
-  } as ITerminalOptions);
-
-  // Create FitAddon instance
   const fitAddon = new FitAddon();
+  const term = new xterm();
 
-  // Initialize terminal with socket commands
-  socketCommand.init(term);
+  onMounted(() => {
+    const options: ITerminalOptions = {
+      cursorBlink: true,
+      scrollSensitivity: 2,
+      allowProposedApi: true,
+    };
+
+    term.options = options;
+    socketCommand.init(term);
+
+    initWebTerminal();
+  });
+
+  const initWebTerminal = () => {
+    term.onKey((e) => handleKey(e));
+    term.onData((e) => handleData(e));
+    term.loadAddon(fitAddon);
+    term.write("Hello Welcome to Nald's Sandbox world\r\n$ ");
+  };
 
   // Open terminal in a given element
   const open = (element: HTMLElement) => {
     term.open(element);
-    term.loadAddon(fitAddon);
-    fitAddon.fit();
   };
 
   // Handle terminal input
@@ -45,7 +52,6 @@ export function useSocketTerminal(socketCommand: SocketCommand) {
     } else if (e.domEvent.key === 'ArrowLeft') {
       moveLeft();
     } else if (printable) {
-      console.log('printable', input.value);
       input.value++;
     }
   };
@@ -55,12 +61,12 @@ export function useSocketTerminal(socketCommand: SocketCommand) {
     socketCommand.execute(data);
   };
 
-  // Initialize event listeners for terminal
-  term.onKey(handleKey);
-  term.onData((e) => handleData(e));
-
   const enter = () => {
     input.value = 0;
+  };
+
+  const fit = () => {
+    fitAddon.fit();
   };
 
   const backSpace = () => {
@@ -100,6 +106,6 @@ export function useSocketTerminal(socketCommand: SocketCommand) {
   return {
     term,
     open,
-    fit: fitAddon.fit,
+    fit,
   };
 }
