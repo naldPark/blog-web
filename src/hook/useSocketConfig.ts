@@ -57,4 +57,5 @@ const useSocketConfig = () => {
     openTerminal,
   };
 };
+
 export default useSocketConfig;

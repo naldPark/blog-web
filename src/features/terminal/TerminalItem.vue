@@ -1,11 +1,3 @@
-<template>
-  <div
-    class="console"
-    id="terminal"
-    style="height: 100dvh; max-height: 1000px"
-  ></div>
-</template>
-
 <script lang="ts" setup>
   import { onMounted } from 'vue';
   import 'xterm/css/xterm.css';
@@ -20,10 +12,16 @@
     socketTerminal.fit();
   });
 </script>
-<style lang="scss" scoped>
-  .console {
-    margin-top: 40px;
 
+<template>
+  <div id="terminal"></div>
+</template>
+
+<style lang="scss" scoped>
+  #terminal {
+    margin-top: 40px;
+    height: 100dvh;
+    max-height: 1000px;
     :deep(.xterm-text-layer) {
       width: 100%;
       height: 100%;
