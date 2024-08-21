@@ -1,22 +1,22 @@
 <template>
-  <VDialog @update:model-value="updateShowValue" max-width="1200">
+  <VDialog max-width="1200" @update:model-value="updateShowValue">
     <VCard color="#161616">
       <VCardText>
         <h4 class="mb-5">
-          <VIcon class="text-primary mr-3">mdi-video</VIcon
-          >{{ $t('video.uploadVideo') }}
+          <VIcon class="text-primary mr-3"> mdi-video </VIcon
+          >{{ t('video.uploadVideo') }}
         </h4>
         <ImportLocalFile
           selected-type="nan"
-          :fileTypes="availableFileTypes"
-          :isMultiple="isMultiple"
-          @updatedUploadfiles="updatedUploadfiles"
+          :file-types="availableFileTypes"
+          :is-multiple="isMultiple"
+          @updated-uploadfiles="updatedUploadfiles"
         />
-        <VDivider class="mt-10"></VDivider>
-        <FileUpload @closeDialog="closeDialog" v-model="movieInfo" />
+        <VDivider class="mt-10" />
+        <FileUpload v-model="movieInfo" @close-dialog="closeDialog" />
       </VCardText>
       <VCardActions>
-        <VSpacer></VSpacer>
+        <VSpacer />
       </VCardActions>
     </VCard>
   </VDialog>
@@ -24,9 +24,10 @@
 
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue';
+  import { useI18n } from 'vue-i18n';
   import ImportLocalFile from '@/features/wonderwall/video/ImportLocalFIle.vue';
   import FileUpload from '@/features/wonderwall/video/FileUpload.vue';
-
+  const { t } = useI18n();
   const { isMultiple } = defineProps({
     isMultiple: {
       type: Boolean,

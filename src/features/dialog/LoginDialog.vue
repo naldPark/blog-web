@@ -1,9 +1,9 @@
 <template>
   <VDialog
     :model-value="modelValue"
-    @update:model-value="updateModelValue"
     width="444px"
     content-class="app-g-dialog"
+    @update:model-value="updateModelValue"
   >
     <VCard>
       <VToolbar density="compact" dark color="grey-darken-3">
@@ -11,7 +11,7 @@
           <VIcon class="text-primary">mdi-key</VIcon>
           {{ t('login') }}
         </VToolbarTitle>
-        <VSpacer></VSpacer>
+        <VSpacer />
       </VToolbar>
       <VCardText class="mt-5">
         <VContainer>
@@ -23,11 +23,10 @@
               <InputText
                 v-model="accountPassword"
                 :label="t('password')"
-                :passwordIcon="true"
-                required
-                @enter="onClickLogin"
+                :passwordIcon="true"                required
                 :icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
                 type="password"
+                @enter="onClickLogin"
               />
             </VCol>
           </VRow>
@@ -52,6 +51,7 @@
   import { login, getRsa } from '@/api/accountService';
   import { useUserStore, useAppCommonStore } from '@/store';
   import { decodeToken } from '@/utils/common';
+  import InputText from '@/components/InputText.vue';
   import { useCookies } from '@vueuse/integrations/useCookies';
   import JSEncrypt from 'jsencrypt';
   import { useMutation } from 'vue-query';

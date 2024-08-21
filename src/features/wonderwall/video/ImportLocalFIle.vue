@@ -23,10 +23,10 @@
           </VIcon>
           <VIcon v-else size="60" color="grey"> mdi-cloud-check </VIcon>
           <p class="pt-3" v-if="selectedLocalFiles.length === 0">
-            {{ $t('video.uploadDetail') }}
+            {{ t('video.uploadDetail') }}
           </p>
           <p class="pt-3" v-else>
-            {{ $t('video.uploadedDetail') }}
+            {{ t('video.uploadedDetail') }}
           </p>
         </VRow>
       </VCardText>

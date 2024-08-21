@@ -20,12 +20,12 @@
             <template v-slot:activator="{ on, attrs }">
               <VBtn class="ma-2" color="secondary" outlined rounded text small v-bind="attrs" v-on="on"
                 @click="resetInput">
-                {{ $t('editUser') }}
+                {{ t('editUser') }}
               </VBtn>
             </template>
 <VCard ref="form">
   <VCardTitle>
-    <span class="text-h5">{{ $t('editUser') }}</span>
+    <span class="text-h5">{{ t('editUser') }}</span>
   </VCardTitle>
   <VCardText v-if="editUserDialog === true && selectedItems[0]">
     <VTextField v-model="selectedItems[0].accountId" :counter="15" label="Id" required></VTextField>
@@ -37,30 +37,30 @@
   <VCardActions>
     <VSpacer></VSpacer>
     <VBtn class="ma-2" large @click="clickToChangeAccountInfo" color="primary" outlined rounded text>
-      {{ $t('editPassword') }}
+      {{ t('editPassword') }}
     </VBtn>
     <VBtn class="ma-2" large @click="addUserDialog = false" color="primary" outlined rounded text>
-      {{ $t('cancel') }}
+      {{ t('cancel') }}
     </VBtn>
     <VBtn class="ma-2" large color="primary" outlined rounded text dark @click="onClickEdit">
-      {{ $t('confirm') }}
+      {{ t('confirm') }}
     </VBtn>
   </VCardActions>
 </VCard>
 </VDialog>
 <VBtn class="ma-2" color="error" @click="clickDeleteUsers" small outlined rounded text>
-  {{ $t('deleteUsers') }}
+  {{ t('deleteUsers') }}
 </VBtn>
 <VDialog v-model="addUserDialog" max-width="500px">
   <template v-slot:activator="{ on, attrs }">
               <VBtn class="ma-2" color="primary" outlined rounded text small v-bind="attrs" v-on="on"
                 @click="resetInput">
-                {{ $t('addUser') }}
+                {{ t('addUser') }}
               </VBtn>
             </template>
   <VCard ref="form">
     <VCardTitle>
-      <span class="text-h5">{{ $t('addUser') }}</span>
+      <span class="text-h5">{{ t('addUser') }}</span>
     </VCardTitle>
     <VCardText v-if="addUserDialog === true">
       <VTextField v-model="newUserInfo.accountId" :counter="15" label="Id" required></VTextField>
@@ -84,10 +84,10 @@
     <VCardActions>
       <VSpacer></VSpacer>
       <VBtn class="ma-2" large @click="addUserDialog = false" color="primary" outlined rounded text>
-        {{ $t('cancel') }}
+        {{ t('cancel') }}
       </VBtn>
       <VBtn class="ma-2" large color="primary" outlined rounded text dark @click="onClickCreate">
-        {{ $t('confirm') }}
+        {{ t('confirm') }}
       </VBtn>
     </VCardActions>
   </VCard>
@@ -112,7 +112,7 @@
           <div v-if="!isMobile" class="page-select grey--text" style="align-items : center;">
             <VSelect class="selectPageCount" dense v-model="listOptions.pageItem" :items="listOptions.pageItems"
               @change="changePageItem"></VSelect>
-            <span class="caption text-end ml-2 grey--text">{{ $t('countPerPage') }}</span>
+            <span class="caption text-end ml-2 grey--text">{{ t('countPerPage') }}</span>
           </div>
         </div>
       </template>

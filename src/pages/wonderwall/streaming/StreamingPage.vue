@@ -12,14 +12,14 @@
               solo
               :items="categories"
               filled
-              :label="$t('category')"
+              :label="t('category')"
             ></VSelect>
           </VCol>
           <VCol class="d-flex pa-1" cols="12" sm="8">
             <VTextField
               class="input-custom"
               solo
-              :label="$t('searchPlaceHolder')"
+              :label="t('searchPlaceHolder')"
               append-icon="mdi-magnify"
               v-model="searchText"
               @keyup.enter="searchVideo"
@@ -47,7 +47,7 @@
           <VCol cols="12" sm="8">
             <h1 class="title">{{ currentMovie.fileName }}</h1>
             <div class="body-2">
-              {{ $t('registDt') }}: {{ currentMovie.createdDt }}
+              {{ t('registDt') }}: {{ currentMovie.createdDt }}
             </div>
           </VCol>
           <VCol cols="12" sm="4">
@@ -60,14 +60,14 @@
                 @click="clickToDownload"
               >
                 <VIcon>mdi-download</VIcon>
-                {{ $t('video.download') }}
+                {{ t('video.download') }}
               </VBtn>
             </div>
           </VCol>
         </VRow>
         <VDivider class="mt-4 mb-4"></VDivider>
         <div class="title">
-          {{ $t('video.synopsis') }}
+          {{ t('video.synopsis') }}
         </div>
         <div class="font-weight-light subtitle-2 description text-grey pa-3">
           {{ currentMovie.fileDesc }}
@@ -76,7 +76,7 @@
       <VDivider class="mt-2 mb-4"></VDivider>
       <div class="movie-list pa-2">
         <div class="title">
-          {{ $t('video.recommendedMovie') }}
+          {{ t('video.recommendedMovie') }}
         </div>
         <MovieItem
           v-for="movie in movieList"
@@ -97,10 +97,11 @@
   import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
   import { useAppCommonStore } from '@/store/appCommonStore';
   import { VideoDetailData } from '@/types/wonderwall/video';
+  import { useI18n } from 'vue-i18n';
 
   /** globalConfig 사용 */
   const { proxy: pxy } = getCurrentInstance()!;
-
+  const { t } = useI18n();
   const categories = [
     { label: pxy!.$t('all'), value: '' },
     { label: pxy!.$t('movie'), value: 'movie' },

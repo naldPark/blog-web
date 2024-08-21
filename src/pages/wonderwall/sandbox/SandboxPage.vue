@@ -2,27 +2,27 @@
   <div class="sandbox-wrapper">
     <VCard variant="outlined" elevation="0" class="sandbox-card">
       <VCardTitle class="text-subtitle-1 text-primary">{{
-        $t('sandbox.funcInfo')
+        t('sandbox.funcInfo')
       }}</VCardTitle>
       <VCardText class="mb-3">
-        <p class="subtitle-2 text-white mt-3 mb-1">{{ $t('sandbox.rules') }}</p>
+        <p class="subtitle-2 text-white mt-3 mb-1">{{ t('sandbox.rules') }}</p>
         <h4 class="ec2-content font-weight-light" style="margin-right: 12px">
-          {{ $t('sandbox.rulesDesc') }}
+          {{ t('sandbox.rulesDesc') }}
         </h4>
         <p class="subtitle-2 text-white mt-3 mb-1">
-          {{ $t('sandbox.howToUse') }}
+          {{ t('sandbox.howToUse') }}
         </p>
         <div class="ec2-content font-weight-light" style="margin-right: 12px">
-          {{ $t('sandbox.howToUseDesc') }}
+          {{ t('sandbox.howToUseDesc') }}
         </div>
       </VCardText>
     </VCard>
     <VCard variant="outlined" elevation="0" class="sandbox-card">
       <VCardTitle class="text-subtitle-1 text-primary">
-        {{ $t('sandbox.environmentInfo') }}
+        {{ t('sandbox.environmentInfo') }}
       </VCardTitle>
       <VCardText>
-        <p class="subtitle-2 mt-3 mb-1">{{ $t('sandbox.status') }}</p>
+        <p class="subtitle-2 mt-3 mb-1">{{ t('sandbox.status') }}</p>
         <VSelect
           style="max-width: 300px"
           item-text="name"
@@ -51,19 +51,19 @@
         <VRow class="mt-3 mb-1 align-center">
           <VCol cols="12" sm="6">
             <p class="subtitle-2 text-white mt-3 mb-1">
-              {{ $t('sandbox.instanceInfo') }}
+              {{ t('sandbox.instanceInfo') }}
             </p>
             <span class="ec2-content">
               <VIcon class="text-primary mr-1">mdi-ubuntu</VIcon>
               Linux
             </span>
             <VBtn color="error" rounded small @click="accessEndpoint">{{
-              $t('sandbox.startInstance')
+              t('sandbox.startInstance')
             }}</VBtn>
           </VCol>
           <VCol cols="12" sm="6">
             <p class="subtitle-2 text-white mt-3 mb-1">
-              {{ $t('sandbox.instancePwd') }}
+              {{ t('sandbox.instancePwd') }}
             </p>
             <span class="ec2-content" v-if="!showPwd">
               <VIcon class="text--grey">mdi-eye-off-outline</VIcon>
@@ -74,12 +74,12 @@
               qwerty1234
             </span>
             <VBtn color="background" rounded small @click="showPwd = !showPwd">
-              {{ showPwd ? $t('hide') : $t('show') }}
+              {{ showPwd ? t('hide') : t('show') }}
             </VBtn>
           </VCol>
         </VRow>
         <p class="subtitle-2 text-white mt-3 mb-1">
-          {{ $t('sandbox.containerImage') }}
+          {{ t('sandbox.containerImage') }}
         </p>
         <span class="ec2-content" style="margin-right: 12px"
           >/node:16.14.0</span
@@ -88,7 +88,7 @@
     </VCard>
     <VCard variant="outlined" elevation="0" class="sandbox-card">
       <VCardTitle class="text-subtitle-1 text-primary">
-        {{ $t('sandbox.sourceFolder') }}
+        {{ t('sandbox.sourceFolder') }}
       </VCardTitle>
       <VCardText>
         <VTreeview

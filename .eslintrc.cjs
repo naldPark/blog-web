@@ -12,11 +12,7 @@ module.exports = {
     es2020: true,
     'vue/setup-compiler-macros': true, //defineProps를 더이상 사용하지 않게 되면서 eslint오류를 무시하기위함 조치
   },
-  extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    '@vue/typescript/recommended',
-  ],
+  extends: ['standard-with-typescript', 'plugin:vue/vue3-essential'],
   ignorePatterns: ['node_modules', 'dist', '*.d.ts', 'vendor', '.eslintrc.cjs'],
   rules: {
     'vue/multi-word-component-names': 'warn',

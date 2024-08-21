@@ -4,7 +4,7 @@
       <div class="form-wrapper">
         <div class="form-container">
           <h1>Chat room</h1>
-          <span>{{ $t('chat.enterInfo') }}</span>
+          <span>{{ t('chat.enterInfo') }}</span>
           <VTextField label="ID" v-model="nameInput" flat placeholder="name" />
           <VTextField
             label="Room"
@@ -21,7 +21,7 @@
             color="primary"
             dark
           >
-            {{ $t('chat.enter') }}
+            {{ t('chat.enter') }}
           </VBtn>
         </div>
       </div>
@@ -30,20 +30,20 @@
       <VCard max-width="1000" class="mx-auto">
         <VToolbar dark>
           <VToolbarTitle class="text-primary"
-            >{{ $t('chat.chatRoom') }} [{{ roomId }}]</VToolbarTitle
+            >{{ t('chat.chatRoom') }} [{{ roomId }}]</VToolbarTitle
           >
           <VSpacer></VSpacer>
           <VBtn class="ma-1" color="secondary" plain @click="leave">{{
-            $t('leave')
+            t('leave')
           }}</VBtn>
         </VToolbar>
         <!-- <div class="connecting ml-3" v-if="!roomId">
-          {{ $t('chat.connecting') }}
+          {{ t('chat.connecting') }}
         </div> -->
 
         <VList id="msgList" style="height: 500px; overflow: auto">
           <VListSubheader v-if="!roomId">
-            {{ $t('chat.connecting') }}</VListSubheader
+            {{ t('chat.connecting') }}</VListSubheader
           >
 
           <VListItem
@@ -86,7 +86,7 @@
             dense
             v-model="messageInput"
             :append-outer-icon="'mdi-send'"
-            :label="`${$t('typeMessage')}`"
+            :label="`${t('typeMessage')}`"
             type="text"
             @click:append-outer="sendMessage"
             @keyup.enter="sendMessage"
@@ -104,11 +104,12 @@
   import { Client } from '@stomp/stompjs';
   import SockJS from 'sockjs-client';
   import { useUserStore } from '@/store/userStore';
+  import { useI18n } from 'vue-i18n';
 
   window.global = window as any;
   const cookies = useCookies();
   const userStore = useUserStore();
-
+  const { t } = useI18n();
   const nameInput = ref(userStore.accountInfo?.accountName);
   const roomInput = ref('default');
   const messageInput = ref('');

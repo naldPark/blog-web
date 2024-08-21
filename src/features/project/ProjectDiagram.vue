@@ -79,7 +79,7 @@
   const selectedNode: Ref<Node> = ref({ icon: '', name: '', value: '' });
   const selectedNodeDesc: Ref<NodeDesc> = ref({ title: '', content: '' });
   const modelData = ref(null);
-  let diagram: Ref<any> = ref(null);
+  const diagram: Ref<any> = ref(null);
 
   const onChangeDiagram = (e: any) => {
     diagram.value = e;

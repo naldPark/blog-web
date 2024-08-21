@@ -36,6 +36,7 @@
 
 <style scoped lang="scss">
   .movie-item-card {
+    display: flex;
     &:hover {
       opacity: 0.7;
       cursor: pointer;
@@ -44,7 +45,5 @@
     .movie-card {
       max-width: 1200px;
     }
-
-    display: flex;
   }
 </style>

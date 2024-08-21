@@ -116,7 +116,7 @@
 
   const myOverview: Ref<any> = ref(null);
   const emit = defineEmits(['nodeSelected', 'linkSelected', 'groupSelected']);
-  let nodeDataArray: Ref<any> = ref(null);
+  const nodeDataArray: Ref<any> = ref(null);
 
   const linkDataArray = [
     { from: 0, to: 2 },

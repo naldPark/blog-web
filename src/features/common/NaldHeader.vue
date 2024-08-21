@@ -283,7 +283,7 @@
       return menuItems;
     } else {
       // 권한이 0이 아닌 경우에는 권한 범위에 맞는 메뉴만 필터링합니다.
-      let filteredMenu = menuItems.filter(
+      const filteredMenu = menuItems.filter(
         (menu) =>
           menu.anonymousAccess ||
           (menu.subMenus &&

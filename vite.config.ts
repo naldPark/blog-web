@@ -1,5 +1,5 @@
 // Plugins
-
+import Components from 'unplugin-vue-components/vite';
 import Layouts from 'vite-plugin-vue-layouts';
 import Vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
@@ -11,6 +11,11 @@ import path from 'path';
 // Utilities
 import { defineConfig } from 'vite';
 export default defineConfig({
+  optimizeDeps: {
+    entries: ['src/router/**/+*.{js,ts}', 'src/hook*.{js,ts}'],
+    include: ['esm-dep > cjs-dep'],
+    force: false,
+  },
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts',
@@ -26,9 +31,9 @@ export default defineConfig({
     //   vueTemplate: true,
     //   ignore: ['useCookies', 'useStorage'],
     // }),
-    // Components({
-    //   dts: 'src/components.d.ts',
-    // }),
+    Components({
+      dts: 'src/components.d.ts',
+    }),
     Vue({
       template: { transformAssetUrls },
     }),
@@ -99,8 +104,11 @@ export default defineConfig({
         secure: false,
       },
     },
+    // hmr: false,
+
     hmr: {
       protocol: 'ws',
+      overlay: false, // 오류 오버레이 비활성화
     },
   },
 });

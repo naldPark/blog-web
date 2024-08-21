@@ -40,7 +40,7 @@
             Contact <span class="text-primary">Me.</span>
           </h1>
           <p class="font-weight-light text-grey">
-            {{ $t('contactMsg') }}
+            {{ t('contactMsg') }}
           </p>
           <br />
           <VThemeProvider>
@@ -50,8 +50,8 @@
                   flat
                   v-model="messageData.name"
                   :rules="[rules.required]"
-                  :label="`${$t('name')} *`"
-                  :placeholder="`${$t('name')} *`"
+                  :label="`${t('name')} *`"
+                  :placeholder="`${t('name')} *`"
                 ></VTextField>
               </VCol>
               <VCol cols="12">
@@ -59,16 +59,16 @@
                   flat
                   v-model="messageData.email"
                   :rules="[rules.required, rules.email]"
-                  :label="`${$t('email')} *`"
-                  :placeholder="`${$t('email')} *`"
+                  :label="`${t('email')} *`"
+                  :placeholder="`${t('email')} *`"
                 ></VTextField>
               </VCol>
               <VCol cols="12">
                 <VTextField
                   v-model="messageData.title"
                   :rules="[rules.required]"
-                  :label="`${$t('title')} *`"
-                  :placeholder="`${$t('title')} *`"
+                  :label="`${t('title')} *`"
+                  :placeholder="`${t('title')} *`"
                 ></VTextField>
               </VCol>
               <VCol cols="12">
@@ -78,8 +78,8 @@
                   auto-grow
                   flat
                   solo
-                  :label="`${$t('content')} *`"
-                  :placeholder="`${$t('content')} *`"
+                  :label="`${t('content')} *`"
+                  :placeholder="`${t('content')} *`"
                 ></VTextarea>
               </VCol>
               <VCol class="mx-auto" cols="auto">
@@ -90,7 +90,7 @@
                   @click="sendMessage"
                 >
                   <VIcon>mdi-check</VIcon>
-                  {{ $t('send') }}
+                  {{ t('send') }}
                 </VBtn>
               </VCol>
             </VRow>

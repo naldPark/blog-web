@@ -4,7 +4,7 @@
       <VCol md="7">
         <VTextField
           type="text"
-          :label="movieInfo?.file ? `${$t('video.selectedFile')}` : ''"
+          :label="movieInfo?.file ? `${t('video.selectedFile')}` : ''"
           :disabled="true"
           v-model="movieInfo.originName"
         />
@@ -12,7 +12,7 @@
       <VCol md="5">
         <VTextField
           type="text"
-          :label="`${$t('video.uploadFileSize')}`"
+          :label="`${t('video.uploadFileSize')}`"
           :disabled="true"
           v-model="movieInfo.fileSize"
         />
@@ -24,7 +24,7 @@
           class="input-aster"
           required
           counter="40"
-          :label="`${$t('video.movieName')}`"
+          :label="`${t('video.movieName')}`"
           prepend-icon="mdi-pen"
           v-model="movieInfo.name"
         >
@@ -34,7 +34,7 @@
         <VSelect
           required
           v-model="movieInfo.category"
-          :label="`${$t('video.category')}`"
+          :label="`${t('video.category')}`"
           prepend-icon="mdi-shape"
           item-title="label"
           item-value="value"
@@ -50,7 +50,7 @@
       <VCol md="12">
         <VTextField
           type="text"
-          :label="`${$t('video.description')}`"
+          :label="`${t('video.description')}`"
           counter="100"
           prepend-icon="mdi-text-box"
           v-model="movieInfo.description"
@@ -64,14 +64,14 @@
           v-model="movieInfo.fileCover"
           :rules="coverRules"
           accept="image/png"
-          :label="`${$t('video.fileCover')}`"
+          :label="`${t('video.fileCover')}`"
           prepend-icon="mdi-camera"
         ></VFileInput>
       </VCol>
       <VCol md="3">
         <VFileInput
           v-model="movieInfo.fileVtt"
-          :label="`${$t('video.subtitle')}`"
+          :label="`${t('video.subtitle')}`"
           accept=".vtt"
         ></VFileInput>
       </VCol>
@@ -79,14 +79,14 @@
         <VSwitch
           v-model="movieInfo.fileDownload"
           inset
-          :label="`${$t('video.ableToDownload')}`"
+          :label="`${t('video.ableToDownload')}`"
         ></VSwitch>
       </VCol>
       <VCol md="3">
         <VSwitch
           v-model="movieInfo.fileAuth"
           inset
-          :label="`${$t('video.private')}`"
+          :label="`${t('video.private')}`"
         ></VSwitch>
       </VCol>
     </VRow>
@@ -100,7 +100,7 @@
         min-width="100"
         @click="$emit('closeDialog')"
       >
-        {{ $t('cancel') }}
+        {{ t('cancel') }}
       </VBtn>
       <VBtn
         outlined
@@ -111,7 +111,7 @@
         min-width="100"
         @click="onSubmit"
       >
-        {{ $t('confirm') }} <VIcon right dark>mdi-cloud-upload</VIcon>
+        {{ t('confirm') }} <VIcon right dark>mdi-cloud-upload</VIcon>
       </VBtn>
     </VCardActions>
   </VCard>

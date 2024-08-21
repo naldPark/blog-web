@@ -8,7 +8,7 @@
       <VToolbar density="compact" dark color="grey-darken-3">
         <VToolbarTitle>
           <VIcon class="text-primary">mdi-security</VIcon>
-          {{ $t('editPassword') }}
+          {{ t('editPassword') }}
         </VToolbarTitle>
         <VSpacer></VSpacer>
       </VToolbar>
@@ -18,8 +18,8 @@
             <VCol cols="12" class="pa-0">
               <VTextField
                 v-model="accountPassword"
-                :label="$t('password')"
-                :placeholder="$t('changePwd')"
+                :label="t('password')"
+                :placeholder="t('changePwd')"
                 type="password"
                 required
                 @keyup.enter="onClickEdit"
@@ -29,8 +29,8 @@
             <VCol cols="12" class="pa-0">
               <VTextField
                 v-model="accountPasswordConfirm"
-                :label="$t('passwordConfirm')"
-                :placeholder="$t('changePwdConfirm')"
+                :label="t('passwordConfirm')"
+                :placeholder="t('changePwdConfirm')"
                 type="password"
                 required
                 @keyup.enter="onClickEdit"
@@ -43,7 +43,7 @@
       <VCardActions>
         <VSpacer />
         <VBtn class="ma-2" color="primary" rounded variant="outlined">
-          {{ $t('cancel') }}
+          {{ t('cancel') }}
         </VBtn>
         <VBtn
           class="ma-2"
@@ -56,7 +56,7 @@
           dark
           @click="onClickEdit"
         >
-          {{ $t('confirm') }}
+          {{ t('confirm') }}
         </VBtn>
       </VCardActions>
     </VCard>

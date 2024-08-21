@@ -30,7 +30,7 @@
             style="margin-left: 16px"
             class="app-g-button line-button size-xsmall"
           >
-            {{ info.info.buttonMsg ? info.info.buttonMsg : t('showNow') }}
+            {{ info.info.buttonMsg ? info.info.buttonMsg : $t('showNow') }}
           </VBtn>
         </div>
       </div>
@@ -89,9 +89,8 @@
   import { useAppCommonStore, useLanguageStore } from '@/store';
   import Config from '@/config';
   import { storeToRefs } from 'pinia';
-  import { useI18n } from 'vue-i18n';
   const appStatusStore: any = useAppCommonStore();
-  const { t } = useI18n();
+
   const languageStatusStore = useLanguageStore();
   const showDialog = ref(false);
   // const appStatusStore = useAppCommonStore();

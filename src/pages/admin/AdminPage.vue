@@ -5,15 +5,15 @@
     </h3>
     <VTabs right icons-and-text background-color="#0e0e0e" v-model="currentTab">
       <VTab>
-        {{ $t('userManage') }}
+        {{ t('userManage') }}
         <VIcon>mdi-account-wrench-outline</VIcon>
       </VTab>
       <VTab>
-        {{ $t('resourceManage') }}
+        {{ t('resourceManage') }}
         <VIcon>mdi-video-outline</VIcon>
       </VTab>
       <VTab>
-        {{ $t('emptyManage') }}
+        {{ t('emptyManage') }}
         <VIcon>mdi-help</VIcon>
       </VTab>
     </VTabs>
@@ -27,7 +27,8 @@
   import { useRoute, useRouter } from 'vue-router';
   import UserManage from '@/features/admin/UserManage.vue';
   import { useDisplay } from 'vuetify';
-
+  import { useI18n } from 'vue-i18n';
+  const { t } = useI18n();
   const display = useDisplay();
   const isMobile: Ref<boolean> = display.smAndDown;
   const currentTab = ref(0);
