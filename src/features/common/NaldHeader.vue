@@ -18,55 +18,53 @@
       prepend-icon="mdi-account-outline"
       class="ma-2"
     />
-    <Button
-      v-else
-      color="primary"
-      prepend-icon="mdi-account-outline"
-      append-icon="mdi-menu-down"
-    >
-      <VMenu activator="parent">
-        <VList>
-          <VListSubheader>{{ accountInfo.accountName }}</VListSubheader>
-          <VListItem
-            class="right-panel-item"
-            v-if="accountInfo.authority === 0"
-          >
-            <VListItemTitle @click="clickToChangeAccountInfo">
-              <VIcon :icon="'mdi-account-edit-outline'" />
-              {{ t('editPassword') }}
-            </VListItemTitle>
-          </VListItem>
-          <VListItem class="right-panel-item">
-            <VListItemTitle @click="clickToChangeLang">
-              <VIcon>mdi-swap-horizontal</VIcon>
-              {{ lang }}
-              <VAvatar tile size="20" left>
-                <VImg
-                  v-if="langSetting === 'ko'"
-                  src="../../assets/icons/america.png"
-                ></VImg>
-                <VImg v-else src="../../assets/icons/korea.png"></VImg>
-              </VAvatar>
-            </VListItemTitle>
-          </VListItem>
-          <VListItem
-            class="right-panel-item"
-            v-if="accountInfo.authority === 0"
-          >
-            <VListItemTitle @click="clickToAdmin">
-              <VIcon>mdi-security</VIcon>
-              {{ t('adminPage') }}
-            </VListItemTitle>
-          </VListItem>
-          <VListItem class="right-panel-item">
-            <VListItemTitle @click="clickToLogout">
-              <VIcon>mdi-logout-variant</VIcon>
-              {{ t('logout') }}
-            </VListItemTitle>
-          </VListItem>
-        </VList>
-      </VMenu>
-    </Button>
+    <VMenu v-else>
+      <template v-slot:activator="{ props }">
+        <Button
+          shape="none"
+          variant="text"
+          color="secondary"
+          v-bind="props"
+          id="menu-activator"
+          prepend-icon="mdi-face-man"
+          append-icon="mdi-menu-down"
+        ></Button>
+      </template>
+      <VList>
+        <VListSubheader>{{ accountInfo.accountName }}</VListSubheader>
+        <VListItem class="right-panel-item" v-if="accountInfo.authority === 0">
+          <VListItemTitle @click="clickToChangeAccountInfo">
+            <VIcon :icon="'mdi-account-edit-outline'" />
+            {{ t('editPassword') }}
+          </VListItemTitle>
+        </VListItem>
+        <VListItem class="right-panel-item">
+          <VListItemTitle @click="clickToChangeLang">
+            <VIcon>mdi-swap-horizontal</VIcon>
+            {{ lang }}
+            <VAvatar tile size="20" left>
+              <VImg
+                v-if="langSetting === 'ko'"
+                src="../../assets/icons/america.png"
+              ></VImg>
+              <VImg v-else src="../../assets/icons/korea.png"></VImg>
+            </VAvatar>
+          </VListItemTitle>
+        </VListItem>
+        <VListItem class="right-panel-item" v-if="accountInfo.authority === 0">
+          <VListItemTitle @click="clickToAdmin">
+            <VIcon>mdi-security</VIcon>
+            {{ t('adminPage') }}
+          </VListItemTitle>
+        </VListItem>
+        <VListItem class="right-panel-item">
+          <VListItemTitle @click="clickToLogout">
+            <VIcon>mdi-logout-variant</VIcon>
+            {{ t('logout') }}
+          </VListItemTitle>
+        </VListItem>
+      </VList>
+    </VMenu>
   </VAppBar>
   <VNavigationDrawer v-model="drawer" app fixed left temporary>
     <VList dense :class="{ beforeLoginNav: !accountInfo }">

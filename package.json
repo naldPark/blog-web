@@ -53,7 +53,6 @@
     "sass": "^1.54.0",
     "typescript": "^5.4.2",
     "unplugin-fonts": "^1.1.1",
-    "unplugin-vue-components": "^0.26.0",
     "unplugin-vue-router": "^0.8.4",
     "vite": "^5.1.5",
     "vite-plugin-import-context": "^1.0.0-rc.1",

@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, Ref } from 'vue';
+  import { ref, onMounted, Ref, getCurrentInstance } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import StorageService from '@/api/storageService';
   import MovieItem from '@/features/wonderwall/video/MovieItem.vue';

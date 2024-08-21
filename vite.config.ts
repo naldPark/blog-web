@@ -1,5 +1,5 @@
 // Plugins
-import Components from 'unplugin-vue-components/vite';
+
 import Layouts from 'vite-plugin-vue-layouts';
 import Vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
@@ -26,9 +26,9 @@ export default defineConfig({
     //   vueTemplate: true,
     //   ignore: ['useCookies', 'useStorage'],
     // }),
-    Components({
-      dts: 'src/components.d.ts',
-    }),
+    // Components({
+    //   dts: 'src/components.d.ts',
+    // }),
     Vue({
       template: { transformAssetUrls },
     }),
