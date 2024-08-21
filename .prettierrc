@@ -1,24 +1,22 @@
 {
-  "parser": "",
   "arrowParens": "always",
   "bracketSpacing": true,
   "endOfLine": "auto",
   "htmlWhitespaceSensitivity": "css",
-  "jsxBracketSameLine": false,
-  "jsxSingleQuote": true,
   "printWidth": 80,
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
   "semi": true,
   "singleQuote": true,
+  "jsxSingleQuote": true,
   "tabWidth": 2,
   "trailingComma": "all",
+
   "useTabs": false,
-  "vueIndentScriptAndStyle": true,
+  "vueIndentScriptAndStyle": false,
   "rangeStart": 0,
   "requirePragma": false,
   "insertPragma": false,
-  "vetur.validation.template": false,
   "overrides": [
     {
       "files": "*.json",

@@ -15,6 +15,7 @@ export default {
   naver: '이전에 사용하던 블로그',
   complete: '완료',
   leave: '나가기',
+  close: '닫기',
   error: '에러',
   unknownError: '알 수 없는 에러가 발생하였습니다',
   password: '비밀번호',

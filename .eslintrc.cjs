@@ -22,6 +22,19 @@ module.exports = {
     'vue/multi-word-component-names': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-explicit-any': 'warn',
+    'prettier/prettier': [
+      'warn',
+      {
+        singleQuote: true,
+        semi: true,
+        trailingComma: 'es5',
+        tabWidth: 2,
+        quoteProps: 'as-needed',
+        vueIndentScriptAndStyle: false,
+        printWidth: 120,
+        htmlWhitespaceSensitivity: 'css',
+      },
+    ],
   },
   settings: {
     'import/resolver': {

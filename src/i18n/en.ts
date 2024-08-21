@@ -13,6 +13,7 @@ export default {
   naver: 'Blog I used to use before',
   complete: 'complete',
   leave: 'leave',
+  close: '닫기',
   error: 'error',
   unknownError: 'Undefined Error occurred.',
   password: 'Password',
