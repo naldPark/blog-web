@@ -2,7 +2,7 @@
   import { useDisplay } from 'vuetify';
   import { Ref } from 'vue';
   import aboutDataAsset from '@/assets/data/about';
-  import Button from '@/components/Button.vue';
+  import Button from '@/components/common/Button.vue';
   import { useI18n } from 'vue-i18n';
 
   const { t } = useI18n();

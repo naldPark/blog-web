@@ -29,7 +29,7 @@ export interface ToastMessageInfo {
   inputMsg?: string;
   message: string;
   buttonMsg: string | null | undefined;
-  timeout: number | null | undefined;
+  timeout: number;
   buttonCallback: (() => void) | null | undefined;
   inputTime?: number;
 }
@@ -113,6 +113,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
   };
 
   const addToastMessage = (info: ToastMessageInfo) => {
+    console.log('info', info);
     const message: ToastMessage = {
       key: new Date().getTime().toString(), // Generating unique key based on timestamp
       show: true,
@@ -139,12 +140,14 @@ export const useAppCommonStore = defineStore('app-common', () => {
         }
       }
 
-      setTimeout(() => {
-        closeToastMessage(message.key);
-      }, message.info.timeout);
+      // setTimeout(() => {
+      //   closeToastMessage(message.key);
+      // }, message.info.timeout);
     }
+    console.log('message', message);
 
     toastMessages.value.push(message);
+    console.log('toastMessages', toastMessages.value);
   };
 
   const closeToastMessage = (key: string) => {

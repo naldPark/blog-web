@@ -164,7 +164,7 @@
 
 <script lang="ts" setup>
   import { ref, computed, watch } from 'vue';
-  import Button from '@/components/Button.vue';
+  import Button from '@/components/common/Button.vue';
   import { useRouter } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import LoginDialog from '@/features/dialog/LoginDialog.vue';

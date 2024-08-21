@@ -32,6 +32,11 @@ $body-font-family: #{$font-family};
     .v-list-group__items .v-list-item {
       padding-inline-start: 30px !important;
     }
-
   }
+}
+
+.snackbar-content {
+  font-weight: 600;
+  border: 1px solid #444444 !important;
+  background-color: rgb(var(--v-theme-surface)) !important;
 }

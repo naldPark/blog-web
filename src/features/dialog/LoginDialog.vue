@@ -23,7 +23,8 @@
               <InputText
                 v-model="accountPassword"
                 :label="t('password')"
-                :passwordIcon="true"                required
+                :passwordIcon="true"
+                required
                 :icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
                 type="password"
                 @enter="onClickLogin"
@@ -51,7 +52,7 @@
   import { login, getRsa } from '@/api/accountService';
   import { useUserStore, useAppCommonStore } from '@/store';
   import { decodeToken } from '@/utils/common';
-  import InputText from '@/components/InputText.vue';
+  import InputText from '@/components/common/InputText.vue';
   import { useCookies } from '@vueuse/integrations/useCookies';
   import JSEncrypt from 'jsencrypt';
   import { useMutation } from 'vue-query';

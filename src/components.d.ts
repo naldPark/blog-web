@@ -8,13 +8,15 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BlogExplore: typeof import('./components/aboutMe/BlogExplore.vue')['default']
-    Button: typeof import('./components/Button.vue')['default']
+    Button: typeof import('./components/common/Button.vue')['default']
     Experience: typeof import('./components/aboutMe/Experience.vue')['default']
-    InputText: typeof import('./components/InputText.vue')['default']
+    InputText: typeof import('./components/common/InputText.vue')['default']
     IntroSection: typeof import('./components/aboutMe/IntroSection.vue')['default']
+    LoadingOverlay: typeof import('./components/common/LoadingOverlay.vue')['default']
     ProfileCard: typeof import('./components/aboutMe/ProfileCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SkillCategory: typeof import('./components/aboutMe/SkillCategory.vue')['default']
+    ToastMessage: typeof import('./components/common/ToastMessage.vue')['default']
   }
 }

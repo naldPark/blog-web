@@ -112,13 +112,20 @@
 
   onMounted(async () => {
     appStatusStore.showLoading();
+
     await getBadgeList().then((res: ApiResponse) => {
       badges.value = res.data;
       appStatusStore.hideLoading();
     });
     typeEffect();
   });
-
+  appStatusStore.addToastMessage({
+    type: 'error',
+    message: 'zzz',
+    buttonMsg: null,
+    timeout: 100000,
+    buttonCallback: null,
+  });
   watch(words, () => {
     currentWord.value = '';
     typeEffect();
