@@ -296,7 +296,7 @@
   };
 
   const checkValidate = (type: any) => {
-    let returnMsg = { result: true, msg: '' };
+    const returnMsg = { result: true, msg: '' };
 
     // if (type === 'edit') {
     //   this.newUserInfo = this.selectedItems[0];

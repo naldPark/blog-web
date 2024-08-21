@@ -85,7 +85,7 @@
 
     <div
       class="falling-star"
-      v-for="(, index) in stars"
+      v-for="(star, index) in stars"
       :key="index"
       :style="getStarStyle(index)"
     ></div>

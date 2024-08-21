@@ -1,11 +1,17 @@
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, PropType } from 'vue';
 
   /** Props정의 */
   const { shape, href } = defineProps({
     color: { type: String, default: 'primary', required: false },
     href: { type: String, required: false },
-    variant: { type: String, default: 'outlined', required: false },
+    variant: {
+      type: String as PropType<
+        'flat' | 'text' | 'elevated' | 'tonal' | 'outlined' | 'plain'
+      >,
+      default: 'outlined',
+      required: false,
+    },
     label: { type: String, required: false },
     size: { type: String, required: false },
     icon: { type: String, required: false },
