@@ -9,7 +9,7 @@ export interface DialogInfo {
   cancelButtonText?: string | null;
   action?: (() => void) | null;
   cancelAction?: (() => void) | null;
-  invisibleClose?: boolean;
+  showCloseButton?: boolean;
 }
 
 interface Dialog {
@@ -20,16 +20,17 @@ interface Dialog {
   cancelButtonText: string | null;
   action: (() => void) | null;
   cancelAction: (() => void) | null;
-  invisibleClose: boolean;
+  showCloseButton: boolean;
 }
 
 export interface ToastMessageInfo {
-  type: string;
+  type: 'success' | 'error' | 'warning';
+  title?: string;
   hide?: boolean;
   inputMsg?: string;
   message: string;
   buttonMsg: string | null | undefined;
-  timeout: number;
+  timeout?: number;
   buttonCallback: (() => void) | null | undefined;
   inputTime?: number;
 }
@@ -42,7 +43,7 @@ interface ToastMessage {
 
 export interface AppStatus {
   timezone: string;
-  showUIBlocker: boolean;
+  showBlocker: boolean;
   toastMessages: Array<ToastMessage>;
   dialogInfo: Dialog;
   prevRouteName: string | null | undefined;
@@ -50,7 +51,7 @@ export interface AppStatus {
 
 export const useAppCommonStore = defineStore('app-common', () => {
   const timezone = ref('Asia/Seoul');
-  const showUIBlocker = ref(false);
+  const showBlocker = ref(false);
   const toastMessages: Ref<ToastMessage[]> = ref([]);
   const dialogInfo: Ref<Dialog> = ref({
     show: false,
@@ -60,7 +61,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
     cancelButtonText: null,
     action: null,
     cancelAction: null,
-    invisibleClose: false,
+    showCloseButton: false,
   });
   const prevRouteName = ref('');
 
@@ -70,7 +71,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
   }
 
   const setLoading = (info: LoadingInfo) => {
-    showUIBlocker.value = info.val;
+    showBlocker.value = info.val;
   };
 
   const setDialogInfo = (info: Dialog) => {
@@ -78,6 +79,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
   };
 
   const showDialog = (info: DialogInfo) => {
+    console.log('asd');
     setDialogInfo({
       show: true,
       title: info.title || '알림',
@@ -86,8 +88,8 @@ export const useAppCommonStore = defineStore('app-common', () => {
       cancelButtonText: info.cancelButtonText || '취소',
       action: info.action || null,
       cancelAction: info.cancelAction || null,
-      invisibleClose:
-        info.invisibleClose === undefined ? false : info.invisibleClose,
+      showCloseButton:
+        info.showCloseButton === undefined ? false : info.showCloseButton,
     });
   };
 
@@ -100,7 +102,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
       cancelButtonText: null,
       action: null,
       cancelAction: null,
-      invisibleClose: false,
+      showCloseButton: false,
     });
   };
 
@@ -113,62 +115,21 @@ export const useAppCommonStore = defineStore('app-common', () => {
   };
 
   const addToastMessage = (info: ToastMessageInfo) => {
-    console.log('info', info);
-    const message: ToastMessage = {
-      key: new Date().getTime().toString(), // Generating unique key based on timestamp
+    const timestamp = Date.now();
+    toastMessages.value.push({
+      key: timestamp.toString(),
       show: true,
-      info: { ...info, inputTime: new Date().getTime() },
-    };
-
-    if (message.info.timeout === null || message.info.timeout === undefined) {
-      message.info.timeout = 2000;
-    }
-
-    if (message.info.timeout > 0) {
-      if (toastMessages.value.length > 0) {
-        const msgTimeout = message.info.timeout + message.info.inputTime!;
-        let maxTimeout = -1;
-        toastMessages.value.forEach((tm: ToastMessage) => {
-          const timeout = tm.info.inputTime! + tm.info.timeout!;
-          if (maxTimeout < timeout) {
-            maxTimeout = timeout;
-          }
-        });
-        message.info.timeout += 1000;
-        if (msgTimeout - maxTimeout < 0) {
-          message.info.timeout += Math.abs(msgTimeout - maxTimeout);
-        }
-      }
-
-      // setTimeout(() => {
-      //   closeToastMessage(message.key);
-      // }, message.info.timeout);
-    }
-    console.log('message', message);
-
-    toastMessages.value.push(message);
-    console.log('toastMessages', toastMessages.value);
-  };
-
-  const closeToastMessage = (key: string) => {
-    const idx = toastMessages.value.findIndex(
-      (v: ToastMessage) => v.key === key,
-    );
-    if (idx > -1) {
-      toastMessages.value[idx].info.hide = true;
-      toastMessages.value = clone(toastMessages.value);
-      setTimeout(() => {
-        const index = toastMessages.value.findIndex(
-          (v: ToastMessage) => v.key === key,
-        );
-        toastMessages.value.splice(index, 1);
-      }, 500);
-    }
+      info: {
+        ...info,
+        inputTime: timestamp,
+        timeout: info.timeout && info.timeout > 0 ? info.timeout : 2000,
+      },
+    });
   };
 
   return {
     timezone,
-    showUIBlocker,
+    showBlocker,
     toastMessages,
     dialogInfo,
     prevRouteName,

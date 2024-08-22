@@ -102,143 +102,141 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { useAppCommonStore } from '@/store/appCommonStore';
-  import { sendMail } from '@/api/commonService';
-  import router from '@/router';
-  import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import { sendMail } from '@/api/commonService';
+import router from '@/router';
+import { useI18n } from 'vue-i18n';
 
-  const appStatusStore = useAppCommonStore();
-  const { t } = useI18n();
-  const messageData: any = ref({
-    name: '',
-    email: '',
-    title: '',
-    content: '',
-  });
+const appStatusStore = useAppCommonStore();
+const { t } = useI18n();
+const messageData: any = ref({
+  name: '',
+  email: '',
+  title: '',
+  content: '',
+});
 
-  const rules = {
-    required: (value: any) => !!value || 'Required.',
-    email: (value: any) => {
+const rules = {
+  required: (value: any) => !!value || 'Required.',
+  email: (value: any) => {
+    const pattern =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return pattern.test(value) || 'Invalid e-mail.';
+  },
+};
+
+const validateCheck = () => {
+  let res = '';
+  for (const key in messageData) {
+    if (key === 'email') {
       const pattern =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return pattern.test(value) || 'Invalid e-mail.';
-    },
-  };
-
-  const validateCheck = () => {
-    let res = '';
-    for (const key in messageData) {
-      if (key === 'email') {
-        const pattern =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        res = !pattern.test(messageData[key]) ? `${t('emailValidate')}` : res;
-      }
-      res = messageData[key] === '' ? `${t('inputEmpty')}` : res;
+      res = !pattern.test(messageData[key]) ? `${t('emailValidate')}` : res;
     }
-    return res;
-  };
+    res = messageData[key] === '' ? `${t('inputEmpty')}` : res;
+  }
+  return res;
+};
 
-  const socials = [
-    {
-      icon: 'mdi-linkedin',
-      color: '#0A66C2',
-      link: 'https://www.linkedin.com/in/naldpark/',
-    },
-    {
-      icon: 'mdi-instagram',
-      color: '#FF5A51',
-      link: 'https://www.instagram.com/youngik_nald/',
-    },
-    {
-      icon: 'mdi-facebook',
-      color: 'indigo',
-      link: 'https://www.facebook.com/nald873',
-    },
-  ];
+const socials = [
+  {
+    icon: 'mdi-linkedin',
+    color: '#0A66C2',
+    link: 'https://www.linkedin.com/in/naldpark/',
+  },
+  {
+    icon: 'mdi-instagram',
+    color: '#FF5A51',
+    link: 'https://www.instagram.com/youngik_nald/',
+  },
+  {
+    icon: 'mdi-facebook',
+    color: 'indigo',
+    link: 'https://www.facebook.com/nald873',
+  },
+];
 
-  const exploreSNS = (url: string) => {
-    window.open(url);
-  };
+const exploreSNS = (url: string) => {
+  window.open(url);
+};
 
-  const sendMessage = async () => {
-    appStatusStore.showLoading();
-    const validate = validateCheck();
-    if (validate === '') {
-      try {
-        const res = await sendMail(messageData.value);
-        let type: string;
-        let message: string;
+const sendMessage = async () => {
+  appStatusStore.showLoading();
+  const validate = validateCheck();
+  if (validate === '') {
+    try {
+      const res = await sendMail(messageData.value);
+      let type: string;
+      let message: string;
 
-        if (res.status_code === 200) {
-          Object.keys(messageData).forEach((key) => {
-            messageData[key] = '';
-          });
-          type = 'success';
-          message = `${t('complete')}`;
-        } else {
-          type = 'error';
-          message = `${t('unknownError')}`;
-        }
-        appStatusStore.hideLoading();
-        appStatusStore.showDialog({
-          title: type,
-          description: message,
-          invisibleClose: true,
-          action: () => {
-            router.push({ name: 'MainPage' }).catch((err: any) => err);
-          },
+      if (res.status_code === 200) {
+        Object.keys(messageData).forEach((key) => {
+          messageData[key] = '';
         });
-      } catch (error) {
-        appStatusStore.hideLoading();
-        appStatusStore.addToastMessage({
-          type: 'error',
-          message: `${t('unknownError')}`,
-          buttonMsg: null,
-          timeout: null,
-          buttonCallback: null,
-        });
+        type = 'success';
+        message = `${t('complete')}`;
+      } else {
+        type = 'error';
+        message = `${t('unknownError')}`;
       }
-    } else {
+      appStatusStore.hideLoading();
+      appStatusStore.showDialog({
+        title: type,
+        description: message,
+        showCloseButton: true,
+        action: () => {
+          router.push({ name: 'MainPage' }).catch((err: any) => err);
+        },
+      });
+    } catch (error) {
       appStatusStore.hideLoading();
       appStatusStore.addToastMessage({
         type: 'error',
-        message: validate as string,
+        message: `${t('unknownError')}`,
         buttonMsg: null,
-        timeout: null,
         buttonCallback: null,
       });
     }
-  };
+  } else {
+    appStatusStore.hideLoading();
+    appStatusStore.addToastMessage({
+      type: 'error',
+      message: validate as string,
+      buttonMsg: null,
+      buttonCallback: null,
+    });
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .contact-page-wrap {
-    margin-top: 50px;
+.contact-page-wrap {
+  margin-top: 50px;
 
-    .inner-border {
-      width: 90%;
-      height: 90%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 1.5px solid #fff8e8;
-    }
-
-    .contact-box {
-      background-color: rgba(20, 20, 20, 0.6);
-      justify-content: left;
-      display: block;
-      width: 100%;
-      border-radius: 30px;
-      font-weight: 200;
-      color: #d5d5d5;
-      background-image: linear-gradient(
-          rgba(10, 10, 10, 0.99),
-          rgba(30, 30, 30, 0.2)
-        ),
-        url('../../assets/images/contactBackground.png');
-    }
+  .inner-border {
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1.5px solid #fff8e8;
   }
+
+  .contact-box {
+    background-color: rgba(20, 20, 20, 0.6);
+    justify-content: left;
+    display: block;
+    width: 100%;
+    border-radius: 30px;
+    font-weight: 200;
+    color: #d5d5d5;
+    background-image: linear-gradient(
+        rgba(10, 10, 10, 0.99),
+        rgba(30, 30, 30, 0.2)
+      ),
+      url('../../assets/images/contactBackground.png');
+  }
+}
 </style>

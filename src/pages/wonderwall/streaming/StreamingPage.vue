@@ -90,166 +90,165 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, Ref, getCurrentInstance } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  import StorageService from '@/api/storageService';
-  import MovieItem from '@/features/wonderwall/video/MovieItem.vue';
-  import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
-  import { useAppCommonStore } from '@/store/appCommonStore';
-  import { VideoDetailData } from '@/types/wonderwall/video';
-  import { useI18n } from 'vue-i18n';
+import { ref, onMounted, Ref, getCurrentInstance } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import StorageService from '@/api/storageService';
+import MovieItem from '@/features/wonderwall/video/MovieItem.vue';
+import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import { VideoDetailData } from '@/types/wonderwall/video';
+import { useI18n } from 'vue-i18n';
 
-  /** globalConfig 사용 */
-  const { proxy: pxy } = getCurrentInstance()!;
-  const { t } = useI18n();
-  const categories = [
-    { label: pxy!.$t('all'), value: '' },
-    { label: pxy!.$t('movie'), value: 'movie' },
-    { label: pxy!.$t('personal'), value: 'personal' },
-    { label: pxy!.$t('etc'), value: 'etc' },
-  ];
-  const searchCategory: Ref<string> = ref('');
-  const currentMovie: Ref<VideoDetailData> = ref({
-    storageId: 0,
-    fileName: '',
-    fileSrc: '',
-    fileSize: 0,
-    fileType: '',
-    createdDt: '',
-    downloadable: '',
-    vttSrc: '',
-    fileDesc: '',
-  });
-  const movieList: Ref<VideoDetailData[]> = ref([]);
-  const searchText: Ref<string> = ref('');
-  const lazyShow: Ref<boolean> = ref(true);
+/** globalConfig 사용 */
+const { proxy: pxy } = getCurrentInstance()!;
+const { t } = useI18n();
+const categories = [
+  { label: pxy!.$t('all'), value: '' },
+  { label: pxy!.$t('movie'), value: 'movie' },
+  { label: pxy!.$t('personal'), value: 'personal' },
+  { label: pxy!.$t('etc'), value: 'etc' },
+];
+const searchCategory: Ref<string> = ref('');
+const currentMovie: Ref<VideoDetailData> = ref({
+  storageId: 0,
+  fileName: '',
+  fileSrc: '',
+  fileSize: 0,
+  fileType: '',
+  createdDt: '',
+  downloadable: '',
+  vttSrc: '',
+  fileDesc: '',
+});
+const movieList: Ref<VideoDetailData[]> = ref([]);
+const searchText: Ref<string> = ref('');
+const lazyShow: Ref<boolean> = ref(true);
 
-  const router = useRouter();
-  const route = useRoute();
-  const appStatusStore = useAppCommonStore();
+const router = useRouter();
+const route = useRoute();
+const appStatusStore = useAppCommonStore();
 
-  const searchVideo = () => {
-    router
-      .push({
-        name: 'StreamingListPage',
-        params: {
-          searchText: searchText.value,
-          searchCategory: searchCategory.value,
-        },
-      })
-      .catch((err) => err);
-  };
-
-  const onClickMovie = async (storageId: number) => {
-    router
-      .replace({
-        name: 'StreamingPage',
-        query: {
-          movieId: storageId,
-        },
-      })
-      .catch((err) => err);
-
-    appStatusStore.showLoading();
-    const fileId = storageId;
-    lazyShow.value = true;
-    await StorageService.getVideoDetail(fileId).then(async (res: any) => {
-      let vttSrc = '';
-      if (res.data.vttSrc) {
-        await StorageService.videoVtt(fileId).then((vttRes: any) => {
-          vttSrc = URL.createObjectURL(
-            new Blob([vttRes.data], { type: 'text/vtt;charset=utf-8;' }),
-          );
-        });
-      }
-      const videoSrc = `/api/storage${res.data.fileSrc}`;
-      currentMovie.value = {
-        ...res.data,
-        fileSrc: videoSrc,
-        vttSrc: vttSrc,
-      };
-      lazyShow.value = false;
-      fetchVideoList();
-      appStatusStore.hideLoading();
-    });
-  };
-
-  const clickToDownload = async () => {
-    appStatusStore.showLoading();
-    await StorageService.download(currentMovie.value.storageId).then(
-      (res: any) => {
-        const blob = new Blob([res.data]);
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.target = '_self';
-        link.download = `${currentMovie.value.fileName}.mp4`;
-        link.click();
+const searchVideo = () => {
+  router
+    .push({
+      name: 'StreamingListPage',
+      params: {
+        searchText: searchText.value,
+        searchCategory: searchCategory.value,
       },
-    );
-    appStatusStore.hideLoading();
-  };
+    })
+    .catch((err) => err);
+};
 
-  const fetchVideoList = () => {
-    return new Promise((resolve) => {
-      const param: any = {
-        limit: 4,
-        offset: 0,
-        sort: 'random',
-      };
-      StorageService.getVideoList(param)
-        .then((response: any) => {
-          if (response.status_code === 200) {
-            movieList.value = response.data.list;
-          } else {
-            appStatusStore.hideLoading();
-            appStatusStore.addToastMessage({
-              type: 'error',
-              message: response.data.data || response.data.message,
-              buttonMsg: null,
-              timeout: null,
-              buttonCallback: null,
-            });
-          }
-          resolve({ finish: true });
-        })
-        .catch((error) => {
-          resolve({ finish: true });
-        });
-    });
-  };
+const onClickMovie = async (storageId: number) => {
+  router
+    .replace({
+      name: 'StreamingPage',
+      query: {
+        movieId: storageId,
+      },
+    })
+    .catch((err) => err);
 
-  onMounted(() => {
-    lazyShow.value = true;
-    appStatusStore.showLoading();
+  appStatusStore.showLoading();
+  const fileId = storageId;
+  lazyShow.value = true;
+  await StorageService.getVideoDetail(fileId).then(async (res: any) => {
+    let vttSrc = '';
+    if (res.data.vttSrc) {
+      await StorageService.videoVtt(fileId).then((vttRes: any) => {
+        vttSrc = URL.createObjectURL(
+          new Blob([vttRes.data], { type: 'text/vtt;charset=utf-8;' }),
+        );
+      });
+    }
+    const videoSrc = `/api/storage${res.data.fileSrc}`;
+    currentMovie.value = {
+      ...res.data,
+      fileSrc: videoSrc,
+      vttSrc: vttSrc,
+    };
+    lazyShow.value = false;
     fetchVideoList();
     appStatusStore.hideLoading();
-    const movieId: number = Number(route.query.movieId);
-    if (!isNaN(movieId)) {
-      onClickMovie(movieId);
-    } else {
-      lazyShow.value = false;
-    }
   });
+};
+
+const clickToDownload = async () => {
+  appStatusStore.showLoading();
+  await StorageService.download(currentMovie.value.storageId).then(
+    (res: any) => {
+      const blob = new Blob([res.data]);
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.target = '_self';
+      link.download = `${currentMovie.value.fileName}.mp4`;
+      link.click();
+    },
+  );
+  appStatusStore.hideLoading();
+};
+
+const fetchVideoList = () => {
+  return new Promise((resolve) => {
+    const param: any = {
+      limit: 4,
+      offset: 0,
+      sort: 'random',
+    };
+    StorageService.getVideoList(param)
+      .then((response: any) => {
+        if (response.status_code === 200) {
+          movieList.value = response.data.list;
+        } else {
+          appStatusStore.hideLoading();
+          appStatusStore.addToastMessage({
+            type: 'error',
+            message: response.data.data || response.data.message,
+            buttonMsg: null,
+            buttonCallback: null,
+          });
+        }
+        resolve({ finish: true });
+      })
+      .catch((error) => {
+        resolve({ finish: true });
+      });
+  });
+};
+
+onMounted(() => {
+  lazyShow.value = true;
+  appStatusStore.showLoading();
+  fetchVideoList();
+  appStatusStore.hideLoading();
+  const movieId: number = Number(route.query.movieId);
+  if (!isNaN(movieId)) {
+    onClickMovie(movieId);
+  } else {
+    lazyShow.value = false;
+  }
+});
 </script>
 
 <style lang="scss" scoped>
-  .movie-player {
-    position: relative;
-    background-color: #000;
-    font-weight: normal;
-    z-index: 2;
-  }
+.movie-player {
+  position: relative;
+  background-color: #000;
+  font-weight: normal;
+  z-index: 2;
+}
 
-  .movie-detail {
-    padding-top: 20px;
+.movie-detail {
+  padding-top: 20px;
 
-    .download {
-      padding-right: 20px;
-      text-align: right;
-    }
+  .download {
+    padding-right: 20px;
+    text-align: right;
   }
+}
 
-  .title {
-    font-size: 1.25rem;
-  }
+.title {
+  font-size: 1.25rem;
+}
 </style>

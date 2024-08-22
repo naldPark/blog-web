@@ -116,199 +116,197 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { useI18n } from 'vue-i18n';
-  import { useAppCommonStore } from '@/store/appCommonStore';
-  import infraService from '@/api/infraService';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import infraService from '@/api/infraService';
 
-  interface StatusItems {
-    name: string;
-    icon: string;
-    color: string;
-  }
-  const appStatusStore = useAppCommonStore();
-  const { t } = useI18n();
+interface StatusItems {
+  name: string;
+  icon: string;
+  color: string;
+}
+const appStatusStore = useAppCommonStore();
+const { t } = useI18n();
 
-  // Router
-  const router = useRouter();
+// Router
+const router = useRouter();
 
-  // State variables
-  const initiallyOpen = ref(['src']);
-  const showPwd = ref(false);
-  const selectedTree = ref<any[]>([]);
-  const selectedStatusItem = ref<any>({
+// State variables
+const initiallyOpen = ref(['src']);
+const showPwd = ref(false);
+const selectedTree = ref<any[]>([]);
+const selectedStatusItem = ref<any>({
+  name: 'Running',
+  icon: 'mdi-play',
+  color: 'orange',
+});
+
+// Files and tree items data
+const files: any = {
+  html: 'mdi-language-html5',
+  js: 'mdi-nodejs',
+  ts: 'mdi-language-typescript',
+  json: 'mdi-code-json',
+  md: 'mdi-language-markdown',
+};
+
+// Status items data
+const statusItems = ref<StatusItems[]>([
+  {
     name: 'Running',
     icon: 'mdi-play',
     color: 'orange',
-  });
+  },
+  {
+    name: 'Stop',
+    icon: 'mdi-stop',
+    color: '#FF0000',
+  },
+  {
+    name: 'Start',
+    icon: 'mdi-play',
+    color: '#2391FF',
+  },
+  {
+    name: 'Waiting',
+    icon: 'mdi-circle-outline',
+    color: '#FF9500',
+  },
+  {
+    name: 'Stopping',
+    icon: 'mdi-circle-outline',
+    color: '#FF0000',
+  },
+  {
+    name: 'Unknown',
+    icon: 'mdi-circle-outline',
+    color: '#868E96',
+  },
+]);
 
-  // Files and tree items data
-  const files: any = {
-    html: 'mdi-language-html5',
-    js: 'mdi-nodejs',
-    ts: 'mdi-language-typescript',
-    json: 'mdi-code-json',
-    md: 'mdi-language-markdown',
-  };
+const treeItems = ref<any[]>([
+  {
+    title: 'Dockerfile',
+  },
+  {
+    title: 'node_modules',
+  },
+  {
+    title: 'dist',
+    children: [
+      {
+        title: 'Pty.js',
+        file: 'js',
+      },
+      {
+        title: 'Socket.js',
+        file: 'js',
+      },
+      {
+        title: 'Pty.js',
+        file: 'js',
+      },
+    ],
+  },
+  {
+    title: 'src',
+    children: [
+      {
+        title: 'Pty.ts',
+        file: 'ts',
+      },
+      {
+        title: 'Socket.ts',
+        file: 'ts',
+      },
+      {
+        title: 'Pty.ts',
+        file: 'ts',
+      },
+    ],
+  },
+  {
+    title: 'package-lock.json',
+    file: 'json',
+  },
+  {
+    title: 'tsconfig.json',
+    file: 'json',
+  },
+  {
+    title: 'package.json',
+    file: 'json',
+  },
+]);
 
-  // Status items data
-  const statusItems = ref<StatusItems[]>([
-    {
-      name: 'Running',
-      icon: 'mdi-play',
-      color: 'orange',
-    },
-    {
-      name: 'Stop',
-      icon: 'mdi-stop',
-      color: '#FF0000',
-    },
-    {
-      name: 'Start',
-      icon: 'mdi-play',
-      color: '#2391FF',
-    },
-    {
-      name: 'Waiting',
-      icon: 'mdi-circle-outline',
-      color: '#FF9500',
-    },
-    {
-      name: 'Stopping',
-      icon: 'mdi-circle-outline',
-      color: '#FF0000',
-    },
-    {
-      name: 'Unknown',
-      icon: 'mdi-circle-outline',
-      color: '#868E96',
-    },
-  ]);
+// Computed properties
+// const sandboxMessage = computed(() => ({
+//   howToUseDesc: t('sandbox.howToUseDesc'),
+//   rulesDesc: t('sandbox.rulesDesc'),
+// }));
 
-  const treeItems = ref<any[]>([
-    {
-      title: 'Dockerfile',
-    },
-    {
-      title: 'node_modules',
-    },
-    {
-      title: 'dist',
-      children: [
-        {
-          title: 'Pty.js',
-          file: 'js',
-        },
-        {
-          title: 'Socket.js',
-          file: 'js',
-        },
-        {
-          title: 'Pty.js',
-          file: 'js',
-        },
-      ],
-    },
-    {
-      title: 'src',
-      children: [
-        {
-          title: 'Pty.ts',
-          file: 'ts',
-        },
-        {
-          title: 'Socket.ts',
-          file: 'ts',
-        },
-        {
-          title: 'Pty.ts',
-          file: 'ts',
-        },
-      ],
-    },
-    {
-      title: 'package-lock.json',
-      file: 'json',
-    },
-    {
-      title: 'tsconfig.json',
-      file: 'json',
-    },
-    {
-      title: 'package.json',
-      file: 'json',
-    },
-  ]);
+// Methods
+const copyClipboard = async () => {
+  const text = 'qwerty1234';
+  try {
+    await navigator.clipboard.writeText(text);
+    appStatusStore.addToastMessage({
+      type: 'success',
+      message: `${t('copied')}`,
+      buttonMsg: null,
+      buttonCallback: null,
+    });
+  } catch (err) {
+    appStatusStore.addToastMessage({
+      type: 'error',
+      message: `${t('copyFailed')}`,
+      buttonMsg: null,
+      buttonCallback: null,
+    });
+  }
+};
 
-  // Computed properties
-  // const sandboxMessage = computed(() => ({
-  //   howToUseDesc: t('sandbox.howToUseDesc'),
-  //   rulesDesc: t('sandbox.rulesDesc'),
-  // }));
+const onChangeStatus = (e: any) => {
+  console.log('e는 ', e);
+  if (e === 'Start') {
+    infraService.getSandboxAccessPoint().then((res: any) => {
+      console.log(res);
+    });
+  } else if (e === 'Stop') {
+    console.log('스탑');
+  }
+};
 
-  // Methods
-  const copyClipboard = async () => {
-    const text = 'qwerty1234';
-    try {
-      await navigator.clipboard.writeText(text);
-      appStatusStore.addToastMessage({
-        type: 'success',
-        message: `${t('copied')}`,
-        buttonMsg: null,
-        timeout: null,
-        buttonCallback: null,
-      });
-    } catch (err) {
-      appStatusStore.addToastMessage({
-        type: 'error',
-        message: `${t('copyFailed')}`,
-        buttonMsg: null,
-        timeout: null,
-        buttonCallback: null,
-      });
-    }
-  };
-
-  const onChangeStatus = (e: any) => {
-    console.log('e는 ', e);
-    if (e === 'Start') {
-      infraService.getSandboxAccessPoint().then((res: any) => {
-        console.log(res);
-      });
-    } else if (e === 'Stop') {
-      console.log('스탑');
-    }
-  };
-
-  const accessEndpoint = () => {
-    router
-      .push({
-        name: 'SandboxTerminalPage',
-      })
-      .catch((err) => err);
-  };
+const accessEndpoint = () => {
+  router
+    .push({
+      name: 'SandboxTerminalPage',
+    })
+    .catch((err) => err);
+};
 </script>
 
 <style lang="scss" scoped>
-  .sandbox-wrapper {
-    height: 100%;
+.sandbox-wrapper {
+  height: 100%;
 
-    .sandbox-card {
-      color: darkgray;
-      margin-top: 10px;
+  .sandbox-card {
+    color: darkgray;
+    margin-top: 10px;
+    background: transparent;
+
+    .source-folder {
+      font-size: 9pt !important;
       background: transparent;
+    }
 
-      .source-folder {
-        font-size: 9pt !important;
-        background: transparent;
-      }
-
-      .ec2-content {
-        margin-left: 10px;
-        margin-right: 12px;
-        color: rgb(134, 134, 134) !important;
-      }
+    .ec2-content {
+      margin-left: 10px;
+      margin-right: 12px;
+      color: rgb(134, 134, 134) !important;
     }
   }
+}
 </style>

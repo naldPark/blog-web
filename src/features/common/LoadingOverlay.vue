@@ -1,6 +1,6 @@
 <template>
   <VOverlay
-    :model-value="showUIBlocker"
+    :model-value="showBlocker"
     class="align-center justify-center"
     z-index="1000"
   >
@@ -9,14 +9,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
-  import { useAppCommonStore } from '@/store';
-  import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useAppCommonStore } from '@/store';
+import { storeToRefs } from 'pinia';
 
-  const appStatusStore = useAppCommonStore();
-  const { showUIBlocker } = storeToRefs(appStatusStore);
+const appStatusStore = useAppCommonStore();
+const { showBlocker } = storeToRefs(appStatusStore);
 </script>
 
 <style lang="scss" scoped>
-  /* Add any specific styles for the loading overlay here */
+/* Add any specific styles for the loading overlay here */
 </style>

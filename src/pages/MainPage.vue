@@ -50,167 +50,176 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, watch, Ref } from 'vue';
-  import NaldHeader from '@/features/common/NaldHeader.vue';
-  import { useUserStore } from '@/store/userStore';
-  import { useAppCommonStore } from '@/store/appCommonStore';
-  import { useDisplay } from 'vuetify';
-  import { getBadgeList } from '@/api/commonService';
-  import { getImageUrl } from '../utils/common';
-  import { ApiResponse } from '@/types/axios.type';
+import { ref, onMounted, watch, Ref } from 'vue';
+import NaldHeader from '@/features/common/NaldHeader.vue';
+import { useUserStore } from '@/store/userStore';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import { useDisplay } from 'vuetify';
+import { getBadgeList } from '@/api/commonService';
+import { getImageUrl } from '../utils/common';
+import { ApiResponse } from '@/types/axios.type';
+import { useI18n } from 'vue-i18n';
 
-  interface Badge {
-    backgroundColor: string;
-    color: string;
-    name: string;
-    src: string;
-    seq: number;
+interface Badge {
+  backgroundColor: string;
+  color: string;
+  name: string;
+  src: string;
+  seq: number;
+}
+
+const display = useDisplay();
+const appStatusStore = useAppCommonStore();
+const { t } = useI18n();
+const accountName: Ref<string | null> = ref(
+  useUserStore().accountInfo.accountName,
+);
+const isMobile: Ref<boolean> = display.smAndDown;
+const appSize: Ref<string> = display.name;
+const badges = ref<Badge[]>([]);
+const words = ref<string[]>(['Odds and end.', 'Programming.', 'Operation.']);
+const currentWord = ref('');
+const typingSpeed = 150;
+const deletingSpeed = 75;
+const pauseDuration = 3000;
+
+let wordIndex = 0;
+let isDeleting = false;
+let typeTimeout: number;
+
+const typeEffect = () => {
+  const current = words.value[wordIndex];
+  if (isDeleting) {
+    currentWord.value = current.substring(0, currentWord.value.length - 1);
+  } else {
+    currentWord.value = current.substring(0, currentWord.value.length + 1);
   }
 
-  const display = useDisplay();
-  const appStatusStore = useAppCommonStore();
-  const accountName: Ref<string | null> = ref(
-    useUserStore().accountInfo.accountName,
-  );
-  const isMobile: Ref<boolean> = display.smAndDown;
-  const appSize: Ref<string> = display.name;
-  const badges = ref<Badge[]>([]);
-  const words = ref<string[]>(['Odds and end.', 'Programming.', 'Operation.']);
-  const currentWord = ref('');
-  const typingSpeed = 150;
-  const deletingSpeed = 75;
-  const pauseDuration = 3000;
+  let speed = typingSpeed;
+  if (isDeleting) {
+    speed = deletingSpeed;
+  }
 
-  let wordIndex = 0;
-  let isDeleting = false;
-  let typeTimeout: number;
+  if (!isDeleting && currentWord.value === current) {
+    speed = pauseDuration;
+    isDeleting = true;
+  } else if (isDeleting && currentWord.value === '') {
+    isDeleting = false;
+    wordIndex = (wordIndex + 1) % words.value.length;
+    speed = typingSpeed;
+  }
 
-  const typeEffect = () => {
-    const current = words.value[wordIndex];
-    if (isDeleting) {
-      currentWord.value = current.substring(0, currentWord.value.length - 1);
-    } else {
-      currentWord.value = current.substring(0, currentWord.value.length + 1);
-    }
+  typeTimeout = window.setTimeout(typeEffect, speed);
+};
 
-    let speed = typingSpeed;
-    if (isDeleting) {
-      speed = deletingSpeed;
-    }
+onMounted(async () => {
+  appStatusStore.showLoading();
 
-    if (!isDeleting && currentWord.value === current) {
-      speed = pauseDuration;
-      isDeleting = true;
-    } else if (isDeleting && currentWord.value === '') {
-      isDeleting = false;
-      wordIndex = (wordIndex + 1) % words.value.length;
-      speed = typingSpeed;
-    }
-
-    typeTimeout = window.setTimeout(typeEffect, speed);
-  };
-
-  onMounted(async () => {
-    appStatusStore.showLoading();
-
-    await getBadgeList().then((res: ApiResponse) => {
-      badges.value = res.data;
-      appStatusStore.hideLoading();
-    });
-    typeEffect();
+  await getBadgeList().then((res: ApiResponse) => {
+    badges.value = res.data;
+    appStatusStore.hideLoading();
   });
-  appStatusStore.addToastMessage({
-    type: 'error',
-    message: 'zzz',
-    buttonMsg: null,
-    timeout: 100000,
-    buttonCallback: null,
-  });
-  watch(words, () => {
-    currentWord.value = '';
-    typeEffect();
-  });
+  typeEffect();
+});
+appStatusStore.addToastMessage({
+  type: 'error',
+  message: 'zzz',
+  buttonMsg: 'zzz',
+  // timeout: 100000,
+  buttonCallback: null,
+});
+
+appStatusStore.showDialog({
+  title: t('complete'),
+  description: t('confirmMsg'),
+  showCloseButton: true,
+  action: () => {},
+});
+watch(words, () => {
+  currentWord.value = '';
+  typeEffect();
+});
 </script>
 
 <style lang="scss" scoped>
-  html {
-    overflow-y: hidden;
+html {
+  overflow-y: hidden;
 
-    .main-page {
+  .main-page {
+    height: 100dvh;
+
+    .main-cover {
       height: 100dvh;
+      background:
+        linear-gradient(to top, rgba(20, 20, 20, 0.8), rgb(0, 0, 0)),
+        url('./../assets/images/network.gif') no-repeat;
+      background-position: 60% center;
+      /* GIF를 컨테이너 중간에서 오른쪽으로 배치 */
+      overflow: hidden;
+      display: flex;
+      background-color: black;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding: 0 3rem;
+      font-family: var(--font-Raleway) !important;
+      background-position: 70% 50%;
 
-      .main-cover {
-        height: 100dvh;
-        background:
-          linear-gradient(to top, rgba(20, 20, 20, 0.8), rgb(0, 0, 0)),
-          url('./../assets/images/network.gif') no-repeat;
-        background-position: 60% center;
-        /* GIF를 컨테이너 중간에서 오른쪽으로 배치 */
-        overflow: hidden;
-        display: flex;
-        background-color: black;
-        flex-direction: column;
-        justify-content: center;
-        height: 100%;
-        padding: 0 3rem;
-        font-family: var(--font-Raleway) !important;
-        background-position: 70% 50%;
+      .main-content {
+        margin-left: 10%;
+        font-size: 2rem;
 
-        .main-content {
-          margin-left: 10%;
-          font-size: 2rem;
+        .main-title {
+          font-size: 3rem;
+          color: #ccc;
+        }
 
-          .main-title {
-            font-size: 3rem;
-            color: #ccc;
+        .main-title-sub {
+          margin-bottom: 0px;
+          font-size: 1.2rem;
+          color: #ccc;
+        }
+
+        .typing {
+          font-weight: 100;
+          font-size: 1.5rem;
+          color: #ccc;
+          .txt-type {
+            display: inline-block;
+            border-right: 0.2rem solid #ffb800;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink 0.75s step-end infinite;
+            line-height: 1; /* Ensure the line-height matches the font size */
           }
+        }
 
-          .main-title-sub {
-            margin-bottom: 0px;
-            font-size: 1.2rem;
-            color: #ccc;
-          }
+        button {
+          width: 170px;
+        }
 
-          .typing {
-            font-weight: 100;
-            font-size: 1.5rem;
-            color: #ccc;
-            .txt-type {
-              display: inline-block;
-              border-right: 0.2rem solid #ffb800;
-              white-space: nowrap;
-              overflow: hidden;
-              animation: blink 0.75s step-end infinite;
-              line-height: 1; /* Ensure the line-height matches the font size */
-            }
-          }
+        &.is-mobile {
+          margin-left: 0;
 
           button {
-            width: 170px;
+            width: 100px;
           }
 
-          &.is-mobile {
-            margin-left: 0;
-
-            button {
-              width: 100px;
-            }
-
-            .main-title {
-              font-size: 2rem;
-            }
+          .main-title {
+            font-size: 2rem;
           }
         }
       }
     }
   }
+}
 
-  @keyframes blink {
-    0% {
-      border-color: transparent;
-    }
-    100% {
-      border-color: #ffb800;
-    }
+@keyframes blink {
+  0% {
+    border-color: transparent;
   }
+  100% {
+    border-color: #ffb800;
+  }
+}
 </style>

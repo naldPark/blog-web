@@ -64,67 +64,67 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { useAppCommonStore } from '@/store/appCommonStore';
-  import { useI18n } from 'vue-i18n';
-  import { editPassword } from '@/api/accountService';
+import { ref } from 'vue';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import { useI18n } from 'vue-i18n';
+import { editPassword } from '@/api/accountService';
 
-  const { accountId } = defineProps<{
-    accountId: string;
-  }>();
+const { accountId } = defineProps<{
+  accountId: string;
+}>();
 
-  const accountPassword = ref<string>('');
-  const accountPasswordConfirm = ref('');
-  const { t } = useI18n();
-  const appStatusStore = useAppCommonStore();
-  const emits = defineEmits(['update:modelValue']);
-  const updateShowValue = (value: any) => {
-    emits('update:modelValue', value);
-  };
+const accountPassword = ref<string>('');
+const accountPasswordConfirm = ref('');
+const { t } = useI18n();
+const appStatusStore = useAppCommonStore();
+const emits = defineEmits(['update:modelValue']);
+const updateShowValue = (value: any) => {
+  emits('update:modelValue', value);
+};
 
-  const onClickEdit = async () => {
-    if (
-      accountPassword.value === '' ||
-      accountPassword.value !== accountPasswordConfirm.value
-    ) {
+const onClickEdit = async () => {
+  if (
+    accountPassword.value === '' ||
+    accountPassword.value !== accountPasswordConfirm.value
+  ) {
+    appStatusStore.showDialog({
+      title: t('error'),
+      description: t('passwordRulesError'),
+      showCloseButton: true,
+      action: () => {},
+    });
+    return;
+  }
+
+  try {
+    appStatusStore.showLoading();
+    const response = await editPassword(accountId, accountPassword.value);
+    if (response.status_code === 200) {
       appStatusStore.showDialog({
-        title: t('error'),
-        description: t('passwordRulesError'),
-        invisibleClose: true,
+        title: t('complete'),
+        description: t('confirmMsg'),
+        showCloseButton: true,
         action: () => {},
       });
-      return;
-    }
-
-    try {
-      appStatusStore.showLoading();
-      const response = await editPassword(accountId, accountPassword.value);
-      if (response.status_code === 200) {
-        appStatusStore.showDialog({
-          title: t('complete'),
-          description: t('confirmMsg'),
-          invisibleClose: true,
-          action: () => {},
-        });
-      } else {
-        appStatusStore.showDialog({
-          title: t('error'),
-          description: response.data.data.error,
-          invisibleClose: true,
-          action: () => {},
-        });
-      }
-    } catch (error) {
+    } else {
       appStatusStore.showDialog({
         title: t('error'),
-        description: 'unknown error',
-        invisibleClose: true,
+        description: response.data.data.error,
+        showCloseButton: true,
         action: () => {},
       });
     }
-    updateShowValue(false);
-    appStatusStore.hideLoading();
-  };
+  } catch (error) {
+    appStatusStore.showDialog({
+      title: t('error'),
+      description: 'unknown error',
+      showCloseButton: true,
+      action: () => {},
+    });
+  }
+  updateShowValue(false);
+  appStatusStore.hideLoading();
+};
 </script>
 
 <style lang="scss" scoped></style>

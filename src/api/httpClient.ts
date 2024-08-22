@@ -51,7 +51,7 @@ const createHttpClient = (): AxiosInstance => {
     //   appStatusStore.showDialog({
     //     title: '로그아웃',
     //     description: '다시 로그인 해주세요',
-    //     invisibleClose: true,
+    //     showCloseButton: true,
     //     action: () => {},
     //   });
 
@@ -77,7 +77,6 @@ const createHttpClient = (): AxiosInstance => {
           type: 'error',
           message: errorData.error_i18n,
           buttonMsg: null,
-          timeout: null,
           buttonCallback: null,
         });
 
@@ -89,7 +88,7 @@ const createHttpClient = (): AxiosInstance => {
     // appStatusStore.showDialog({
     //   title: '로그아웃',
     //   description: '다시 로그인 해주세요',
-    //   invisibleClose: true,
+    //   showCloseButton: true,
     //   action: () => {},
     // });
 
