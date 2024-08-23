@@ -1,35 +1,34 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue'; // Import ref from vue for reactive state
 import i18n from '@/i18n/i18n'; // Import i18n configuration
+import { useI18n } from 'vue-i18n';
+import { LOCAL_STORAGE_KEYS } from '@/types/enum';
+
+export type LanguageType = 'ko' | 'en';
 
 export const useLanguageStore = defineStore('language', () => {
   // State definition
-  const language = ref('ko');
+  const language = ref<LanguageType>('ko');
+  const { locale, t } = useI18n();
 
   // Actions definition
-  const saveLanguage = (lang: string) => {
-    // Check if the language is supported
-    if (lang === 'ko' || lang === 'en') {
-      localStorage.setItem('language', lang);
-      language.value = lang;
-      // Explicitly cast the locale to the supported languages
-      i18n.global.locale = lang as 'ko' | 'en';
-    } else {
-      console.warn('지원되지 않는 언어:', lang);
-    }
+  const saveLanguage = (lang: LanguageType) => {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.LANGUAGE, lang);
+    language.value = lang;
+    locale.value = lang as 'ko' | 'en';
   };
 
   const loadLanguage = () => {
-    const lang = localStorage.getItem('language');
-    if (lang === 'ko' || lang === 'en') {
-      language.value = lang;
+    const lang = localStorage.getItem(LOCAL_STORAGE_KEYS.LANGUAGE);
+    if (lang) {
+      language.value = lang as LanguageType;
     } else {
       const browserLanguage = navigator.language;
       // Decide language based on the browser language
       language.value = browserLanguage.startsWith('ko') ? 'ko' : 'en';
     }
     // Explicitly cast the locale to the supported languages
-    i18n.global.locale = language.value as 'ko' | 'en';
+    locale.value = language.value;
   };
 
   return {

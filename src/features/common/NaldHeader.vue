@@ -15,6 +15,7 @@
       prepend-icon="mdi-account-outline"
       class="ma-2"
     />
+
     <VMenu v-else>
       <template v-slot:activator="{ props }">
         <Button
@@ -88,7 +89,7 @@ export enum LANGUAGE_TYPE {
 </script>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, watchEffect, onMounted } from 'vue';
 import Button from '@/components/common/Button.vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -98,11 +99,12 @@ import { useUserStore } from '@/store/userStore';
 import { useLanguageStore } from '@/store/languageStore';
 import HeaderDrawer from './HeaderDrawer.vue';
 import menuItems from '@/assets/data/menu';
+import { LOCAL_STORAGE_KEYS } from '@/types/enum';
 const router = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
 const languageStatusStore = useLanguageStore();
-const languageValue = localStorage.getItem('language') || 'ko';
+const languageValue = localStorage.getItem(LOCAL_STORAGE_KEYS.LANGUAGE) || 'ko';
 const langSetting = ref<string>(languageValue);
 const drawer = ref(false);
 const showEditPasswordDialog = ref(false);
@@ -171,9 +173,8 @@ const clickToShowEditPassword = () => {
 const clickToChangeLang = () => {
   const newLang = langSetting.value === 'ko' ? 'en' : 'ko';
   langSetting.value = newLang;
-  localStorage.setItem('language', newLang);
+  localStorage.setItem(LOCAL_STORAGE_KEYS.LANGUAGE, newLang);
   languageStatusStore.saveLanguage(newLang);
-  location.reload();
 };
 
 // 관리자 페이지로 이동 함수
@@ -199,10 +200,15 @@ const onChangePage = (menu: any) => {
   }
 };
 
-// 언어 변경 감시
-watch(langSetting, (newLang: string) => {
-  languageStatusStore.saveLanguage(newLang);
+onMounted(() => {
+  console.log('헤더마운트');
 });
+
+// watchEffect(() => {
+//   // langSetting.value가 변경될 때마다 UI를 자동으로 업데이트합니다.
+//   const watchs = languageStatusStore.language;
+//   console.log('watchs', watchs);
+// });
 </script>
 
 <style lang="scss" scoped>

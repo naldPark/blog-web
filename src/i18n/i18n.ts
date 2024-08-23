@@ -1,6 +1,7 @@
 import { createI18n } from 'vue-i18n';
 import en from './en';
 import ko from './ko';
+import { LOCAL_STORAGE_KEYS } from '@/types/enum';
 
 // 번역 데이터 설정
 const messages = {
@@ -15,17 +16,18 @@ export const availableLanguages = [
 
 // 로케일을 결정하는 함수
 export const getLocale = () => {
-  const lang = localStorage.getItem('language');
+  console.log('로케일');
+  const lang = localStorage.getItem(LOCAL_STORAGE_KEYS.LANGUAGE);
   return lang ? lang : 'ko';
 };
 
-type MessageSchema = typeof ko // json 파일 타입화?해서 messages타입 지정해줌
+type MessageSchema = typeof ko; // json 파일 타입화?해서 messages타입 지정해줌
 const i18n = createI18n<[MessageSchema], 'ko' | 'en'>({
   legacy: false,
   globalInjection: true,
   locale: getLocale(),
   warnHtmlInMessage: 'off',
-  fallbackLocale: "ko",
+  fallbackLocale: 'ko',
   messages,
   silentTranslationWarn: true, // 필요한 옵션
 });
