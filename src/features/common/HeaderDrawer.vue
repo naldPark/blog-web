@@ -1,3 +1,61 @@
+<script lang="ts" setup>
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import menuItems from '@/assets/data/menu';
+import { computed } from 'vue';
+import { useUserStore } from '@/store';
+import { MenuInfo, SubMenuInfo } from '@/types/common';
+
+const router = useRouter();
+const { t } = useI18n();
+const { accountInfo } = useUserStore();
+const avatarOnline = '../../assets/icons/avatar_online.png';
+const avatarOffline = '../../assets/icons/avatar_offline.png';
+
+const props = defineProps<{
+  showLoginDialog: boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', value: boolean): void;
+  (event: 'update:showLoginDialog', value: boolean): void;
+}>();
+
+const updateShowValue = (value: boolean) => emit('update:modelValue', value);
+const clickShowLoginDialog = () =>
+  emit('update:showLoginDialog', !props.showLoginDialog);
+
+const handleAvatarClick = () => {
+  if (!accountInfo) clickShowLoginDialog();
+};
+
+/** 권한에 따른 메뉴  */
+const menuInfo = computed(() => {
+  const currentAuthority: number = accountInfo?.authority;
+  if (currentAuthority === -1) return [];
+  if (currentAuthority == 0) return menuItems;
+
+  /** 권한이 0이 아닌 사용자에 대해 필터링 */
+  return menuItems
+    .filter(
+      (menu) =>
+        menu.anonymousAccess ||
+        menu.subMenus?.some((subMenu) => subMenu.availableRange !== 1),
+    )
+    .map((menu) => ({
+      ...menu,
+      subMenus: menu.subMenus?.filter(
+        (subMenu) => subMenu.availableRange !== 1,
+      ),
+    }));
+});
+
+const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
+  if ('active' in menu) menu.active = !menu.active;
+  router.push({ name: menu.value });
+};
+</script>
+
 <template>
   <VNavigationDrawer
     @update:model-value="updateShowValue"
@@ -37,7 +95,7 @@
     </VList>
     <VDivider />
     <VList density="compact">
-      <template v-for="menu in menuItems" :key="menu.title">
+      <template v-for="menu in menuInfo" :key="menu.title">
         <VListItem
           v-if="!menu.subMenus"
           v-model="menu.active"
@@ -46,7 +104,7 @@
           :append-icon="menu.subMenus ? 'mdi-chevron-up' : null"
         >
           <template v-slot:prepend>
-            <VIcon :icon="menu.icon"></VIcon>
+            <VIcon :icon="menu.icon" />
           </template>
           <VListItemTitle>{{ t(menu.title) }}</VListItemTitle>
         </VListItem>
@@ -72,50 +130,5 @@
     </VList>
   </VNavigationDrawer>
 </template>
-
-<script lang="ts" setup>
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import menuItems from '@/assets/data/menu';
-
-const router = useRouter();
-const { t } = useI18n();
-
-const avatarOnline = '../../assets/icons/avatar_online.png';
-const avatarOffline = '../../assets/icons/avatar_offline.png';
-
-const props = defineProps<{
-  showLoginDialog: boolean;
-  accountInfo: { accountName?: string; email?: string } | null;
-}>();
-
-const emit = defineEmits<{
-  (event: 'update:modelValue', value: boolean): void;
-  (event: 'update:showLoginDialog', value: boolean): void;
-}>();
-
-const updateShowValue = (value: boolean) => emit('update:modelValue', value);
-const clickShowLoginDialog = () =>
-  emit('update:showLoginDialog', !props.showLoginDialog);
-
-const handleAvatarClick = () => {
-  if (!props.accountInfo) clickShowLoginDialog();
-};
-
-const onChangePage = (menu: {
-  url?: string;
-  value?: string;
-  subMenus?: any[];
-  active?: boolean;
-}) => {
-  if (menu.subMenus) {
-    menu.active = !menu.active;
-  } else if (menu.url) {
-    window.location.href = menu.url;
-  } else {
-    router.push({ name: menu.value });
-  }
-};
-</script>
 
 <style lang="scss" scoped></style>

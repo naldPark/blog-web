@@ -1,7 +1,7 @@
 <template>
   <VAppBar color="rgba(22, 22, 22, 0.95)" density="compact" class="nald-header">
     <VAppBarNavIcon variant="text" @click="toggleDrawer"></VAppBarNavIcon>
-    <VToolbarTitle @click="onChangePage(menuInfo[0])" style="cursor: pointer">
+    <VToolbarTitle @click="clickToMain()" style="cursor: pointer">
       <VAvatar rounded size="30px">
         <VImg src="@/assets/logo.png"></VImg>
       </VAvatar>
@@ -39,7 +39,7 @@
         <VListItem class="right-panel-item">
           <VListItemTitle @click="clickToChangeLang">
             <VIcon>mdi-swap-horizontal</VIcon>
-            {{ lang }}
+            {{ langSetting }}
             <VAvatar tile size="20" left>
               <VImg
                 v-if="langSetting === 'ko'"
@@ -89,76 +89,28 @@ export enum LANGUAGE_TYPE {
 </script>
 
 <script lang="ts" setup>
-import { ref, computed, watch, watchEffect, onMounted } from 'vue';
+import { ref } from 'vue';
 import Button from '@/components/common/Button.vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import LoginDialog from '@/features/dialog/LoginDialog.vue';
 import ChangePasswordDialog from '@/features/dialog/ChangePasswordDialog.vue';
 import { useUserStore } from '@/store/userStore';
-import { useLanguageStore } from '@/store/languageStore';
+import { LanguageType, useLanguageStore } from '@/store/languageStore';
 import HeaderDrawer from './HeaderDrawer.vue';
-import menuItems from '@/assets/data/menu';
-import { LOCAL_STORAGE_KEYS } from '@/types/enum';
+import { MenuInfo } from '@/types/common';
 const router = useRouter();
 const { t } = useI18n();
-const userStore = useUserStore();
-const languageStatusStore = useLanguageStore();
-const languageValue = localStorage.getItem(LOCAL_STORAGE_KEYS.LANGUAGE) || 'ko';
-const langSetting = ref<string>(languageValue);
-const drawer = ref(false);
+const { accountInfo, setAuthToken } = useUserStore();
+const { saveLanguage, getOppositeLanguage, language } = useLanguageStore();
+const langSetting = ref<LanguageType>(language);
 const showEditPasswordDialog = ref(false);
 const showLoginDialog = ref(false);
 const showDrawer = ref(false);
 
 const toggleDrawer = () => {
   showDrawer.value = !showDrawer.value;
-  console.log('Drawer toggled:', drawer.value);
 };
-
-// 계산된 메뉴 정보
-const menuInfo = computed(() => {
-  const currentAuthority = userStore.accountInfo?.authority;
-  if (!currentAuthority) {
-    return [];
-  }
-
-  // 권한이 0인 경우에는 모든 메뉴를 보여줍니다.
-  if (currentAuthority == 0) {
-    return menuItems;
-  } else {
-    // 권한이 0이 아닌 경우에는 권한 범위에 맞는 메뉴만 필터링합니다.
-    const filteredMenu = menuItems.filter(
-      (menu) =>
-        menu.anonymousAccess ||
-        (menu.subMenus &&
-          menu.subMenus.some(
-            (subMenu) =>
-              subMenu.availableRange === null || subMenu.availableRange !== 1,
-          )),
-    );
-    filteredMenu.forEach((menu) => {
-      if (menu.subMenus) {
-        menu.subMenus = menu.subMenus.filter(
-          (subMenu) =>
-            subMenu.availableRange === null || subMenu.availableRange !== 1,
-        );
-      }
-    });
-    return filteredMenu;
-  }
-});
-
-// 현재 로그인 상태 정보
-const accountInfo = computed(() => userStore.accountInfo);
-
-// 현재 언어 설정
-const lang = computed(
-  () =>
-    LANGUAGE_TYPE[
-      langSetting.value === 'ko' ? 'en' : ('ko' as keyof typeof LANGUAGE_TYPE)
-    ],
-);
 
 // 로그인 다이얼로그 열기/닫기 함수
 const clickToShowLoginDialog = () => {
@@ -171,10 +123,8 @@ const clickToShowEditPassword = () => {
 
 // 언어 변경 함수
 const clickToChangeLang = () => {
-  const newLang = langSetting.value === 'ko' ? 'en' : 'ko';
-  langSetting.value = newLang;
-  localStorage.setItem(LOCAL_STORAGE_KEYS.LANGUAGE, newLang);
-  languageStatusStore.saveLanguage(newLang);
+  langSetting.value = getOppositeLanguage(langSetting.value);
+  saveLanguage(langSetting.value);
 };
 
 // 관리자 페이지로 이동 함수
@@ -184,31 +134,14 @@ const clickToAdmin = () => {
 
 // 로그아웃 함수
 const clickToLogout = () => {
-  userStore.setAuthToken(null);
+  setAuthToken(null);
   router.push({ name: 'MainPage' });
 };
 
 // 페이지 변경 함수
-const onChangePage = (menu: any) => {
-  console.log('menu', menu);
-  if (menu.subMenus) {
-    menu.active = !menu.active;
-  } else if (menu.url) {
-    location.href = menu.url;
-  } else {
-    router.push({ name: menu.value });
-  }
+const clickToMain = () => {
+  router.push('/');
 };
-
-onMounted(() => {
-  console.log('헤더마운트');
-});
-
-// watchEffect(() => {
-//   // langSetting.value가 변경될 때마다 UI를 자동으로 업데이트합니다.
-//   const watchs = languageStatusStore.language;
-//   console.log('watchs', watchs);
-// });
 </script>
 
 <style lang="scss" scoped>

@@ -2,12 +2,12 @@ export interface MenuInfo {
   name: string;
   icon: string;
   value: string;
-  subMenus?: SubMenu[];
+  subMenus?: SubMenuInfo[];
   anonymousAccess?: boolean;
   active: boolean;
 }
 
-export interface SubMenu {
+export interface SubMenuInfo {
   name: string;
   icon: string;
   title: string;
