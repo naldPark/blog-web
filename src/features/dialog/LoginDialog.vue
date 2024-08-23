@@ -1,6 +1,5 @@
 <template>
   <VDialog
-    :model-value="modelValue"
     width="444px"
     content-class="app-g-dialog"
     @update:model-value="updateModelValue"
@@ -65,10 +64,6 @@ const cookies = useCookies();
 const userStore = useUserStore();
 const appStatusStore = useAppCommonStore();
 const emits = defineEmits(['update:modelValue']);
-
-defineProps<{
-  modelValue: boolean;
-}>();
 
 const updateModelValue = (value: boolean) => {
   emits('update:modelValue', value);

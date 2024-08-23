@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+import { computed } from 'vue';
+import { useDisplay } from 'vuetify';
+
+const { smAndDown: isMobile } = useDisplay();
+const currentYear = computed(() => new Date().getFullYear());
+</script>
+
 <template>
   <VFooter padless absolute dark color="grey-darken-4">
     <VRow class="overline text-center justify-center" no-gutters>
@@ -7,11 +15,7 @@
         </VCard>
       </VCol>
       <VCol cols="12" sm="auto">
-        <VCard
-          class="text-xs"
-          flat
-          :class="{ 'not-mobile': !isMobile, 'pa-2': !isMobile }"
-        >
+        <VCard flat :class="{ 'not-mobile': !isMobile }">
           &copy; nald &nbsp;
         </VCard>
       </VCol>
@@ -22,17 +26,11 @@
   </VFooter>
 </template>
 
-<script lang="ts" setup>
-  import { computed, Ref, ref } from 'vue';
-  import { useDisplay } from 'vuetify';
-
-  const display = useDisplay();
-  const isMobile: Ref<boolean> = display.smAndDown;
-  const currentYear = computed(() => new Date().getFullYear());
-</script>
-
 <style lang="scss" scoped>
-  .not-mobile:after {
+.not-mobile {
+  padding: 8px;
+  &:after {
     content: ' | ';
   }
+}
 </style>

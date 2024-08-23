@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+import { useAppCommonStore } from '@/store';
+import { storeToRefs } from 'pinia';
+
+const appStatusStore = useAppCommonStore();
+const { showBlocker } = storeToRefs(appStatusStore);
+</script>
+
 <template>
   <VOverlay
     :model-value="showBlocker"
@@ -8,15 +16,4 @@
   </VOverlay>
 </template>
 
-<script lang="ts" setup>
-import { computed } from 'vue';
-import { useAppCommonStore } from '@/store';
-import { storeToRefs } from 'pinia';
-
-const appStatusStore = useAppCommonStore();
-const { showBlocker } = storeToRefs(appStatusStore);
-</script>
-
-<style lang="scss" scoped>
-/* Add any specific styles for the loading overlay here */
-</style>
+<style lang="scss" scoped></style>

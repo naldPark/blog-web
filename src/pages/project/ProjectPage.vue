@@ -45,32 +45,31 @@
 </template>
 
 <script lang="ts" setup>
-  import { Ref, ref } from 'vue';
-  import ProjectKube from '@/features/project/ProjectKube.vue';
-  import ProjectDiagram from '@/features/project/ProjectDiagram.vue';
-  import ProjectHistory from '@/features/project/ProjectHistory.vue';
-  import { useDisplay } from 'vuetify';
+import { Ref, ref } from 'vue';
+import ProjectKube from '@/features/project/ProjectKube.vue';
+import ProjectDiagram from '@/features/project/ProjectDiagram.vue';
+import ProjectHistory from '@/features/project/ProjectHistory.vue';
+import { useDisplay } from 'vuetify';
 
-  const display = useDisplay();
-  const isMobile: Ref<boolean> = display.smAndDown;
-  const currentTab = ref<string>('diagram');
-  const tabs: any = [
-    {
-      icon: 'mdi-blur-linear',
-      text: 'Diagram',
-      value: 'diagram',
-    },
-    {
-      icon: 'mdi-kubernetes',
-      text: 'NavigateKube',
-      value: 'kube',
-    },
-    {
-      icon: 'mdi-history',
-      text: 'History',
-      value: 'history',
-    },
-  ];
+const { smAndDown: isMobile } = useDisplay();
+const currentTab = ref<string>('diagram');
+const tabs: any = [
+  {
+    icon: 'mdi-blur-linear',
+    text: 'Diagram',
+    value: 'diagram',
+  },
+  {
+    icon: 'mdi-kubernetes',
+    text: 'NavigateKube',
+    value: 'kube',
+  },
+  {
+    icon: 'mdi-history',
+    text: 'History',
+    value: 'history',
+  },
+];
 </script>
 
 <style lang="scss" scoped></style>

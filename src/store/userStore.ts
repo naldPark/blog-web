@@ -7,10 +7,10 @@ import { ref } from 'vue';
 const AUTH_TOKEN_COOKIE_KEY = 'access_token';
 const ACCOUNT_INFO_KEY = 'ACCOUNT_INFO';
 export interface AccountInfo {
-  accountId: string | null;
-  accountName: string | null;
-  authority: number | null;
-  email: string | null;
+  accountId: string;
+  accountName: string;
+  authority: number;
+  email: string;
 }
 
 // Define your store
@@ -20,10 +20,10 @@ export const useUserStore = defineStore('user', () => {
   const isSignIn = ref(false);
   const authToken = ref<string | null>(null);
   const accountInfo = ref<AccountInfo>({
-    accountId: null,
-    accountName: null,
-    authority: null,
-    email: null,
+    accountId: '',
+    accountName: '',
+    authority: -1,
+    email: '',
   });
 
   // Actions definition
@@ -36,10 +36,10 @@ export const useUserStore = defineStore('user', () => {
       cookies.remove(AUTH_TOKEN_COOKIE_KEY);
       localStorage.clear();
       accountInfo.value = {
-        accountId: null,
-        accountName: null,
-        authority: null,
-        email: null,
+        accountId: '',
+        accountName: '',
+        authority: -1,
+        email: '',
       };
       authToken.value = null;
       isSignIn.value = false;
@@ -72,10 +72,10 @@ export const useUserStore = defineStore('user', () => {
 
   const resetAccountInfo = () => {
     accountInfo.value = {
-      accountId: null,
-      accountName: null,
-      authority: null,
-      email: null,
+      accountId: '',
+      accountName: '',
+      authority: -1,
+      email: '',
     };
     localStorage.removeItem(ACCOUNT_INFO_KEY);
     cookies.remove(AUTH_TOKEN_COOKIE_KEY);

@@ -3,6 +3,7 @@ import { clone } from 'ramda';
 import { Ref, ref } from 'vue';
 
 export interface DialogInfo {
+  show?: boolean;
   title: string;
   description: string;
   buttonText?: string | null;
@@ -12,26 +13,15 @@ export interface DialogInfo {
   showCloseButton?: boolean;
 }
 
-interface Dialog {
-  show: boolean;
-  title: string;
-  description: string;
-  buttonText: string | null;
-  cancelButtonText: string | null;
-  action: (() => void) | null;
-  cancelAction: (() => void) | null;
-  showCloseButton: boolean;
-}
-
 export interface ToastMessageInfo {
   type: 'success' | 'error' | 'warning';
   title?: string;
-  hide?: boolean;
+  showButton?: boolean;
   inputMsg?: string;
   message: string;
-  buttonMsg: string | null | undefined;
+  buttonMsg?: string;
   timeout?: number;
-  buttonCallback: (() => void) | null | undefined;
+  buttonCallback?: () => void;
   inputTime?: number;
 }
 
@@ -45,7 +35,7 @@ export interface AppStatus {
   timezone: string;
   showBlocker: boolean;
   toastMessages: Array<ToastMessage>;
-  dialogInfo: Dialog;
+  dialogInfo: DialogInfo;
   prevRouteName: string | null | undefined;
 }
 
@@ -53,7 +43,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
   const timezone = ref('Asia/Seoul');
   const showBlocker = ref(false);
   const toastMessages: Ref<ToastMessage[]> = ref([]);
-  const dialogInfo: Ref<Dialog> = ref({
+  const dialogInfo: Ref<DialogInfo> = ref({
     show: false,
     title: '',
     description: '',
@@ -74,7 +64,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
     showBlocker.value = info.val;
   };
 
-  const setDialogInfo = (info: Dialog) => {
+  const setDialogInfo = (info: DialogInfo) => {
     dialogInfo.value = info;
   };
 
@@ -88,8 +78,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
       cancelButtonText: info.cancelButtonText || '취소',
       action: info.action || null,
       cancelAction: info.cancelAction || null,
-      showCloseButton:
-        info.showCloseButton === undefined ? false : info.showCloseButton,
+      showCloseButton: info.showCloseButton ?? false,
     });
   };
 

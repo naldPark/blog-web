@@ -23,32 +23,31 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, watch, onMounted, Ref } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import UserManage from '@/features/admin/UserManage.vue';
-  import { useDisplay } from 'vuetify';
-  import { useI18n } from 'vue-i18n';
-  const { t } = useI18n();
-  const display = useDisplay();
-  const isMobile: Ref<boolean> = display.smAndDown;
-  const currentTab = ref(0);
-  const route = useRoute();
-  const router = useRouter();
+import { ref, watch, onMounted, Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import UserManage from '@/features/admin/UserManage.vue';
+import { useDisplay } from 'vuetify';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+const { smAndDown: isMobile } = useDisplay();
+const currentTab = ref(0);
+const route = useRoute();
+const router = useRouter();
 
-  watch(currentTab, (newTab) => {
-    router
-      .replace({
-        name: 'AdminPage',
-        query: { tab: newTab.toString() },
-      })
-      .catch((err) => err);
-  });
+watch(currentTab, (newTab) => {
+  router
+    .replace({
+      name: 'AdminPage',
+      query: { tab: newTab.toString() },
+    })
+    .catch((err) => err);
+});
 
-  onMounted(() => {
-    if (route.query.tab) {
-      currentTab.value = Number(route.query.tab);
-    }
-  });
+onMounted(() => {
+  if (route.query.tab) {
+    currentTab.value = Number(route.query.tab);
+  }
+});
 </script>
 
 <style lang="scss" scoped></style>

@@ -124,17 +124,15 @@ onMounted(async () => {
 appStatusStore.addToastMessage({
   type: 'error',
   message: 'zzz',
-  buttonMsg: 'zzz',
-  // timeout: 100000,
-  buttonCallback: null,
+  showButton: true,
 });
 
-appStatusStore.showDialog({
-  title: t('complete'),
-  description: t('confirmMsg'),
-  showCloseButton: true,
-  action: () => {},
-});
+// appStatusStore.showDialog({
+//   title: t('complete'),
+//   description: t('confirmMsg'),
+//   showCloseButton: true,
+//   action: () => {},
+// });
 watch(words, () => {
   currentWord.value = '';
   typeEffect();

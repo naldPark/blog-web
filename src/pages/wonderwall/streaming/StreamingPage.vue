@@ -205,8 +205,6 @@ const fetchVideoList = () => {
           appStatusStore.addToastMessage({
             type: 'error',
             message: response.data.data || response.data.message,
-            buttonMsg: null,
-            buttonCallback: null,
           });
         }
         resolve({ finish: true });

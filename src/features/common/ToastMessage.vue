@@ -1,3 +1,28 @@
+<script lang="ts" setup>
+import { useAppCommonStore } from '@/store';
+import { storeToRefs } from 'pinia';
+import Button from '@/components/common/Button.vue';
+
+const { toastMessages } = storeToRefs(useAppCommonStore());
+
+const getIconAndColor = (type: string) =>
+  ({
+    success: { icon: 'mdi-check-circle', color: '#4CAF50' },
+    error: { icon: 'mdi-close-circle', color: '#c24c4f' },
+    warning: { icon: 'mdi-alert-circle', color: '#6ed7f5' },
+  })[type] || { icon: 'mdi-alert-circle', color: '#6ed7f5' };
+
+const getColor = (type: string) => getIconAndColor(type).color;
+const getIcon = (type: string) => getIconAndColor(type).icon;
+
+const handleButtonClick = (toast: {
+  info: { buttonCallback?: () => void };
+  show: boolean;
+}) => {
+  toast.info.buttonCallback?.() ?? (toast.show = false);
+};
+</script>
+
 <template>
   <div class="text-center">
     <v-snackbar
@@ -36,30 +61,16 @@
           <div class="message">{{ toast.info.message }}</div>
         </template>
       </v-alert>
-      <template v-slot:actions>
-        <v-btn color="grey" variant="text" @click="toast.show = false">
-          {{ toast.info.buttonMsg ?? $t('close') }}
-        </v-btn>
+      <template v-slot:actions v-if="toast.info.showButton">
+        <Button
+          color="grey"
+          variant="text"
+          @click="handleButtonClick(toast)"
+          :label="toast.info.buttonMsg ?? $t('close')"
+        />
       </template>
     </v-snackbar>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { useAppCommonStore } from '@/store';
-import { storeToRefs } from 'pinia';
-
-const { toastMessages } = storeToRefs(useAppCommonStore());
-
-const getIconAndColor = (type: string) =>
-  ({
-    success: { icon: 'mdi-check-circle', color: '#4CAF50' },
-    error: { icon: 'mdi-close-circle', color: '#c24c4f' },
-    warning: { icon: 'mdi-alert-circle', color: '#6ed7f5' },
-  })[type] || { icon: 'mdi-alert-circle', color: '#6ed7f5' };
-
-const getColor = (type: string) => getIconAndColor(type).color;
-const getIcon = (type: string) => getIconAndColor(type).icon;
-</script>
 
 <style lang="scss" scoped></style>
