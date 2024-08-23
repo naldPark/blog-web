@@ -255,15 +255,11 @@ const copyClipboard = async () => {
     appStatusStore.addToastMessage({
       type: 'success',
       message: `${t('copied')}`,
-      buttonMsg: null,
-      buttonCallback: null,
     });
   } catch (err) {
     appStatusStore.addToastMessage({
       type: 'error',
       message: `${t('copyFailed')}`,
-      buttonMsg: null,
-      buttonCallback: null,
     });
   }
 };

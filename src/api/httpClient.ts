@@ -76,8 +76,6 @@ const createHttpClient = (): AxiosInstance => {
         appStatusStore.addToastMessage({
           type: 'error',
           message: errorData.error_i18n,
-          buttonMsg: null,
-          buttonCallback: null,
         });
 
         if (location.pathname !== '/' && location.pathname !== '/main') {
@@ -100,9 +98,9 @@ const createHttpClient = (): AxiosInstance => {
     //   appStatusStore.addToastMessage({
     //     type: 'error',
     //     message: errorData.error_i18n,
-    //     buttonMsg: null,
+    //
     //     timeout: null,
-    //     buttonCallback: null,
+    //
     //   });
     //   if (location.pathname !== '/' && location.pathname !== '/main') {
     //     location.href = `${location.origin}`;

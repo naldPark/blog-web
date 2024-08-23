@@ -194,8 +194,6 @@ const sendMessage = async () => {
       appStatusStore.addToastMessage({
         type: 'error',
         message: `${t('unknownError')}`,
-        buttonMsg: null,
-        buttonCallback: null,
       });
     }
   } else {
@@ -203,8 +201,6 @@ const sendMessage = async () => {
     appStatusStore.addToastMessage({
       type: 'error',
       message: validate as string,
-      buttonMsg: null,
-      buttonCallback: null,
     });
   }
 };
