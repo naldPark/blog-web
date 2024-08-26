@@ -98,15 +98,25 @@ import ChangePasswordDialog from '@/features/dialog/ChangePasswordDialog.vue';
 import { useUserStore } from '@/store/userStore';
 import { LanguageType, useLanguageStore } from '@/store/languageStore';
 import HeaderDrawer from './HeaderDrawer.vue';
-import { MenuInfo } from '@/types/common';
+import { storeToRefs } from 'pinia';
 const router = useRouter();
 const { t } = useI18n();
-const { accountInfo, setAuthToken } = useUserStore();
+
 const { saveLanguage, getOppositeLanguage, language } = useLanguageStore();
 const langSetting = ref<LanguageType>(language);
 const showEditPasswordDialog = ref(false);
 const showLoginDialog = ref(false);
 const showDrawer = ref(false);
+
+/** 잘못된 방법
+ *  store는 reactive로 래핑된 객체
+ * 디스트럭처링(destructuring : 구조 분해 할당)이 불가능함
+ * 이런식의 사용이 올바름
+ * const { accountInfo } = storeToRefs(useUserStore)
+ * storeToRefs 는 반응형으로 작동하게 해줌
+ */
+const userStore = useUserStore();
+const { accountInfo } = storeToRefs(userStore);
 
 const toggleDrawer = () => {
   showDrawer.value = !showDrawer.value;
@@ -134,7 +144,7 @@ const clickToAdmin = () => {
 
 // 로그아웃 함수
 const clickToLogout = () => {
-  setAuthToken(null);
+  userStore.resetAccountInfo();
   router.push({ name: 'MainPage' });
 };
 

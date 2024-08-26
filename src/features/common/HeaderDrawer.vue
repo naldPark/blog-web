@@ -5,12 +5,13 @@ import menuItems from '@/assets/data/menu';
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
 import { MenuInfo, SubMenuInfo } from '@/types/common';
+import { storeToRefs } from 'pinia';
+import avatarOnline from '@/assets/icons/avatar_online.png';
+import avatarOffline from '@/assets/icons/avatar_offline.png';
 
 const router = useRouter();
 const { t } = useI18n();
-const { accountInfo } = useUserStore();
-const avatarOnline = '../../assets/icons/avatar_online.png';
-const avatarOffline = '../../assets/icons/avatar_offline.png';
+const { accountInfo } = storeToRefs(useUserStore());
 
 const props = defineProps<{
   showLoginDialog: boolean;
@@ -31,7 +32,7 @@ const handleAvatarClick = () => {
 
 /** 권한에 따른 메뉴  */
 const menuInfo = computed(() => {
-  const currentAuthority: number = accountInfo?.authority;
+  const currentAuthority: number = accountInfo.value.authority;
   if (currentAuthority === -1) return [];
   if (currentAuthority == 0) return menuItems;
 
