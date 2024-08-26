@@ -79,13 +79,15 @@ const { mutate: postLogin } = useMutation({
     const token = res.data.access_token;
     cookies.set('access_token', token);
     const tokenInfo = JSON.parse(decodeToken(token));
-    userStore.setAuthToken(token);
-    userStore.setAccountInfo({
-      accountId: tokenInfo.user_id,
-      accountName: tokenInfo.user_name,
-      authority: tokenInfo.authority,
-      email: tokenInfo.user_email,
-    });
+    userStore.setAccountInfo(
+      {
+        accountId: tokenInfo.user_id,
+        accountName: tokenInfo.user_name,
+        authority: tokenInfo.authority,
+        email: tokenInfo.user_email,
+      },
+      token,
+    );
     updateModelValue(false);
   },
   onError: (error: any) => {

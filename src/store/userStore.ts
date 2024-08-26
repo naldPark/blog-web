@@ -60,9 +60,10 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  const setAccountInfo = (info: AccountInfo) => {
+  const setAccountInfo = (info: AccountInfo, token: string) => {
     accountInfo.value = info;
     localStorage.setItem(ACCOUNT_INFO_KEY, JSON.stringify(info));
+    setAuthToken(token);
   };
 
   const getAuthToken = () => {
@@ -77,6 +78,7 @@ export const useUserStore = defineStore('user', () => {
       authority: -1,
       email: '',
     };
+    setAuthToken(null);
     localStorage.removeItem(ACCOUNT_INFO_KEY);
     cookies.remove(AUTH_TOKEN_COOKIE_KEY);
     authToken.value = null;
@@ -87,7 +89,6 @@ export const useUserStore = defineStore('user', () => {
     isSignIn,
     authToken,
     accountInfo,
-    setAuthToken,
     loadAuthToken,
     setAccountInfo,
     getAuthToken,

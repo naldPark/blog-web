@@ -52,13 +52,11 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, Ref } from 'vue';
 import NaldHeader from '@/features/common/NaldHeader.vue';
-import { useUserStore } from '@/store/userStore';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useDisplay } from 'vuetify';
 import { getBadgeList } from '@/api/commonService';
 import { getImageUrl } from '../utils/common';
 import { ApiResponse } from '@/types/axios.type';
-import { useI18n } from 'vue-i18n';
 
 interface Badge {
   backgroundColor: string;
@@ -70,10 +68,6 @@ interface Badge {
 
 const display = useDisplay();
 const appStatusStore = useAppCommonStore();
-const { t } = useI18n();
-const accountName: Ref<string | null> = ref(
-  useUserStore().accountInfo.accountName,
-);
 const isMobile: Ref<boolean> = display.smAndDown;
 const appSize: Ref<string> = display.name;
 const badges = ref<Badge[]>([]);
@@ -121,18 +115,7 @@ onMounted(async () => {
   });
   typeEffect();
 });
-appStatusStore.addToastMessage({
-  type: 'error',
-  message: 'zzz',
-  showButton: true,
-});
 
-// appStatusStore.showDialog({
-//   title: t('complete'),
-//   description: t('confirmMsg'),
-//   showCloseButton: true,
-//   action: () => {},
-// });
 watch(words, () => {
   currentWord.value = '';
   typeEffect();

@@ -92,6 +92,7 @@ const getStarStyle = (index: number) => {
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/components/aboutMe';
 .intro-wrapper {
   background-image: linear-gradient(
       rgba(20, 20, 20, 0.6),
@@ -147,9 +148,10 @@ const getStarStyle = (index: number) => {
   .falling-star {
     position: absolute;
     background: transparent;
-    box-shadow: var(--animationBoxShadow);
+    @extend .star-shadow; /* box-shadow를 포함시키는 방법 */
     z-index: 1;
 
+    animation: anim-star linear infinite;
     @keyframes anim-star {
       0% {
         transform: translateY(-2000px);
@@ -158,8 +160,6 @@ const getStarStyle = (index: number) => {
         transform: translateY(0px);
       }
     }
-
-    animation: anim-star linear infinite;
   }
 }
 </style>
