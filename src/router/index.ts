@@ -128,7 +128,7 @@ router.beforeEach(
   ) => {
     console.log('감자러쉬', to);
     const userStore = useUserStore();
-    userStore.loadAuthToken();
+    userStore.getAuthToken();
     if (to.matched.some((route) => route.meta.anonymousAccess)) {
       next();
     } else if (userStore.isSignIn) {
