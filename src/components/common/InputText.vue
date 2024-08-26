@@ -1,51 +1,67 @@
 <script lang="ts" setup>
-  import { ref, computed } from 'vue';
-  import { useI18n } from 'vue-i18n';
+import { ValidationRule } from '@/types/common';
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-  /** 다국어 사용  */
-  const { t } = useI18n();
+/** 다국어 사용  */
+const { t } = useI18n();
 
-  /** Props정의 required 기본값: true*/
-  const { type, passwordIcon, icon, placeholder } = defineProps({
-    color: { type: String, default: 'primary', required: false },
-    label: { type: String, required: false },
-    required: { type: Boolean, required: false },
-    type: { type: String, required: false },
-    placeholder: {
-      type: String,
-      required: false,
-    },
-    icon: { type: String, required: false },
-    passwordIcon: { type: Boolean, required: false },
-  });
+/** Props정의 required 기본값: true*/
+interface Props {
+  color?: string;
+  label?: string;
+  required?: boolean;
+  type?: string;
+  placeholder?: string;
+  rules?: ValidationRule[];
+  icon?: string;
+  passwordIcon?: boolean;
+}
+const emit = defineEmits<{
+  (e: 'enter'): void;
+  (e: 'onClick'): void;
+}>();
+const props = defineProps<Props>();
 
-  /** 비밀번호 가시성 ref */
-  const passwordVisible = ref(false);
+const {
+  color = 'primary',
+  label,
+  required = false,
+  type,
+  placeholder,
+  rules = [],
+  icon,
+  passwordIcon,
+} = props;
 
-  /** computed로 기본 placeholder 값 설정 */
-  const computedPlaceholder = computed(
-    () => placeholder || t('defaultPlaceHolder'),
-  );
+/** 비밀번호 가시성 ref */
+const passwordVisible = ref(false);
 
-  /** InputText 내부 아이콘 */
-  const computedIcon = computed(() => {
-    if (icon) return icon;
-    if (passwordIcon) return passwordVisible.value ? 'mdi-eye-off' : 'mdi-eye';
-    return '';
-  });
+/** computed로 기본 placeholder 값 설정 */
+const computedPlaceholder = computed(
+  () => placeholder || t('defaultPlaceHolder'),
+);
 
-  /** 비밀번호인 경우에 보기 or 암호화 */
-  const togglePasswordVisibility = () => {
-    if (passwordIcon) {
-      passwordVisible.value = !passwordVisible.value;
-    }
-  };
+/** InputText 내부 아이콘 */
+const computedIcon = computed(() => {
+  if (icon) return icon;
+  if (passwordIcon) return passwordVisible.value ? 'mdi-eye-off' : 'mdi-eye';
+  return '';
+});
+
+/** 비밀번호인 경우에 보기 or 암호화 */
+const togglePasswordVisibility = () => {
+  if (passwordIcon) {
+    passwordVisible.value = !passwordVisible.value;
+  }
+};
 </script>
 
 <template>
   <VTextField
     flat
     :required="required"
+    :rules="rules"
     :color="color"
     :placeholder="computedPlaceholder"
     :label="label"

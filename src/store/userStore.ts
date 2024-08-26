@@ -50,23 +50,23 @@ export const useUserStore = defineStore('user', () => {
     setAuthToken(token);
   };
 
-  /** 토큰 불러오기 */
-  /** 이것도 없애는게 맞고 그냥 authToken만 있으면 됨 */
-  const getAuthToken = (): string | null => {
-    const storedToken = cookies.get(AUTH_TOKEN_COOKIE_KEY);
-    if (storedToken) {
-      authToken.value = storedToken;
-      isSignIn.value = true;
-      accountInfo.value = JSON.parse(
-        localStorage.getItem(ACCOUNT_INFO_KEY) || '{}',
-      );
-    } else {
-      authToken.value = null;
-      isSignIn.value = false;
-      accountInfo.value = initAccountValue;
-    }
-    return authToken.value;
-  };
+  // /** 토큰 불러오기 */
+  // /** 이것도 없애는게 맞고 그냥 authToken만 있으면 됨 */
+  // const getAuthToken = (): string | null => {
+  //   const storedToken = cookies.get(AUTH_TOKEN_COOKIE_KEY);
+  //   if (storedToken) {
+  //     authToken.value = storedToken;
+  //     isSignIn.value = true;
+  //     accountInfo.value = JSON.parse(
+  //       localStorage.getItem(ACCOUNT_INFO_KEY) || '{}',
+  //     );
+  //   } else {
+  //     authToken.value = null;
+  //     isSignIn.value = false;
+  //     accountInfo.value = initAccountValue;
+  //   }
+  //   return authToken.value;
+  // };
 
   /** 유저 및 토큰 정보 초기화 */
   const resetAccountInfo = () => {
@@ -81,7 +81,6 @@ export const useUserStore = defineStore('user', () => {
     authToken,
     accountInfo,
     setAccountInfo,
-    getAuthToken,
     resetAccountInfo,
   };
 });

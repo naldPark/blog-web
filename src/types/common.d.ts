@@ -13,3 +13,5 @@ export interface SubMenuInfo {
   title: string;
   value: string;
 }
+
+export type ValidationRule = (value: string) => string | boolean;

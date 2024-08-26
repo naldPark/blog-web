@@ -66,6 +66,7 @@ export default {
   deleteUsers: '사용자 삭제',
   deleteUsersMsg: '{0} 사용자를 삭제하시겠습니까 ?',
   confirmMsg: '정상적으로 처리 되었습니다.',
+  relogin: '다시 로그인 해주세요',
   chat: {
     enterInfo: 'ID를 확인하고 입장 해 주세요',
     enter: '입장하기',

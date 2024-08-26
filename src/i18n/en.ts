@@ -64,6 +64,7 @@ export default {
   deleteUsers: 'delete users',
   deleteUsersMsg: 'Are you sure to delete user {0} ?',
   confirmMsg: 'your request has been completed',
+  relogin: 'Please log in again.',
   chat: {
     enterInfo: 'Please check yourname and enter',
     enter: 'Enter',

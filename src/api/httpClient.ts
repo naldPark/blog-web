@@ -27,13 +27,12 @@ const createHttpClient = (): AxiosInstance => {
   const requestInterceptorHandler = async (
     request: InternalAxiosRequestConfig,
   ): Promise<InternalAxiosRequestConfig> => {
-    const userStore = useUserStore();
-    const authToken = userStore.getAuthToken();
+    const { authToken } = useUserStore();
     if (!request.headers) {
       request.headers = {} as AxiosHeaders;
     }
     if (!request.headers[Config.AUTH_TOKEN_HEADER_KEY]) {
-      if (typeof authToken === 'string' && !isEmpty(authToken)) {
+      if (authToken) {
         request.headers[Config.AUTH_TOKEN_HEADER_KEY] = `${authToken}`;
       }
       request.headers['requestPath'] = location.pathname;
@@ -73,23 +72,17 @@ const createHttpClient = (): AxiosInstance => {
       const errorData = error.response.data as ApiErrorResponse;
 
       if (errorData.status_code === 401) {
+        const userStore = useUserStore();
         appStatusStore.addToastMessage({
           type: 'error',
           message: errorData.error_i18n,
         });
-
+        userStore.resetAccountInfo();
         if (location.pathname !== '/' && location.pathname !== '/main') {
           location.href = `${location.origin}`;
         }
       }
     }
-    // appStatusStore.showDialog({
-    //   title: '로그아웃',
-    //   description: '다시 로그인 해주세요',
-    //   showCloseButton: true,
-    //   action: () => {},
-    // });
-
     // const userStore = useUserStore();
     // userStore.setAuthToken(null);
     // history.go(-1);

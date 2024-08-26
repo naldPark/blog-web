@@ -46,41 +46,37 @@
           <VThemeProvider>
             <VRow class="pa-2">
               <VCol cols="12">
-                <VTextField
+                <InputText
                   flat
                   v-model="messageData.name"
                   :rules="[rules.required]"
                   :label="`${t('name')} *`"
                   :placeholder="`${t('name')} *`"
-                ></VTextField>
+                />
               </VCol>
               <VCol cols="12">
-                <VTextField
-                  flat
+                <InputText
                   v-model="messageData.email"
                   :rules="[rules.required, rules.email]"
                   :label="`${t('email')} *`"
                   :placeholder="`${t('email')} *`"
-                ></VTextField>
+                />
               </VCol>
               <VCol cols="12">
-                <VTextField
+                <InputText
                   v-model="messageData.title"
                   :rules="[rules.required]"
                   :label="`${t('title')} *`"
                   :placeholder="`${t('title')} *`"
-                ></VTextField>
+                />
               </VCol>
               <VCol cols="12">
-                <VTextarea
+                <Textarea
                   v-model="messageData.content"
                   :rules="[rules.required]"
-                  auto-grow
-                  flat
-                  solo
                   :label="`${t('content')} *`"
                   :placeholder="`${t('content')} *`"
-                ></VTextarea>
+                />
               </VCol>
               <VCol class="mx-auto" cols="auto">
                 <VBtn
@@ -100,45 +96,65 @@
     </VRow>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { sendMail } from '@/api/commonService';
 import router from '@/router';
 import { useI18n } from 'vue-i18n';
+import Textarea from '@/components/common/TextArea.vue';
+import InputText from '@/components/common/InputText.vue';
+import { ValidationRule } from '@/types/common';
+import { emailRegExp } from '@/utils/regExpUtil';
+
+// Interface for messageData
+interface MessageData {
+  name: string;
+  email: string;
+  title: string;
+  content: string;
+}
 
 const appStatusStore = useAppCommonStore();
 const { t } = useI18n();
-const messageData: any = ref({
+
+// Define messageData with the MessageData interface
+const messageData = ref<MessageData>({
   name: '',
   email: '',
   title: '',
   content: '',
 });
 
-const rules = {
-  required: (value: any) => !!value || 'Required.',
-  email: (value: any) => {
-    const pattern =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return pattern.test(value) || 'Invalid e-mail.';
+// Validation rules
+const rules: {
+  required: ValidationRule;
+  email: ValidationRule;
+} = {
+  required: (value: string) => !!value || 'Required.',
+  email: (value: string) => {
+    return emailRegExp().test(value) || 'Invalid e-mail.';
   },
 };
 
-const validateCheck = () => {
+// Validate form data
+const validateCheck = (): string => {
   let res = '';
-  for (const key in messageData) {
+  for (const key in messageData.value) {
     if (key === 'email') {
-      const pattern =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      res = !pattern.test(messageData[key]) ? `${t('emailValidate')}` : res;
+      res = !emailRegExp().test(messageData.value[key as keyof MessageData])
+        ? `${t('emailValidate')}`
+        : res;
     }
-    res = messageData[key] === '' ? `${t('inputEmpty')}` : res;
+    res =
+      messageData.value[key as keyof MessageData] === ''
+        ? `${t('inputEmpty')}`
+        : res;
   }
   return res;
 };
 
+// Social media links
 const socials = [
   {
     icon: 'mdi-linkedin',
@@ -157,23 +173,26 @@ const socials = [
   },
 ];
 
+// Open social media link
 const exploreSNS = (url: string) => {
   window.open(url);
 };
 
-const sendMessage = async () => {
+// Send message function
+const sendMessage = async (): Promise<void> => {
   appStatusStore.showLoading();
   const validate = validateCheck();
   if (validate === '') {
     try {
       const res = await sendMail(messageData.value);
-      let type: string;
+      let type: 'success' | 'error';
       let message: string;
 
       if (res.status_code === 200) {
-        Object.keys(messageData).forEach((key) => {
-          messageData[key] = '';
-        });
+        // Clear messageData after successful send
+        for (const key in messageData.value) {
+          messageData.value[key as keyof MessageData] = '';
+        }
         type = 'success';
         message = `${t('complete')}`;
       } else {
@@ -186,10 +205,14 @@ const sendMessage = async () => {
         description: message,
         showCloseButton: true,
         action: () => {
-          router.push({ name: 'MainPage' }).catch((err: any) => err);
+          router.push({ name: 'MainPage' }).catch((err: unknown) => {
+            if (err instanceof Error) {
+              console.error(err.message);
+            }
+          });
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       appStatusStore.hideLoading();
       appStatusStore.addToastMessage({
         type: 'error',
@@ -200,7 +223,7 @@ const sendMessage = async () => {
     appStatusStore.hideLoading();
     appStatusStore.addToastMessage({
       type: 'error',
-      message: validate as string,
+      message: validate,
     });
   }
 };

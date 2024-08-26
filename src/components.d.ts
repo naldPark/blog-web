@@ -16,5 +16,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SkillCategory: typeof import('./components/aboutMe/SkillCategory.vue')['default']
+    TextArea: typeof import('./components/common/TextArea.vue')['default']
   }
 }
