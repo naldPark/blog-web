@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useRef } from '@/hook/useRef';
 import { ValidationRule } from '@/types/common';
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -35,7 +36,7 @@ const {
 } = props;
 
 /** 비밀번호 가시성 ref */
-const passwordVisible = ref(false);
+const passwordVisible = useRef(false);
 
 /** computed로 기본 placeholder 값 설정 */
 const computedPlaceholder = computed(
