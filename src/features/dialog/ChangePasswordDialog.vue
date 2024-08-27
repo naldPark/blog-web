@@ -48,7 +48,8 @@
         <VBtn
           class="ma-2"
           :disabled="
-            accountPassword === '' || accountPassword !== accountPasswordConfirm
+            isEmpty(accountPassword) ||
+            not(equals(accountPassword, accountPasswordConfirm))
           "
           color="primary"
           rounded
@@ -69,6 +70,7 @@ import { useAppCommonStore } from '@/store/appCommonStore';
 import { useI18n } from 'vue-i18n';
 import { editPassword } from '@/api/accountService';
 import { ApiResponse } from '@/types/axios';
+import { isEmpty, equals, not } from 'ramda';
 
 const { accountId } = defineProps<{
   accountId: string;

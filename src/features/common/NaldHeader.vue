@@ -120,7 +120,6 @@ const listItems: RightMenuItems[] = [
             <VListItemTitle @click="item.onClick">
               <VIcon :icon="item.icon" />
               {{ item.text }}
-
               <VAvatar
                 v-if="item.showAvatar"
                 :image="
