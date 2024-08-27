@@ -74,7 +74,7 @@ export default defineConfig({
     'process.env': {},
     global: 'globalThis', // to find variable on socktjs global
   },
-  root: './',
+  root: '.',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

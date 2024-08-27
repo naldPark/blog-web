@@ -1,95 +1,6 @@
-<template>
-  <VAppBar color="rgba(22, 22, 22, 0.95)" density="compact" class="nald-header">
-    <VAppBarNavIcon variant="text" @click="toggleDrawer"></VAppBarNavIcon>
-    <VToolbarTitle @click="clickToMain()" style="cursor: pointer">
-      <VAvatar rounded size="30px">
-        <VImg src="@/assets/logo.png"></VImg>
-      </VAvatar>
-      <span> Nald{{ isSignIn }}{{ accountInfo.accountName }}</span>
-    </VToolbarTitle>
-    <VSpacer></VSpacer>
-    <Button
-      v-if="!accountInfo.accountId"
-      @onClick="clickToShowLoginDialog"
-      :label="t('login')"
-      prepend-icon="mdi-account-outline"
-      class="ma-2"
-    />
-
-    <VMenu v-else>
-      <template v-slot:activator="{ props }">
-        <Button
-          shape="none"
-          variant="text"
-          color="secondary"
-          v-bind="props"
-          id="menu-activator"
-          prepend-icon="mdi-face-man"
-          append-icon="mdi-menu-down"
-        ></Button>
-      </template>
-      <VList>
-        <VListSubheader>{{ accountInfo.accountName }}</VListSubheader>
-        <VListItem class="right-panel-item" v-if="accountInfo.authority === 0">
-          <VListItemTitle @click="clickToShowEditPassword">
-            <VIcon :icon="'mdi-account-edit-outline'" />
-            {{ t('editPassword') }}
-          </VListItemTitle>
-        </VListItem>
-        <VListItem class="right-panel-item">
-          <VListItemTitle @click="clickToChangeLang">
-            <VIcon>mdi-swap-horizontal</VIcon>
-            {{ langSetting }}
-            <VAvatar tile size="20" left>
-              <VImg
-                v-if="langSetting === 'ko'"
-                src="../../assets/icons/america.png"
-              ></VImg>
-              <VImg v-else src="../../assets/icons/korea.png"></VImg>
-            </VAvatar>
-          </VListItemTitle>
-        </VListItem>
-        <VListItem class="right-panel-item" v-if="accountInfo.authority === 0">
-          <VListItemTitle @click="clickToAdmin">
-            <VIcon>mdi-security</VIcon>
-            {{ t('adminPage') }}
-          </VListItemTitle>
-        </VListItem>
-        <VListItem class="right-panel-item">
-          <VListItemTitle @click="clickToLogout">
-            <VIcon>mdi-logout-variant</VIcon>
-            {{ t('logout') }}
-          </VListItemTitle>
-        </VListItem>
-      </VList>
-    </VMenu>
-  </VAppBar>
-  <HeaderDrawer
-    v-model="showDrawer"
-    :showLoginDialog="showLoginDialog"
-    :accountInfo="accountInfo"
-    @update:showLoginDialog="showLoginDialog = $event"
-  />
-  <LoginDialog
-    v-model="showLoginDialog"
-    msg="Vue 3 + TypeScript + Vite + Vuetify 3"
-  />
-  <ChangePasswordDialog
-    v-model="showEditPasswordDialog"
-    v-if="accountInfo?.accountId"
-    :accountId="accountInfo.accountId"
-  />
-</template>
-
-<script lang="ts">
-export enum LANGUAGE_TYPE {
-  ko = '한국어',
-  en = 'English',
-}
-</script>
-
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { getImageUrl } from '@/utils/commonUtil';
 import Button from '@/components/common/Button.vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -99,9 +10,17 @@ import { useUserStore } from '@/store/userStore';
 import { LanguageType, useLanguageStore } from '@/store/languageStore';
 import HeaderDrawer from './HeaderDrawer.vue';
 import { storeToRefs } from 'pinia';
+
+interface RightMenuItems {
+  text: string;
+  icon: string;
+  onClick: () => void;
+  requiresAdmin?: boolean;
+  showAvatar?: boolean;
+}
+
 const router = useRouter();
 const { t } = useI18n();
-
 const { saveLanguage, getOppositeLanguage, language } = useLanguageStore();
 const langSetting = ref<LanguageType>(language);
 const showEditPasswordDialog = ref(false);
@@ -116,45 +35,122 @@ const showDrawer = ref(false);
  * storeToRefs 는 반응형으로 작동하게 해줌
  */
 const userStore = useUserStore();
-const { accountInfo, isSignIn } = storeToRefs(userStore);
+const { accountInfo } = storeToRefs(userStore);
 
-const toggleDrawer = () => {
-  showDrawer.value = !showDrawer.value;
-};
+const toggleDrawer = () => (showDrawer.value = !showDrawer.value);
 
 // 로그인 다이얼로그 열기/닫기 함수
-const clickToShowLoginDialog = () => {
-  showLoginDialog.value = !showLoginDialog.value;
-};
+const clickToShowLoginDialog = () =>
+  (showLoginDialog.value = !showLoginDialog.value);
 
-const clickToShowEditPassword = () => {
-  showEditPasswordDialog.value = true;
-};
-
-// 언어 변경 함수
-const clickToChangeLang = () => {
-  langSetting.value = getOppositeLanguage(langSetting.value);
-  saveLanguage(langSetting.value);
-};
-
-// 관리자 페이지로 이동 함수
-const clickToAdmin = () => {
-  console.log('userStore', userStore.isSignIn);
-  console.log('isSignIn', isSignIn);
-  router.push({ name: 'AdminPage' });
-};
-
-// 로그아웃 함수
-const clickToLogout = () => {
-  userStore.resetAccountInfo();
-  router.push({ name: 'MainPage' });
-};
-
-// 페이지 변경 함수
-const clickToMain = () => {
-  router.push('/');
-};
+const listItems: RightMenuItems[] = [
+  {
+    text: t('editPassword'),
+    icon: 'mdi-account-edit-outline',
+    onClick: () => (showEditPasswordDialog.value = true),
+    requiresAdmin: true,
+  },
+  {
+    text: getOppositeLanguage(langSetting.value),
+    icon: 'mdi-swap-horizontal',
+    onClick: () => {
+      langSetting.value = getOppositeLanguage(langSetting.value);
+      saveLanguage(langSetting.value);
+    },
+    showAvatar: true,
+  },
+  {
+    text: t('adminPage'),
+    icon: 'mdi-security',
+    onClick: () => router.push({ name: 'AdminPage' }),
+    requiresAdmin: true,
+  },
+  {
+    text: t('logout'),
+    icon: 'mdi-logout-variant',
+    onClick: () => {
+      userStore.resetAccountInfo();
+      router.push({ name: 'MainPage' });
+    },
+  },
+];
 </script>
+
+<template>
+  <VAppBar color="rgba(22, 22, 22, 0.95)" density="compact" class="nald-header">
+    <VAppBarNavIcon variant="text" @click="toggleDrawer" />
+    <VToolbarTitle @click="() => router.push('/')" style="cursor: pointer">
+      <VAvatar
+        size="30px"
+        rounded="0"
+        :tile="true"
+        :image="getImageUrl('/logo.png')"
+        :border="0"
+      />
+      <span> Nald</span>
+    </VToolbarTitle>
+    <VSpacer />
+    <Button
+      v-if="!accountInfo.accountId"
+      @onClick="clickToShowLoginDialog"
+      :label="t('login')"
+      prepend-icon="mdi-account-outline"
+      class="ma-2"
+    />
+    <VMenu v-else>
+      <template v-slot:activator="{ props }">
+        <Button
+          shape="none"
+          variant="text"
+          color="secondary"
+          v-bind="props"
+          id="menu-activator"
+          prepend-icon="mdi-face-man"
+          append-icon="mdi-menu-down"
+        />
+      </template>
+      <VList>
+        <VListSubheader>{{ accountInfo.accountName }}</VListSubheader>
+        <VListItem
+          v-for="(item, index) in listItems"
+          :key="index"
+          class="right-panel-item"
+        >
+          <template v-if="!item.requiresAdmin || accountInfo.authority === 0">
+            <VListItemTitle @click="item.onClick">
+              <VIcon :icon="item.icon" />
+              {{ item.text }}
+
+              <VAvatar
+                v-if="item.showAvatar"
+                :image="
+                  getImageUrl(
+                    `/assets/svgs/${langSetting === 'ko' ? 'us' : 'kr'}.svg`,
+                  )
+                "
+                size="20px"
+                rounded="0"
+                :tile="true"
+              />
+            </VListItemTitle>
+          </template>
+        </VListItem>
+      </VList>
+    </VMenu>
+  </VAppBar>
+  <HeaderDrawer
+    v-model="showDrawer"
+    :showLoginDialog="showLoginDialog"
+    :accountInfo="accountInfo"
+    @update:showLoginDialog="showLoginDialog = $event"
+  />
+  <LoginDialog v-model="showLoginDialog" />
+  <ChangePasswordDialog
+    v-model="showEditPasswordDialog"
+    v-if="accountInfo?.accountId"
+    :accountId="accountInfo.accountId"
+  />
+</template>
 
 <style lang="scss" scoped>
 .nald-header {

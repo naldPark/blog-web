@@ -1,19 +1,16 @@
 <template>
   <div>
     <div>
-      <v-data-table v-model="selected" :headers="userHeaders" :items="userList">
-        <template v-slot:item.authority="{ value }"> {{ value }}zz </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon class="me-2" size="small"> mdi-pencil </v-icon>
-          <v-icon size="small"> mdi-delete </v-icon>
+      <VDataTable v-model="selected" :headers="userHeaders" :items="userList">
+        <template v-slot:item.status="{ value }">
+          <span :style="{ color: value.color }">{{ value.key }}</span>
         </template>
-      </v-data-table>
+        <template v-slot:item.actions="{ item }">
+          <VIcon class="text-success" size="small"> mdi-pencil </VIcon>
+          <VIcon size="small"> mdi-delete </VIcon>
+        </template>
+      </VDataTable>
     </div>
-    <edit-account-info-dialog
-      v-if="selectedItems[0]"
-      v-model="showEditAccountPasswordDialog"
-      :accountId="selectedItems[0].accountId"
-    />
   </div>
 </template>
 
@@ -73,9 +70,14 @@ const userHeaders = ref([
   { title: t('email'), key: 'email', sortable: false },
   { title: t('failCnt'), key: 'loginFailCnt', sortable: false },
   { title: t('status'), key: 'status', sortable: false },
-  { title: 'Actions', key: 'actions', sortable: false },
-  // { text: t('createdAt'), key: 'createdAt', sortable: false, width: 150 },
-  // { text: t('modifiedAt'), key: 'modifiedAt', sortable: false, width: 150 },
+  {
+    title: t('lastLoginDt'),
+    key: 'recentLoginDt',
+    sortable: false,
+    width: 150,
+  },
+  { title: t('createdDt'), key: 'createdDt', sortable: false, width: 150 },
+  { title: '', key: 'actions', sortable: false },
 ]);
 
 const currentPageNumber = computed({
@@ -125,28 +127,28 @@ const getGroup = (authority: number) => {
 };
 
 const getStatus = (status: number) => {
-  const statuses = ['active', 'looked', 'deleted'];
-  return statuses[status] || 'active';
+  const statuses = [
+    { key: 'active', color: 'var(--succcess)' },
+    { key: 'locked', color: 'var(--error)' },
+    { key: 'deleted', color: 'grey' },
+  ];
+  return statuses[status] || { key: 'active', color: 'green' };
 };
 const { refetch } = useQuery({
   queryKey: [COMMON_QUERY_KEY.USER_LIST],
   queryFn: getUserList,
-  keepPreviousData: false,
-  staleTime: 5 * 60 * 1000, // 5분
-  onError: (err: ApiErrorResponse) => {
-    console.log('Error:', err);
-  },
   onSuccess: (res: ApiResponse) => {
-    console.log('res', res);
-    userList.value = res.data.list.map((v: any) => ({
-      ...v,
-      group: getGroup(v.authority),
-      status: getStatus(v.status),
-    }));
+    userList.value = res.data.list.map(
+      ({ authority, status, ...rest }: any) => ({
+        ...rest,
+        group: getGroup(authority),
+        status: getStatus(status),
+      }),
+    );
+
     totalPageNumber.value = Math.ceil(
       res.data.total / listOptions.value.itemsPerPage,
     );
-    console.log('userList', userList.value);
   },
 });
 const onClickCreate = async () => {
@@ -158,32 +160,34 @@ const onClickCreate = async () => {
   addUserDialog.value = false;
   // await refetch();
 };
-
 const checkValidate = (type: 'edit' | 'create') => {
   const messages: string[] = [];
-  const { accountId, accountName, email, password } = newUserInfo.value;
+  const {
+    accountId = '',
+    accountName = '',
+    email = '',
+    password = '',
+  } = newUserInfo.value;
 
-  if (type === 'edit') {
-    Object.assign(newUserInfo.value, selectedItems.value[0]);
-  }
+  type === 'edit' && Object.assign(newUserInfo.value, selectedItems.value[0]);
 
-  if (!accountId) messages.push(t('requiredError', ['Id']));
-  else {
-    if (!/^[a-z0-9]*$/.test(accountId)) messages.push(t('idRulesError'));
-    if (accountId.length > 15) messages.push(t('lengthRulesError', ['Id', 15]));
-  }
+  const validate = (condition: boolean, errorMsg: string) =>
+    !condition && messages.push(errorMsg);
 
-  if (!accountName) messages.push(t('requiredError', ['Name']));
-  else if (accountName.length > 10)
-    messages.push(t('lengthRulesError', ['Name', 10]));
+  validate(!!accountId, t('requiredError', ['Id']));
+  accountId && validate(/^[a-z0-9]*$/.test(accountId), t('idRulesError'));
+  accountId &&
+    validate(accountId.length <= 15, t('lengthRulesError', ['Id', 15]));
 
-  if (!email) messages.push(t('requiredError', ['E-mail']));
-  else if (!/.+@.+\..+/.test(email)) messages.push(t('emailRulesError'));
+  validate(!!accountName, t('requiredError', ['Name']));
+  accountName &&
+    validate(accountName.length <= 10, t('lengthRulesError', ['Name', 10]));
 
-  if (type === 'create') {
-    if (password !== confirmPassword.value)
-      messages.push(t('passwordRulesError'));
-  }
+  validate(!!email, t('requiredError', ['E-mail']));
+  email && validate(/.+@.+\..+/.test(email), t('emailRulesError'));
+
+  type === 'create' &&
+    validate(password === confirmPassword.value, t('passwordRulesError'));
 
   return { result: messages.length === 0, msg: messages.join('\n ') };
 };

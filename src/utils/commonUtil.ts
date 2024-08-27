@@ -4,8 +4,8 @@
  * @param name argocd.svg
  * @returns
  */
-export const getImageUrl = (path: string, name: string) => {
-  return new URL(`${path}/${name}`, import.meta.url).href;
+export const getImageUrl = (path: string, name?: string) => {
+  return new URL(`${path}${name ? `/${name}` : ''}`, import.meta.url).href;
 };
 
 /**  토큰 디코딩 */

@@ -40,7 +40,7 @@ const handleButtonClick = (toast: {
     >
       <v-alert
         :color="getColor(toast.info.type)"
-        border="top"
+        :border="'top'"
         style="background-color: #212121"
         :border-color="getColor(toast.info.type)"
         rounded="sm"

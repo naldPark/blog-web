@@ -30,6 +30,7 @@ const getStarStyle = (index: number) => {
 
 <template>
   <div class="intro-wrapper">
+    <!-- <v-img height="100%" src="../../assets/images/aboutBackground.jpg" cover> -->
     <VRow class="ma-0">
       <VCol cols="12" md="8" lg="8">
         <div class="text-md-left pa-7 intro-box">
@@ -80,6 +81,7 @@ const getStarStyle = (index: number) => {
         </VCard>
       </VCol>
     </VRow>
+    <!-- </v-img> -->
 
     <div
       class="falling-star"
