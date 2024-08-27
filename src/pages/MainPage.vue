@@ -1,6 +1,7 @@
 <template>
   <div class="main-page">
     <NaldHeader />
+
     <div class="main-cover">
       <VRow class="pt-5 align-center">
         <div class="main-content" :class="{ 'is-mobile': isMobile }">
@@ -12,6 +13,14 @@
           </p>
           <span class="main-title-sub">
             인테리어 확장공사중 (소음심한날: 빨간날, 칼퇴한날)
+            <v-btn @click="onTest()">Open Dialog</v-btn>
+            <Dialog
+              v-model:visible="showDialog"
+              header="Dialog Header"
+              footer="Dialog Footer"
+              @confirm="handleConfirm"
+              @click:outside="handleClickOutside"
+            ></Dialog>
           </span>
           <p class="typing text-right">
             . . of
@@ -50,13 +59,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, Ref } from 'vue';
+import { ref, onMounted, watch, Ref, watchEffect } from 'vue';
 import NaldHeader from '@/features/common/NaldHeader.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useDisplay } from 'vuetify';
 import { getBadgeList } from '@/api/commonService';
 import { getImageUrl } from '../utils/commonUtil';
 import { ApiResponse, ApiResult } from '@/types/axios';
+import Dialog from '@/components/common/Dialog.vue';
+import { useEffect } from '@/hook/useEffect';
 
 interface Badge {
   backgroundColor: string;
@@ -83,27 +94,51 @@ let typeTimeout: number;
 
 const typeEffect = () => {
   const current = words.value[wordIndex];
-  if (isDeleting) {
-    currentWord.value = current.substring(0, currentWord.value.length - 1);
-  } else {
-    currentWord.value = current.substring(0, currentWord.value.length + 1);
-  }
+  const speed = isDeleting ? deletingSpeed : typingSpeed;
 
-  let speed = typingSpeed;
-  if (isDeleting) {
-    speed = deletingSpeed;
-  }
+  /** 삭제중일때는 -, 추가중일때는 + 처리 */
+  currentWord.value = isDeleting
+    ? current.slice(0, currentWord.value.length - 1)
+    : current.slice(0, currentWord.value.length + 1);
 
+  /**상태를 업데이트 & 타이밍 설정 */
   if (!isDeleting && currentWord.value === current) {
-    speed = pauseDuration;
+    typeTimeout = window.setTimeout(typeEffect, pauseDuration);
     isDeleting = true;
   } else if (isDeleting && currentWord.value === '') {
     isDeleting = false;
     wordIndex = (wordIndex + 1) % words.value.length;
-    speed = typingSpeed;
+    typeTimeout = window.setTimeout(typeEffect, typingSpeed);
+  } else {
+    typeTimeout = window.setTimeout(typeEffect, speed);
   }
+};
 
-  typeTimeout = window.setTimeout(typeEffect, speed);
+// Dialog의 표시 상태를 관리하기 위한 ref
+const showDialog = ref(false);
+
+// Confirm 버튼 클릭 처리 함수
+const handleConfirm = () => {
+  console.log('Confirm button clicked');
+  showDialog.value = false; // 다이얼로그 닫기
+};
+
+// 다이얼로그 외부 클릭 처리 함수
+const handleClickOutside = () => {
+  console.log('Clicked outside the dialog');
+};
+
+watch(showDialog, (current, previous) => {
+  console.log('[count] watch => ', current, previous);
+});
+
+useEffect(() => {
+  console.log('showdialog', showDialog.value);
+}, [showDialog]);
+
+const onTest = () => {
+  console.log('왜반응을안하지');
+  showDialog.value = !showDialog.value;
 };
 
 onMounted(async () => {

@@ -1,254 +1,14 @@
 <template>
-  <div class="contents">
-    <VDataTable
-      show-select
-      :headers="userHeaders"
-      :items="userList"
-      class="custom-table use-head"
-      @click="onClickRow"
-      :single-select="false"
-      :options.sync="listOptions"
-      v-model="selectedItems"
-      item-key="accountId"
-      hide-default-footer
-    >
-      <template v-slot:item="{ item }">
-        <tr>
-          <td>{{ item.name }}</td>
-          <td>{{ item.group }}</td>
-          <td>{{ item.email }}</td>
-          <td>{{ item.failCnt }}</td>
-          <td>{{ item.status }}</td>
-          <td>{{ item.iron }}</td>
-        </tr>
-      </template>
-      <template v-slot:top>
-        <VToolbar flat>
-          <VSpacer />
-          <VDialog
-            v-model="editUserDialog"
-            max-width="500px"
-            v-if="selectedItems.length === 1"
-          >
-            <template v-slot:activator="{ props: activatorProps }">
-              <v-btn
-                v-bind="activatorProps"
-                color="surface-variant"
-                :text="t('editUser')"
-                variant="flat"
-              ></v-btn>
-            </template>
-            <VCard ref="form">
-              <VCardTitle>
-                <span class="text-h5">{{ t('editUser') }}</span>
-              </VCardTitle>
-              <VCardText v-if="editUserDialog && selectedItems[0]">
-                <VTextField
-                  v-model="selectedItems[0].accountId"
-                  :counter="15"
-                  label="Id"
-                  required
-                />
-                <VTextField
-                  v-model="selectedItems[0].accountName"
-                  :counter="10"
-                  label="Name"
-                  required
-                />
-                <VTextField
-                  v-model="selectedItems[0].email"
-                  label="E-mail"
-                  required
-                />
-                <VSelect
-                  v-model="selectedItems[0].authority"
-                  :items="authority"
-                  item-text="label"
-                  item-value="value"
-                  label="Item"
-                  required
-                />
-              </VCardText>
-              <VCardActions>
-                <VSpacer />
-                <VBtn
-                  class="ma-2"
-                  large
-                  @click="clickToChangeAccountInfo"
-                  color="primary"
-                  outlined
-                  rounded
-                >
-                  {{ t('editPassword') }}
-                </VBtn>
-                <VBtn
-                  class="ma-2"
-                  large
-                  @click="addUserDialog = false"
-                  color="primary"
-                  outlined
-                  rounded
-                >
-                  {{ t('cancel') }}
-                </VBtn>
-                <VBtn
-                  class="ma-2"
-                  large
-                  color="primary"
-                  outlined
-                  rounded
-                  dark
-                  @click="onClickEdit"
-                >
-                  {{ t('confirm') }}
-                </VBtn>
-              </VCardActions>
-            </VCard>
-          </VDialog>
-          <VBtn
-            class="ma-2"
-            color="error"
-            @click="clickDeleteUsers"
-            small
-            outlined
-            rounded
-          >
-            {{ t('deleteUsers') }}
-          </VBtn>
-          <VDialog v-model="addUserDialog" max-width="500px">
-            <template v-slot:activator="{ props: activatorProps }">
-              <v-btn
-                v-bind="activatorProps"
-                color="primary"
-                :text="t('addUser')"
-                variant="flat"
-                @click="resetInput"
-              ></v-btn>
-            </template>
-            <VCard ref="form">
-              <VCardTitle>
-                <span class="text-h5">{{ t('addUser') }}</span>
-              </VCardTitle>
-              <VCardText v-if="addUserDialog">
-                <VTextField
-                  v-model="newUserInfo.accountId"
-                  :counter="15"
-                  label="Id"
-                  required
-                />
-                <VTextField
-                  v-model="newUserInfo.accountName"
-                  :counter="10"
-                  label="Name"
-                  required
-                />
-                <VRow>
-                  <VCol cols="12" sm="6">
-                    <VTextField
-                      v-model="newUserInfo.password"
-                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      :type="showPassword ? 'text' : 'password'"
-                      name="input-10-1"
-                      label="Password"
-                      counter
-                      @click:append="showPassword = !showPassword"
-                    />
-                  </VCol>
-                  <VCol cols="12" sm="6">
-                    <VTextField
-                      v-model="confirmPassword"
-                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      :type="showPassword ? 'text' : 'password'"
-                      name="input-10-2"
-                      label="PasswordConfirm"
-                      class="input-group--focused"
-                      @click:append="showPassword = !showPassword"
-                    />
-                  </VCol>
-                </VRow>
-                <VTextField
-                  v-model="newUserInfo.email"
-                  label="E-mail"
-                  required
-                />
-                <VSelect
-                  v-model="newUserInfo.authority"
-                  :items="authority"
-                  item-text="label"
-                  item-value="value"
-                  label="Item"
-                  required
-                />
-              </VCardText>
-              <VCardActions>
-                <VSpacer />
-                <VBtn
-                  class="ma-2"
-                  large
-                  @click="addUserDialog = false"
-                  color="primary"
-                  outlined
-                  rounded
-                >
-                  {{ t('cancel') }}
-                </VBtn>
-                <VBtn
-                  class="ma-2"
-                  large
-                  color="primary"
-                  outlined
-                  rounded
-                  dark
-                  @click="onClickCreate"
-                >
-                  {{ t('confirm') }}
-                </VBtn>
-              </VCardActions>
-            </VCard>
-          </VDialog>
-        </VToolbar>
-      </template>
-      <template v-slot:bottom>
-        <div class="pagination-wrapper">
-          <div class="icon-page-first" @click="currentPageNumber = 1">
-            <VBtn plain color="primary">
-              <VIcon>mdi-page-first</VIcon>
-            </VBtn>
-          </div>
-          <v-pagination
-            v-model="currentPageNumber"
-            :length="totalPageNumber"
-            :total-visible="5"
-            next-icon="mdi-chevron-right"
-            prev-icon="mdi-chevron-left"
-          />
-          <div
-            class="icon-page-last"
-            @click="currentPageNumber = totalPageNumber"
-          >
-            <VBtn plain color="primary">
-              <VIcon>mdi-page-last</VIcon>
-            </VBtn>
-          </div>
-          <div
-            v-if="!isMobile"
-            class="page-select grey--text"
-            style="align-items: center"
-          >
-            <VSelect
-              class="selectPageCount"
-              dense
-              v-model="listOptions.pageItem"
-              :items="listOptions.pageItems"
-              @change="changePageItem"
-            />
-            <span class="caption text-end ml-2 grey--text">{{
-              t('countPerPage')
-            }}</span>
-          </div>
-        </div>
-      </template>
-    </VDataTable>
+  <div>
+    <div>
+      <v-data-table v-model="selected" :headers="userHeaders" :items="userList">
+        <template v-slot:item.authority="{ value }"> {{ value }}zz </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon class="me-2" size="small"> mdi-pencil </v-icon>
+          <v-icon size="small"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
+    </div>
     <edit-account-info-dialog
       v-if="selectedItems[0]"
       v-model="showEditAccountPasswordDialog"
@@ -261,6 +21,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getUserList, createUser, editUser } from '@/api/accountService';
+import InputText from '@/components/common/InputText.vue';
 import { useAppCommonStore } from '@/store';
 import { isEmpty } from 'ramda';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
@@ -279,6 +40,7 @@ const newUserInfo = ref({
   password: '',
   authority: 4,
 });
+const selected = ref<any[]>([]);
 const addUserDialog = ref(false);
 const editUserDialog = ref(false);
 const showEditAccountPasswordDialog = ref(false);
@@ -305,14 +67,15 @@ const authority = ref([
 ]);
 
 const userHeaders = ref([
-  { text: 'ID', key: 'accountId', sortable: false, width: 50 },
-  { text: t('name'), key: 'accountName', sortable: false, width: 90 },
-  { text: t('group'), key: 'group', sortable: false, width: 110 },
-  { text: t('email'), key: 'email', sortable: false, width: 140 },
-  { text: t('failCnt'), key: 'loginFailCnt', sortable: false, width: 90 },
-  { text: t('status'), key: 'status', sortable: false, width: 80 },
-  { text: t('createdAt'), key: 'createdAt', sortable: false, width: 150 },
-  { text: t('modifiedAt'), key: 'modifiedAt', sortable: false, width: 150 },
+  { title: 'ID', key: 'accountId', sortable: false },
+  { title: t('name'), key: 'accountName', sortable: false },
+  { title: t('group'), key: 'group', sortable: false },
+  { title: t('email'), key: 'email', sortable: false },
+  { title: t('failCnt'), key: 'loginFailCnt', sortable: false },
+  { title: t('status'), key: 'status', sortable: false },
+  { title: 'Actions', key: 'actions', sortable: false },
+  // { text: t('createdAt'), key: 'createdAt', sortable: false, width: 150 },
+  // { text: t('modifiedAt'), key: 'modifiedAt', sortable: false, width: 150 },
 ]);
 
 const currentPageNumber = computed({
@@ -383,6 +146,7 @@ const { refetch } = useQuery({
     totalPageNumber.value = Math.ceil(
       res.data.total / listOptions.value.itemsPerPage,
     );
+    console.log('userList', userList.value);
   },
 });
 const onClickCreate = async () => {

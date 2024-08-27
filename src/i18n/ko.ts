@@ -56,6 +56,7 @@ export default {
   failCnt: '실패 횟수',
   lastLoginDt: '최근 접속일',
   registDt: '등록일',
+  createdDt: '생성일',
   edit: '수정',
   delete: '삭제',
   userManage: '사용자 관리',

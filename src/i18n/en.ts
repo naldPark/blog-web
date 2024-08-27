@@ -54,6 +54,7 @@ export default {
   failCnt: 'failed login',
   lastLoginDt: 'Last Access',
   registDt: 'registed date',
+  createdDt: 'created date',
   edit: 'edit',
   delete: 'delete',
   userManage: 'User Manage',

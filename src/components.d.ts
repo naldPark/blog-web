@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BlogExplore: typeof import('./components/aboutMe/BlogExplore.vue')['default']
     Button: typeof import('./components/common/Button.vue')['default']
+    Dialog: typeof import('./components/common/Dialog.vue')['default']
     Experience: typeof import('./components/aboutMe/Experience.vue')['default']
     InputText: typeof import('./components/common/InputText.vue')['default']
     IntroSection: typeof import('./components/aboutMe/IntroSection.vue')['default']
