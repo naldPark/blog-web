@@ -1,15 +1,3 @@
-<template>
-  <VTextarea
-    v-model="modelValue"
-    :rules="rules"
-    auto-grow
-    flat
-    solo
-    :label="label"
-    :placeholder="placeholder"
-  ></VTextarea>
-</template>
-
 <script setup>
 import { computed, defineProps, defineEmits } from 'vue';
 
@@ -30,3 +18,15 @@ const modelValue = computed({
   set: (value) => emit('update:modelValue', value),
 });
 </script>
+
+<template>
+  <VTextarea
+    v-model="modelValue"
+    :rules="rules"
+    auto-grow
+    flat
+    solo
+    :label="label"
+    :placeholder="placeholder"
+  ></VTextarea>
+</template>

@@ -1,6 +1,6 @@
 import { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import { ApiErrorResponse, ApiResponse } from '@/types/axios.type';
 import httpClient from '@/api/httpClient';
+import { ApiErrorResponse, ApiResponse } from '@/types/axios';
 
 /**
  * get

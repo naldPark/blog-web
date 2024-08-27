@@ -36,12 +36,7 @@
           v-model="movieInfo.category"
           :label="`${t('video.category')}`"
           prepend-icon="mdi-shape"
-          item-title="label"
-          item-value="value"
           :items="categories"
-          persistent-hint
-          return-object
-          single-line
         >
         </VSelect>
       </VCol>
@@ -122,27 +117,12 @@ import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import storageService from '@/api/storageService';
 import { useAppCommonStore } from '@/store';
+import type { MovieInfoData } from '@/types/wonderwall/video';
+import { fileToBase64 } from '@/utils/fileUtil';
 
-const { modelValue } = defineProps({
-  modelValue: {
-    type: Object,
-    required: false,
-    default: () => ({
-      category: null,
-      file: null,
-      originName: '',
-      fileSize: 0,
-      description: '',
-      name: '',
-      status: '',
-      fileType: '',
-      fileCover: null,
-      fileVtt: null,
-      fileDownload: false,
-      fileAuth: false,
-    }),
-  },
-});
+const props = defineProps<{
+  modelValue: MovieInfoData;
+}>();
 
 const emit = defineEmits(['update:modelValue', 'closeDialog']);
 const appStatusStore = useAppCommonStore();
@@ -165,7 +145,7 @@ const coverRules = ref([
 
 // 초기 props 모델 값이 정의되지 않았을 경우에 대한 방어 코드
 const movieInfo = ref({
-  ...(modelValue || {
+  ...(props.modelValue || {
     category: null,
     file: null,
     originName: '',
@@ -182,16 +162,16 @@ const movieInfo = ref({
 });
 
 watch(
-  modelValue,
+  props.modelValue,
   (newValue) => {
-    movieInfo.value = modelValue;
+    movieInfo.value = props.modelValue;
   },
   { immediate: true },
 );
 
 const thumbnail = ref(null);
 
-async function onSubmit() {
+const onSubmit = async () => {
   if (movieInfo.value.fileCover) {
     await fileToBase64(movieInfo.value.fileCover).then((result: any) => {
       thumbnail.value = result;
@@ -203,7 +183,7 @@ async function onSubmit() {
     fileDownload: movieInfo.value.fileDownload,
     description: movieInfo.value.description,
     category: movieInfo.value.category
-      ? movieInfo.value.category.value
+      ? movieInfo.value.category
       : categories[0].value,
     fileAuth: movieInfo.value.fileAuth,
     fileCover: thumbnail.value,
@@ -227,16 +207,7 @@ async function onSubmit() {
       });
       emit('closeDialog');
     });
-}
-
-function fileToBase64(file: any) {
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  return new Promise((resolve, reject) => {
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-  });
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -103,11 +103,11 @@ const availableFileTypes = computed(() => {
   return props.fileTypes || ['.mp4'];
 });
 
-function dragoverHover(value: boolean) {
+const dragoverHover = (value: boolean) => {
   dragover.value = value;
-}
+};
 
-async function onDropFiles(e: DragEvent) {
+const onDropFiles = async (e: DragEvent) => {
   console.log('???');
   onProgressing.value = true;
   e.stopPropagation();
@@ -115,12 +115,10 @@ async function onDropFiles(e: DragEvent) {
   dragover.value = false;
   let dragFiles = null;
   let isFolder = false;
-  console.log('??2??2');
   if (props.isMultiple) {
     if (e.dataTransfer?.types[0] !== 'Files' || !e.dataTransfer.items) {
       return;
     }
-    console.log('??2??3');
     const entries = [...e.dataTransfer.items].map((item) =>
       item.webkitGetAsEntry(),
     );
@@ -133,7 +131,6 @@ async function onDropFiles(e: DragEvent) {
       ),
     );
   } else {
-    console.log('??2??4');
     if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
       if (e.dataTransfer.files[0].type === '') {
         isFolder = true;
@@ -143,7 +140,6 @@ async function onDropFiles(e: DragEvent) {
   }
 
   if (dragFiles) {
-    console.log('555');
     selectedLocalFiles.value = [];
     for (const file of dragFiles) {
       selectedLocalFiles.value.push({
@@ -154,9 +150,9 @@ async function onDropFiles(e: DragEvent) {
   }
 
   doCheckFiles(selectedLocalFiles.value, isFolder);
-}
+};
 
-async function checkFileTree(entries: any[], depth?: any) {
+const checkFileTree = async (entries: any[], depth?: any) => {
   const dirs = entries.filter((entry) => !!entry && entry.isDirectory);
   const files = entries.filter((entry) => !!entry && entry.isFile);
 
@@ -178,15 +174,15 @@ async function checkFileTree(entries: any[], depth?: any) {
     files: [...files],
     depth,
   };
-}
+};
 
-function onClickBrowse() {
+const onClickBrowse = () => {
   if (fileInput) {
     fileInput.click();
   }
-}
+};
 
-function onFileSelected() {
+const onFileSelected = () => {
   onProgressing.value = true;
   if (fileInput && fileInput.length > 0) {
     selectedLocalFiles.value = [];
@@ -198,9 +194,9 @@ function onFileSelected() {
     }
     doCheckFiles(selectedLocalFiles.value);
   }
-}
+};
 
-function doCheckFiles(files: Array<any>, isFolder?: any) {
+const doCheckFiles = (files: Array<any>, isFolder?: boolean) => {
   const regText = availableFileTypes.value.join('|');
   const regExp = new RegExp('(' + regText + ')$');
 
@@ -263,7 +259,7 @@ function doCheckFiles(files: Array<any>, isFolder?: any) {
     }
     fileInput = [];
   }, 2000);
-}
+};
 </script>
 
 <style scoped lang="scss">

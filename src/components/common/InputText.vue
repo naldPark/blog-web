@@ -36,7 +36,7 @@ const {
 } = props;
 
 /** 비밀번호 가시성 ref */
-const passwordVisible = useRef(false);
+const passwordVisible = ref(false);
 
 /** computed로 기본 placeholder 값 설정 */
 const computedPlaceholder = computed(

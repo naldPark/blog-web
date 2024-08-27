@@ -7,7 +7,6 @@ import Axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { useUserStore, useAppCommonStore } from '@/store';
-import { isEmpty } from 'ramda';
 import Config from '@/config';
 import { ApiErrorResponse } from '@/types/axios';
 
@@ -40,29 +39,13 @@ const createHttpClient = (): AxiosInstance => {
     return request;
   };
 
-  // Response interceptor handler
   const responseInterceptorHandler = async (
     response: AxiosResponse,
   ): Promise<AxiosResponse> => {
-    console.log('리스폰스');
-    // if (response.data.spec && response.data.spec === 'AccessDeniedException') {
-    //   const appStatusStore = useAppCommonStore();
-    //   appStatusStore.showDialog({
-    //     title: '로그아웃',
-    //     description: '다시 로그인 해주세요',
-    //     showCloseButton: true,
-    //     action: () => {},
-    //   });
-
-    //   const userStore = useUserStore();
-    //   userStore.setAuthToken(null);
-    //   console.log('2');
-    //   history.go(-1);
-    // }
+    // console.log('리스폰스');
     return response;
   };
 
-  // Error response interceptor handler
   const errorResponseInterceptorHandler = async (
     error: AxiosError,
   ): Promise<never> => {
@@ -83,35 +66,19 @@ const createHttpClient = (): AxiosInstance => {
         }
       }
     }
-    // const userStore = useUserStore();
-    // userStore.setAuthToken(null);
-    // history.go(-1);
-
-    // if (errorData.status_code === 401) {
-    //   appStatusStore.addToastMessage({
-    //     type: 'error',
-    //     message: errorData.error_i18n,
-    //
-    //     timeout: null,
-    //
-    //   });
-    //   if (location.pathname !== '/' && location.pathname !== '/main') {
-    //     location.href = `${location.origin}`;
-    //   }
-    // }
     appStatusStore.hideLoading();
 
     throw error;
   };
 
-  // Add request interceptor
+  /** request interceptor 사용 */
   axiosInstance.interceptors.request.use(
     requestInterceptorHandler as unknown as (
       request: InternalAxiosRequestConfig,
     ) => Promise<InternalAxiosRequestConfig>,
   );
 
-  // Add response interceptor
+  /** response interceptor 사용 */
   axiosInstance.interceptors.response.use(
     responseInterceptorHandler,
     errorResponseInterceptorHandler,
@@ -120,7 +87,7 @@ const createHttpClient = (): AxiosInstance => {
   return axiosInstance;
 };
 
-// Singleton pattern to return Axios instance
+/** 싱클톤 패턴 httpClient */
 const httpClient = createHttpClient();
 
 export default httpClient;

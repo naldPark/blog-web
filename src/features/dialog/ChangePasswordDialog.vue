@@ -68,6 +68,7 @@ import { ref } from 'vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useI18n } from 'vue-i18n';
 import { editPassword } from '@/api/accountService';
+import { ApiResponse } from '@/types/axios';
 
 const { accountId } = defineProps<{
   accountId: string;
@@ -98,7 +99,10 @@ const onClickEdit = async () => {
 
   try {
     appStatusStore.showLoading();
-    const response = await editPassword(accountId, accountPassword.value);
+    const response = (await editPassword(
+      accountId,
+      accountPassword.value,
+    )) as ApiResponse;
     if (response.status_code === 200) {
       appStatusStore.showDialog({
         title: t('complete'),

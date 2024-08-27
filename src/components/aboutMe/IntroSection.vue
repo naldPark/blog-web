@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify';
-import { Ref } from 'vue';
 import aboutDataAsset from '@/assets/data/about';
 import Button from '@/components/common/Button.vue';
 import { useI18n } from 'vue-i18n';

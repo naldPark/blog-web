@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getImageUrl } from '@/utils/common';
+import { getImageUrl } from '@/utils/commonUtil';
 import go, { Diagram } from 'gojs';
 import { ref, onMounted, toRaw, Ref } from 'vue';
 import infraService from '@/api/infraService';

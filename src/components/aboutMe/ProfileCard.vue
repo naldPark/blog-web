@@ -19,15 +19,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineProps } from 'vue';
+import { defineProps } from 'vue';
+import Button from '../common/Button.vue';
 
-  defineProps<{
-    snsList: Array<{
-      color: string;
-      icon: string;
-      link: string;
-    }>;
-  }>();
+defineProps<{
+  snsList: Array<{
+    color: string;
+    icon: string;
+    link: string;
+  }>;
+}>();
 </script>
 
 <style scoped></style>

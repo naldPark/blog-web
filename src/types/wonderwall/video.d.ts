@@ -10,3 +10,25 @@ export interface VideoDetailData {
   createdDt?: string;
   downloadable?: string;
 }
+
+export interface MovieInfoData {
+  category: string;
+  file: File | null;
+  originName: string;
+  fileSize: number;
+  description: string;
+  name: string;
+  status: string;
+  fileType: string;
+  fileCover: File | File[] | undefined;
+  fileVtt: File | null;
+  fileDownload: boolean;
+  fileAuth: boolean;
+}
+
+export interface FileInfo {
+  file: File;
+  name: string;
+  size: number;
+  status: string;
+}

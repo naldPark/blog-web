@@ -7,7 +7,7 @@ type SocketCommand = {
   execute: (command: string) => void;
 };
 
-export function useSocketTerminal(socketCommand: SocketCommand) {
+export const useSocketTerminal = (socketCommand: SocketCommand) => {
   const input = ref(0);
   const fitAddon = new FitAddon();
   const term = ref<xterm | null>(null); // Using ref for term to allow reactivity
@@ -112,4 +112,4 @@ export function useSocketTerminal(socketCommand: SocketCommand) {
     open,
     fit,
   };
-}
+};

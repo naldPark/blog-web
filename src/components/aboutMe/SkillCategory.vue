@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-  import { defineProps } from 'vue';
+import { defineProps } from 'vue';
 
-  defineProps<{
-    title: string;
-    skills: Array<{
-      name: string;
-      icon: string;
-      value: number;
-    }>;
-  }>();
+defineProps<{
+  title: string;
+  skills: Array<{
+    name: string;
+    icon: string;
+    value: number;
+  }>;
+}>();
 </script>
 
 <template>

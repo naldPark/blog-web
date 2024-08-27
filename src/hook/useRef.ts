@@ -1,11 +1,13 @@
 import { ref, Ref, UnwrapRef } from 'vue';
 
 // Custom ref function that abstracts .value
-export function useRef<T>(initialValue: T): {
+export const useRef = <T>(
+  initialValue: T,
+): {
   value: T;
   set: (value: T) => void;
   toggle?: () => void;
-} {
+} => {
   // Create a ref with the initial value
   const innerRef: Ref<UnwrapRef<T>> = ref(initialValue);
 
@@ -31,4 +33,4 @@ export function useRef<T>(initialValue: T): {
     },
     toggle,
   };
-}
+};

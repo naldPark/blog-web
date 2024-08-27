@@ -55,8 +55,8 @@ import NaldHeader from '@/features/common/NaldHeader.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useDisplay } from 'vuetify';
 import { getBadgeList } from '@/api/commonService';
-import { getImageUrl } from '../utils/common';
-import { ApiResponse } from '@/types/axios.type';
+import { getImageUrl } from '../utils/commonUtil';
+import { ApiResponse, ApiResult } from '@/types/axios';
 
 interface Badge {
   backgroundColor: string;
@@ -109,8 +109,9 @@ const typeEffect = () => {
 onMounted(async () => {
   appStatusStore.showLoading();
 
-  await getBadgeList().then((res: ApiResponse) => {
-    badges.value = res.data;
+  await getBadgeList().then((res: ApiResult) => {
+    const response = res as ApiResponse;
+    badges.value = response.data;
     appStatusStore.hideLoading();
   });
   typeEffect();

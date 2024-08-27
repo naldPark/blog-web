@@ -8,6 +8,19 @@ import MainLayout from '@/layouts/MainLayout.vue';
 import WonderwallLayout from '@/layouts/WonderwallLayout.vue';
 import { useUserStore } from '@/store/userStore';
 
+const perRouteGuardForLogging = (to: { path: any }, from: { path: any }) => {
+  console.log(`from: ${from.path} => to: ${to.path}`);
+  return true;
+};
+
+const moveToMain = () => {
+  router
+    .push({
+      name: 'MainPage',
+    })
+    .catch((err) => console.error(err));
+};
+
 const routes = [
   {
     path: '/main',
@@ -109,16 +122,10 @@ const routes = [
     redirect: '/',
   },
 ];
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
-
-function perRouteGuardForLogging(to: { path: any }, from: { path: any }) {
-  console.log(`from: ${from.path} => to: ${to.path}`);
-  return true;
-}
 
 router.beforeEach(
   async (
@@ -136,13 +143,5 @@ router.beforeEach(
     }
   },
 );
-
-const moveToMain = () => {
-  router
-    .push({
-      name: 'MainPage',
-    })
-    .catch((err) => console.error(err));
-};
 
 export default router;

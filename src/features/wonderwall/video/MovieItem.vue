@@ -23,27 +23,27 @@
 </template>
 
 <script setup lang="ts">
-  const props = defineProps<{
-    item: any;
-  }>();
+const props = defineProps<{
+  item: any;
+}>();
 
-  const emits = defineEmits(['selectMovie']);
+const emits = defineEmits(['selectMovie']);
 
-  const changeMovie = () => {
-    emits('selectMovie', props.item);
-  };
+const changeMovie = () => {
+  emits('selectMovie', props.item);
+};
 </script>
 
 <style scoped lang="scss">
-  .movie-item-card {
-    display: flex;
-    &:hover {
-      opacity: 0.7;
-      cursor: pointer;
-    }
-
-    .movie-card {
-      max-width: 1200px;
-    }
+.movie-item-card {
+  display: flex;
+  &:hover {
+    opacity: 0.7;
+    cursor: pointer;
   }
+
+  .movie-card {
+    max-width: 1200px;
+  }
+}
 </style>

@@ -62,7 +62,7 @@ import { Ref, ref } from 'vue';
 import DiagramItem from './DiagramItem.vue';
 import story from '@/assets/data/story';
 import { useDisplay } from 'vuetify';
-import { getImageUrl } from '@/utils/common';
+import { getImageUrl } from '@/utils/commonUtil';
 interface Node {
   icon: string;
   name: string;

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-  import { computed } from 'vue';
-  import SkillCategory from '@/components/aboutMe/SkillCategory.vue';
-  import aboutDataAsset from '@/assets/data/about';
+import { computed } from 'vue';
+import SkillCategory from '@/components/aboutMe/SkillCategory.vue';
+import aboutDataAsset from '@/assets/data/about';
 
-  const workExperience = computed(() => aboutDataAsset.workExperience);
-  const frontendSkills = computed(() => aboutDataAsset.skills.frontend);
-  const backendSkills = computed(() => aboutDataAsset.skills.backend);
-  const operationSkills = computed(() => aboutDataAsset.skills.operation);
+const workExperience = computed(() => aboutDataAsset.workExperience);
+const frontendSkills = computed(() => aboutDataAsset.skills.frontend);
+const backendSkills = computed(() => aboutDataAsset.skills.backend);
+const operationSkills = computed(() => aboutDataAsset.skills.operation);
 </script>
 
 <template>

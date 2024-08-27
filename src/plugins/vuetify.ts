@@ -37,8 +37,8 @@ const vuetify = createVuetify({
   },
 });
 
-export function vuetifyPlugins(app: App) {
+export const vuetifyPlugins = (app: App) => {
   app.use(vuetify);
-}
+};
 
 export default vuetify;
