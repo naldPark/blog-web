@@ -366,7 +366,7 @@ const getStatus = (status: number) => {
   return statuses[status] || 'active';
 };
 const { refetch } = useQuery({
-  queryKey: ['USER_LIST'], // COMMON_QUERY_KEY.USER_LIST로 정의된 상수로 대체
+  queryKey: [COMMON_QUERY_KEY.USER_LIST],
   queryFn: getUserList,
   keepPreviousData: false,
   staleTime: 5 * 60 * 1000, // 5분
@@ -374,7 +374,7 @@ const { refetch } = useQuery({
     console.log('Error:', err);
   },
   onSuccess: (res: ApiResponse) => {
-    console.log('res', res.data);
+    console.log('res', res);
     userList.value = res.data.list.map((v: any) => ({
       ...v,
       group: getGroup(v.authority),

@@ -151,12 +151,12 @@ const onClickMovie = async (storageId: number) => {
     .catch((err) => err);
 
   appStatusStore.showLoading();
-  const fileId = storageId;
+  const fileSeq = storageId;
   lazyShow.value = true;
-  await StorageService.getVideoDetail(fileId).then(async (res: any) => {
+  await StorageService.getVideoDetail(fileSeq).then(async (res: any) => {
     let vttSrc = '';
     if (res.data.vttSrc) {
-      await StorageService.videoVtt(fileId).then((vttRes: any) => {
+      await StorageService.videoVtt(fileSeq).then((vttRes: any) => {
         vttSrc = URL.createObjectURL(
           new Blob([vttRes.data], { type: 'text/vtt;charset=utf-8;' }),
         );
