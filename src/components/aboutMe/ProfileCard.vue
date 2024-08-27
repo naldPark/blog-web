@@ -1,3 +1,16 @@
+<script lang="ts" setup>
+import { defineProps } from 'vue';
+import Button from '../common/Button.vue';
+
+defineProps<{
+  snsList: Array<{
+    color: string;
+    icon: string;
+    link: string;
+  }>;
+}>();
+</script>
+
 <template>
   <VCard>
     <VCardText>
@@ -18,17 +31,4 @@
   </VCard>
 </template>
 
-<script lang="ts" setup>
-import { defineProps } from 'vue';
-import Button from '../common/Button.vue';
-
-defineProps<{
-  snsList: Array<{
-    color: string;
-    icon: string;
-    link: string;
-  }>;
-}>();
-</script>
-
-<style scoped></style>
+<style lang="scss" scoped></style>

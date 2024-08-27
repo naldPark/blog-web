@@ -11,16 +11,15 @@ import { useQuery } from 'vue-query';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
 import { isEmpty } from 'ramda';
 
-const { t } = useI18n();
 const cardList = ref<BlogData[]>([]);
 
 /** useQuery는 마운팅 전에 실행 됨 */
 const {
-  isError: hasError,
-  data: blogList,
-  isLoading,
-  refetch,
-  error,
+  // isError: hasError,
+  // data: blogList,
+  // isLoading,
+  // refetch,
+  // error,
 } = useQuery({
   /**쿼리 키 - 고유성 보장 */
   queryKey: [COMMON_QUERY_KEY.BADGE_LIST],
@@ -33,7 +32,7 @@ const {
    */
   enabled: isEmpty(cardList.value),
   onError: (err: ApiErrorResponse) => {
-    console.log('error');
+    console.log('error', err);
   },
   onSuccess: (res: ApiResponse) => {
     cardList.value = res.data;
