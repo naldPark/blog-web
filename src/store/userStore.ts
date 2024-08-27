@@ -15,7 +15,7 @@ export interface AccountInfo {
 /** 유저 정보 스토어 **/
 export const useUserStore = defineStore('user', () => {
   const cookies = useCookies();
-  const isSignIn = ref(false);
+
   const authToken = ref<string | null>(
     cookies.get(AUTH_TOKEN_COOKIE_KEY) || null,
   );
@@ -29,11 +29,13 @@ export const useUserStore = defineStore('user', () => {
     JSON.parse(localStorage.getItem(ACCOUNT_INFO_KEY) || '{}') ||
       initAccountValue,
   );
+  const isSignIn = ref<boolean>(!!accountInfo);
 
   /** 토큰 세팅 */
   const setAuthToken = (token: string | null) => {
     authToken.value = token;
-    isSignIn.value = !!token;
+    console.log('!!token', !!token);
+    // isSignIn.value = !!token;
     if (token) {
       cookies.set(AUTH_TOKEN_COOKIE_KEY, token);
     } else {
@@ -46,6 +48,7 @@ export const useUserStore = defineStore('user', () => {
   /** 토큰 내 유저 정보 세팅 */
   const setAccountInfo = (info: AccountInfo, token: string) => {
     accountInfo.value = info;
+    isSignIn.value = true;
     localStorage.setItem(ACCOUNT_INFO_KEY, JSON.stringify(info));
     setAuthToken(token);
   };
@@ -70,6 +73,7 @@ export const useUserStore = defineStore('user', () => {
 
   /** 유저 및 토큰 정보 초기화 */
   const resetAccountInfo = () => {
+    isSignIn.value = false;
     accountInfo.value = initAccountValue;
     setAuthToken(null);
     localStorage.removeItem(ACCOUNT_INFO_KEY);

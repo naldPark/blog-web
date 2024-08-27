@@ -77,6 +77,7 @@ import { useI18n } from 'vue-i18n';
 import VideoSlider from '@/features/wonderwall/video/VideoSlider.vue';
 import { shuffleArray } from '@/utils/commonUtil';
 import { VideoDetailData } from '@/types/wonderwall/video';
+import { ApiResponse } from '@/types/axios';
 const { t } = useI18n();
 const categories: any = [
   { label: t('video.movie'), value: 'movie', hint: t('video.movie') },
@@ -111,7 +112,7 @@ const fetchVideoList = async () => {
       type: searchCategory.value,
       searchText: searchText.value,
     };
-    const response = await storageService.getVideoList(param);
+    const response = (await storageService.getVideoList(param)) as ApiResponse;
     if (response.status_code === 200) {
       movieList.value = response.data.list;
     }

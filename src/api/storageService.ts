@@ -1,16 +1,15 @@
 import Config from '@/config';
 import { get, post } from './axiosMethod';
 import { ApiResult } from '@/types/axios';
-import { MovieInfoData } from '@/types/wonderwall/video';
 
 const storageService = {
   dafaultAPI: `${Config.backend}`,
 
-  download(fileId: string): Promise<Blob> {
+  download(fileSeq: number): Promise<Blob> {
     const config: any = {
       responseType: 'blob',
     };
-    return get(`${this.dafaultAPI}/storage/download/${fileId}`, config);
+    return get(`${this.dafaultAPI}/storage/download/${fileSeq}`, config);
   },
 
   getVideoList(params?: Record<string, any>): Promise<ApiResult<any>> {
@@ -19,11 +18,11 @@ const storageService = {
     };
     return get(`${this.dafaultAPI}/storage/videoList`, config);
   },
-  getVideoDetail(fileId: string): Promise<ApiResult<any>> {
-    return get(`${this.dafaultAPI}/storage/getVideoDetail/${fileId}`);
+  getVideoDetail(fileSeq: number): Promise<ApiResult<any>> {
+    return get(`${this.dafaultAPI}/storage/getVideoDetail/${fileSeq}`);
   },
-  videoVtt(vttPath: string): Promise<Blob> {
-    return get(`${this.dafaultAPI}/storage/vtt/${vttPath}.vtt`);
+  videoVtt(fileSeq: number): Promise<Blob> {
+    return get(`${this.dafaultAPI}/storage/vtt/${fileSeq}.vtt`);
   },
 
   localUploadFiles(info: any, movieInfo: any): Promise<ApiResult<any>> {

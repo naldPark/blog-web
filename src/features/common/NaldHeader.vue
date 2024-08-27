@@ -5,7 +5,7 @@
       <VAvatar rounded size="30px">
         <VImg src="@/assets/logo.png"></VImg>
       </VAvatar>
-      <span> Nald</span>
+      <span> Nald{{ isSignIn }}{{ accountInfo.accountName }}</span>
     </VToolbarTitle>
     <VSpacer></VSpacer>
     <Button
@@ -116,7 +116,7 @@ const showDrawer = ref(false);
  * storeToRefs 는 반응형으로 작동하게 해줌
  */
 const userStore = useUserStore();
-const { accountInfo } = storeToRefs(userStore);
+const { accountInfo, isSignIn } = storeToRefs(userStore);
 
 const toggleDrawer = () => {
   showDrawer.value = !showDrawer.value;
@@ -139,6 +139,8 @@ const clickToChangeLang = () => {
 
 // 관리자 페이지로 이동 함수
 const clickToAdmin = () => {
+  console.log('userStore', userStore.isSignIn);
+  console.log('isSignIn', isSignIn);
   router.push({ name: 'AdminPage' });
 };
 

@@ -1,8 +1,17 @@
 <template>
   <div class="contents">
-    <!-- <VDataTable show-select :headers="userHeaders" :items="userList" class="custom-table use-head" @click="onClickRow"
-      :single-select="false" :options.sync="listOptions" v-model="selectedItems" item-key="accountId"
-      hide-default-footer>
+    <VDataTable
+      show-select
+      :headers="userHeaders"
+      :items="userList"
+      class="custom-table use-head"
+      @click="onClickRow"
+      :single-select="false"
+      :options.sync="listOptions"
+      v-model="selectedItems"
+      item-key="accountId"
+      hide-default-footer
+    >
       <template v-slot:item="{ item }">
         <tr>
           <td>{{ item.name }}</td>
@@ -13,131 +22,253 @@
           <td>{{ item.iron }}</td>
         </tr>
       </template>
-<template v-slot:top>
+      <template v-slot:top>
         <VToolbar flat>
-          <VSpacer></VSpacer>
-          <VDialog v-model="editUserDialog" max-width="500px" v-if="selectedItems.length === 1">
-            <template v-slot:activator="{ on, attrs }">
-              <VBtn class="ma-2" color="secondary" outlined rounded text small v-bind="attrs" v-on="on"
-                @click="resetInput">
-                {{ t('editUser') }}
-              </VBtn>
+          <VSpacer />
+          <VDialog
+            v-model="editUserDialog"
+            max-width="500px"
+            v-if="selectedItems.length === 1"
+          >
+            <template v-slot:activator="{ props: activatorProps }">
+              <v-btn
+                v-bind="activatorProps"
+                color="surface-variant"
+                :text="t('editUser')"
+                variant="flat"
+              ></v-btn>
             </template>
-<VCard ref="form">
-  <VCardTitle>
-    <span class="text-h5">{{ t('editUser') }}</span>
-  </VCardTitle>
-  <VCardText v-if="editUserDialog === true && selectedItems[0]">
-    <VTextField v-model="selectedItems[0].accountId" :counter="15" label="Id" required></VTextField>
-    <VTextField v-model="selectedItems[0].accountName" :counter="10" label="Name" required></VTextField>
-    <VTextField v-model="selectedItems[0].email" label="E-mail" required></VTextField>
-    <VSelect v-model="selectedItems[0].authority" :items="authority" item-text="label" item-value="value" label="Item"
-      required></VSelect>
-  </VCardText>
-  <VCardActions>
-    <VSpacer></VSpacer>
-    <VBtn class="ma-2" large @click="clickToChangeAccountInfo" color="primary" outlined rounded text>
-      {{ t('editPassword') }}
-    </VBtn>
-    <VBtn class="ma-2" large @click="addUserDialog = false" color="primary" outlined rounded text>
-      {{ t('cancel') }}
-    </VBtn>
-    <VBtn class="ma-2" large color="primary" outlined rounded text dark @click="onClickEdit">
-      {{ t('confirm') }}
-    </VBtn>
-  </VCardActions>
-</VCard>
-</VDialog>
-<VBtn class="ma-2" color="error" @click="clickDeleteUsers" small outlined rounded text>
-  {{ t('deleteUsers') }}
-</VBtn>
-<VDialog v-model="addUserDialog" max-width="500px">
-  <template v-slot:activator="{ on, attrs }">
-              <VBtn class="ma-2" color="primary" outlined rounded text small v-bind="attrs" v-on="on"
-                @click="resetInput">
-                {{ t('addUser') }}
-              </VBtn>
+            <VCard ref="form">
+              <VCardTitle>
+                <span class="text-h5">{{ t('editUser') }}</span>
+              </VCardTitle>
+              <VCardText v-if="editUserDialog && selectedItems[0]">
+                <VTextField
+                  v-model="selectedItems[0].accountId"
+                  :counter="15"
+                  label="Id"
+                  required
+                />
+                <VTextField
+                  v-model="selectedItems[0].accountName"
+                  :counter="10"
+                  label="Name"
+                  required
+                />
+                <VTextField
+                  v-model="selectedItems[0].email"
+                  label="E-mail"
+                  required
+                />
+                <VSelect
+                  v-model="selectedItems[0].authority"
+                  :items="authority"
+                  item-text="label"
+                  item-value="value"
+                  label="Item"
+                  required
+                />
+              </VCardText>
+              <VCardActions>
+                <VSpacer />
+                <VBtn
+                  class="ma-2"
+                  large
+                  @click="clickToChangeAccountInfo"
+                  color="primary"
+                  outlined
+                  rounded
+                >
+                  {{ t('editPassword') }}
+                </VBtn>
+                <VBtn
+                  class="ma-2"
+                  large
+                  @click="addUserDialog = false"
+                  color="primary"
+                  outlined
+                  rounded
+                >
+                  {{ t('cancel') }}
+                </VBtn>
+                <VBtn
+                  class="ma-2"
+                  large
+                  color="primary"
+                  outlined
+                  rounded
+                  dark
+                  @click="onClickEdit"
+                >
+                  {{ t('confirm') }}
+                </VBtn>
+              </VCardActions>
+            </VCard>
+          </VDialog>
+          <VBtn
+            class="ma-2"
+            color="error"
+            @click="clickDeleteUsers"
+            small
+            outlined
+            rounded
+          >
+            {{ t('deleteUsers') }}
+          </VBtn>
+          <VDialog v-model="addUserDialog" max-width="500px">
+            <template v-slot:activator="{ props: activatorProps }">
+              <v-btn
+                v-bind="activatorProps"
+                color="primary"
+                :text="t('addUser')"
+                variant="flat"
+                @click="resetInput"
+              ></v-btn>
             </template>
-  <VCard ref="form">
-    <VCardTitle>
-      <span class="text-h5">{{ t('addUser') }}</span>
-    </VCardTitle>
-    <VCardText v-if="addUserDialog === true">
-      <VTextField v-model="newUserInfo.accountId" :counter="15" label="Id" required></VTextField>
-      <VTextField v-model="newUserInfo.accountName" :counter="10" label="Name" required></VTextField>
-      <VRow>
-        <VCol cols="12" sm="6">
-          <VTextField v-model="newUserInfo.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="showPassword ? 'text' : 'password'" name="input-10-1" label="Password" counter
-            @click:append="showPassword = !showPassword"></VTextField>
-        </VCol>
-        <VCol cols="12" sm="6">
-          <VTextField v-model="confirmPassword" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="showPassword ? 'text' : 'password'" name="input-10-2" label="PasswordConfirm"
-            class="input-group--focused" @click:append="showPassword = !showPassword"></VTextField>
-        </VCol>
-      </VRow>
-      <VTextField v-model="newUserInfo.email" label="E-mail" required></VTextField>
-      <VSelect v-model="newUserInfo.authority" :items="authority" item-text="label" item-value="value" label="Item"
-        required></VSelect>
-    </VCardText>
-    <VCardActions>
-      <VSpacer></VSpacer>
-      <VBtn class="ma-2" large @click="addUserDialog = false" color="primary" outlined rounded text>
-        {{ t('cancel') }}
-      </VBtn>
-      <VBtn class="ma-2" large color="primary" outlined rounded text dark @click="onClickCreate">
-        {{ t('confirm') }}
-      </VBtn>
-    </VCardActions>
-  </VCard>
-</VDialog>
-</VToolbar>
-</template>
-<template v-slot:footer>
+            <VCard ref="form">
+              <VCardTitle>
+                <span class="text-h5">{{ t('addUser') }}</span>
+              </VCardTitle>
+              <VCardText v-if="addUserDialog">
+                <VTextField
+                  v-model="newUserInfo.accountId"
+                  :counter="15"
+                  label="Id"
+                  required
+                />
+                <VTextField
+                  v-model="newUserInfo.accountName"
+                  :counter="10"
+                  label="Name"
+                  required
+                />
+                <VRow>
+                  <VCol cols="12" sm="6">
+                    <VTextField
+                      v-model="newUserInfo.password"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      :type="showPassword ? 'text' : 'password'"
+                      name="input-10-1"
+                      label="Password"
+                      counter
+                      @click:append="showPassword = !showPassword"
+                    />
+                  </VCol>
+                  <VCol cols="12" sm="6">
+                    <VTextField
+                      v-model="confirmPassword"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      :type="showPassword ? 'text' : 'password'"
+                      name="input-10-2"
+                      label="PasswordConfirm"
+                      class="input-group--focused"
+                      @click:append="showPassword = !showPassword"
+                    />
+                  </VCol>
+                </VRow>
+                <VTextField
+                  v-model="newUserInfo.email"
+                  label="E-mail"
+                  required
+                />
+                <VSelect
+                  v-model="newUserInfo.authority"
+                  :items="authority"
+                  item-text="label"
+                  item-value="value"
+                  label="Item"
+                  required
+                />
+              </VCardText>
+              <VCardActions>
+                <VSpacer />
+                <VBtn
+                  class="ma-2"
+                  large
+                  @click="addUserDialog = false"
+                  color="primary"
+                  outlined
+                  rounded
+                >
+                  {{ t('cancel') }}
+                </VBtn>
+                <VBtn
+                  class="ma-2"
+                  large
+                  color="primary"
+                  outlined
+                  rounded
+                  dark
+                  @click="onClickCreate"
+                >
+                  {{ t('confirm') }}
+                </VBtn>
+              </VCardActions>
+            </VCard>
+          </VDialog>
+        </VToolbar>
+      </template>
+      <template v-slot:bottom>
         <div class="pagination-wrapper">
           <div class="icon-page-first" @click="currentPageNumber = 1">
             <VBtn plain color="primary">
               <VIcon>mdi-page-first</VIcon>
             </VBtn>
           </div>
-          <v-pagination v-model="currentPageNumber" :length="totalPageNumber" :total-visible="5"
-            next-icon="mdi-chevron-right" preVIcon="mdi-chevron-left">
-          </v-pagination>
-          <div class="icon-page-last" @click="currentPageNumber = totalPageNumber">
+          <v-pagination
+            v-model="currentPageNumber"
+            :length="totalPageNumber"
+            :total-visible="5"
+            next-icon="mdi-chevron-right"
+            prev-icon="mdi-chevron-left"
+          />
+          <div
+            class="icon-page-last"
+            @click="currentPageNumber = totalPageNumber"
+          >
             <VBtn plain color="primary">
               <VIcon>mdi-page-last</VIcon>
             </VBtn>
           </div>
-          <div v-if="!isMobile" class="page-select grey--text" style="align-items : center;">
-            <VSelect class="selectPageCount" dense v-model="listOptions.pageItem" :items="listOptions.pageItems"
-              @change="changePageItem"></VSelect>
-            <span class="caption text-end ml-2 grey--text">{{ t('countPerPage') }}</span>
+          <div
+            v-if="!isMobile"
+            class="page-select grey--text"
+            style="align-items: center"
+          >
+            <VSelect
+              class="selectPageCount"
+              dense
+              v-model="listOptions.pageItem"
+              :items="listOptions.pageItems"
+              @change="changePageItem"
+            />
+            <span class="caption text-end ml-2 grey--text">{{
+              t('countPerPage')
+            }}</span>
           </div>
         </div>
       </template>
-</VDataTable> -->
-    <!-- <edit-account-info-dialog v-if="selectedItems[0]" v-model="showEditAccountPasswordDialog"
-      :accountId="selectedItems[0].accountId"></edit-account-info-dialog> -->
+    </VDataTable>
+    <edit-account-info-dialog
+      v-if="selectedItems[0]"
+      v-model="showEditAccountPasswordDialog"
+      :accountId="selectedItems[0].accountId"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import {
-  changeStatus,
-  getUserList,
-  createUser,
-  editUser,
-} from '@/api/accountService';
-import ChangePasswordDialog from '@/features/dialog/ChangePasswordDialog.vue';
+import { getUserList, createUser, editUser } from '@/api/accountService';
 import { useAppCommonStore } from '@/store';
+import { isEmpty } from 'ramda';
+import { COMMON_QUERY_KEY } from '@/types/queryEnum';
+import { useQuery } from 'vue-query';
+import { ApiErrorResponse, ApiResponse } from '@/types/axios';
 
 const appStatusStore = useAppCommonStore();
 const { t } = useI18n();
-
 const props = defineProps<{ isMobile?: boolean }>();
 
 const isMobile = props.isMobile ?? false;
@@ -151,8 +282,8 @@ const newUserInfo = ref({
 const addUserDialog = ref(false);
 const editUserDialog = ref(false);
 const showEditAccountPasswordDialog = ref(false);
-const selectedItems = ref([]);
-const userList = ref([]);
+const selectedItems = ref<any[]>([]);
+const userList = ref<any[]>([]);
 const showPassword = ref(false);
 const confirmPassword = ref('');
 const totalPageNumber = ref(0);
@@ -206,85 +337,54 @@ const resetInput = () => {
 };
 
 const clickDeleteUsers = () => {
-  // const checkedUsers = selectedItems.value.map(m => m.accountName);
-  // appStatusStore.showDialog({
-  //   title: t('deleteUsers'),
-  //   description: `${t('deleteUsersMsg', [checkedUsers.join(', ')])}`,
-  //   showCloseButton: true,
-  //   action: () => {
-  //     changeStatus(checkedUsers, 2).then((res: any) => {
-  //       if (res.data.statusCode === 200) {
-  //         fetchUserList();
-  //         appStatusStore.addToastMessage({
-  //           type: 'error',
-  //           message: t('complete'),
-  //
-  //           timeout: null,
-  //           buttonCallback: null
-  //         });
-  //       }
-  //     },
-  //     )
-  //   }
-  // });
-};
-
-const getGroup = (authority: number) => {
-  switch (authority) {
-    case 0:
-      return 'super';
-    case 1:
-      return 'all';
-    case 2:
-      return 'buddy';
-    case 3:
-      return 'biz';
-    case 4:
-    default:
-      return 'viewer';
-  }
-};
-
-//0 : ok, 1: locked, 2: deleted
-const getStatus = (status: number) => {
-  switch (status) {
-    case 0:
-      return 'active';
-    case 1:
-      return 'looked';
-    case 2:
-      return 'deleted';
-    default:
-      return 'active';
-  }
-};
-
-const fetchUserList = () => {
-  return new Promise((resolve) => {
-    appStatusStore.showLoading();
-    getUserList()
-      .then((res: any) => {
-        if (res.status_code === 200) {
-          console.log(res.data);
-          userList.value = res.data.list.map((v: any) => ({
-            ...v,
-            group: getGroup(v.authority),
-            status: getStatus(v.status),
-          }));
-          totalPageNumber.value = Math.ceil(
-            res.data.total / listOptions.value.itemsPerPage,
-          );
-        }
-        resolve({ finish: true });
-        appStatusStore.hideLoading();
-      })
-      .catch((error: any) => {
-        appStatusStore.hideLoading();
-        resolve({ finish: true });
-      });
+  const checkedUsers = selectedItems.value.map((m) => m.accountName);
+  appStatusStore.showDialog({
+    title: t('deleteUsers'),
+    description: `${t('deleteUsersMsg', [checkedUsers.join(', ')])}`,
+    showCloseButton: true,
+    action: () => {
+      // changeStatus(checkedUsers, 2).then((res: any) => {
+      //   if (res.data.statusCode === 200) {
+      //     fetchUserList();
+      //     appStatusStore.addToastMessage({
+      //       type: 'error',
+      //       message: t('complete'),
+      //     });
+      //   }
+      // });
+    },
   });
 };
 
+const getGroup = (authority: number) => {
+  const groups = ['super', 'all', 'buddy', 'biz', 'viewer'];
+  return groups[authority] || 'viewer';
+};
+
+const getStatus = (status: number) => {
+  const statuses = ['active', 'looked', 'deleted'];
+  return statuses[status] || 'active';
+};
+const { refetch } = useQuery({
+  queryKey: ['USER_LIST'], // COMMON_QUERY_KEY.USER_LIST로 정의된 상수로 대체
+  queryFn: getUserList,
+  keepPreviousData: false,
+  staleTime: 5 * 60 * 1000, // 5분
+  onError: (err: ApiErrorResponse) => {
+    console.log('Error:', err);
+  },
+  onSuccess: (res: ApiResponse) => {
+    console.log('res', res.data);
+    userList.value = res.data.list.map((v: any) => ({
+      ...v,
+      group: getGroup(v.authority),
+      status: getStatus(v.status),
+    }));
+    totalPageNumber.value = Math.ceil(
+      res.data.total / listOptions.value.itemsPerPage,
+    );
+  },
+});
 const onClickCreate = async () => {
   if (newUserInfo.value.password !== confirmPassword.value) {
     alert(t('passwordMismatch'));
@@ -292,84 +392,69 @@ const onClickCreate = async () => {
   }
   await createUser(newUserInfo.value);
   addUserDialog.value = false;
-  await fetchUserList();
+  // await refetch();
 };
 
-const checkValidate = (type: any) => {
-  const returnMsg = { result: true, msg: '' };
+const checkValidate = (type: 'edit' | 'create') => {
+  const messages: string[] = [];
+  const { accountId, accountName, email, password } = newUserInfo.value;
 
-  // if (type === 'edit') {
-  //   this.newUserInfo = this.selectedItems[0];
-  // }
-  // Object.keys(this.newUserInfo).forEach(v => {
-  //   if (this.newUserInfo[v] === "") {
-  //     returnMsg.result = false;
-  //     returnMsg.msg = returnMsg.msg + `${this.$i18n.t('requiredError', [v])} \n `;
-  //   } else {
-  //     if (v === 'accountId') {
-  //       if (!/^[a-z0-9]*$/.test(this.newUserInfo[v])) {
-  //         returnMsg.result = false;
-  //         returnMsg.msg = returnMsg.msg + `${this.$i18n.t('idRulesError')} \n `;
-  //       }
-  //       if (this.newUserInfo[v].length > 15) {
-  //         returnMsg.result = false;
-  //         returnMsg.msg = returnMsg.msg + `${this.$i18n.t('lengthRulesError', ['Id', 15])} \n `;
-  //       }
-  //     } else if (v === 'accountName') {
-  //       if (this.newUserInfo[v].length > 10) {
-  //         returnMsg.result = false;
-  //         returnMsg.msg = returnMsg.msg + `${this.$i18n.t('lengthRulesError', ['name', 10])} \n `;
-  //       }
-  //     } else if (v === 'email') {
-  //       if (!/.+@.+\..+/.test(this.newUserInfo[v])) {
-  //         returnMsg.result = false;
-  //         returnMsg.msg = returnMsg.msg + `${this.$i18n.t('emailRulesError')} \n `;
-  //       }
-  //     } else if (v === 'password' && type === 'create') {
-  //       if (this.newUserInfo.password !== this.confirmPassword) {
-  //         returnMsg.result = false;
-  //         returnMsg.msg = returnMsg.msg + `${this.$i18n.t('passwordRulesError')} \n `;
-  //       }
-  //     }
-  //   }
-  // })
+  if (type === 'edit') {
+    Object.assign(newUserInfo.value, selectedItems.value[0]);
+  }
 
-  return returnMsg;
+  if (!accountId) messages.push(t('requiredError', ['Id']));
+  else {
+    if (!/^[a-z0-9]*$/.test(accountId)) messages.push(t('idRulesError'));
+    if (accountId.length > 15) messages.push(t('lengthRulesError', ['Id', 15]));
+  }
+
+  if (!accountName) messages.push(t('requiredError', ['Name']));
+  else if (accountName.length > 10)
+    messages.push(t('lengthRulesError', ['Name', 10]));
+
+  if (!email) messages.push(t('requiredError', ['E-mail']));
+  else if (!/.+@.+\..+/.test(email)) messages.push(t('emailRulesError'));
+
+  if (type === 'create') {
+    if (password !== confirmPassword.value)
+      messages.push(t('passwordRulesError'));
+  }
+
+  return { result: messages.length === 0, msg: messages.join('\n ') };
 };
 
-const onClickEdit = () => {
-  const returnMsg = checkValidate('edit');
-  if (!returnMsg.result) {
+const onClickEdit = async () => {
+  const { result, msg } = checkValidate('edit');
+  if (!result) {
     appStatusStore.showDialog({
       title: t('error'),
-      description: returnMsg.msg,
-      showCloseButton: true, // 캔슬버튼 가리기
+      description: msg,
+      showCloseButton: true,
       action: () => {},
     });
     return;
   }
 
-  editUser(selectedItems.value[0]).then((res: any) => {
-    if (res.data.statusCode === 200) {
-      appStatusStore.showDialog({
-        title: t('complete'),
-        description: t('confirmMsg'),
-        showCloseButton: true, // 캔슬버튼 가리기
-        action: () => {
-          fetchUserList();
-        },
-      });
-      editUserDialog.value = false;
-      showEditAccountPasswordDialog.value = false;
-    } else {
-      appStatusStore.showDialog({
-        title: t('error'),
-        description: res.data.message,
-        showCloseButton: true, // 캔슬버튼 가리기
-        action: () => {},
-      });
-    }
-  });
+  const res = await editUser(selectedItems.value[0]);
+  console.log('res', res);
+  // if (res.data.statusCode === 200) {
+  //   appStatusStore.showDialog({
+  //     title: t('complete'),
+  //     description: t('confirmMsg'),
+  //     showCloseButton: true,
+  //     action: fetchUserList,
+  //   });
+  //   editUserDialog.value = false;
+  //   showEditAccountPasswordDialog.value = false;
+  // } else {
+  //   appStatusStore.showDialog({
+  //     title: t('error'),
+  //     description: 'dddddd',
+  //     showCloseButton: true,
+  //     action: () => {},
+  //   });
+  // }
 };
 
 const clickToChangeAccountInfo = () => {
@@ -378,10 +463,10 @@ const clickToChangeAccountInfo = () => {
 
 const changePageItem = () => {
   listOptions.value.page = 1;
-  fetchUserList();
+  // fetchUserList();
 };
 
-onMounted(fetchUserList);
+// onMounted(fetchUserList);
 </script>
 
 <style scoped>
