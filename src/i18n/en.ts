@@ -1,7 +1,8 @@
 export default {
   lang: 'en',
-  hello: 'HELLO ALL',
-  nald: "Nald's pensieve box.",
+  mainTitle: 'HELLO ALL',
+  mainSubTitle: "Nald's pensieve box.",
+  mainDescription: 'Continuously updating (though sporadically).',
   name: 'name',
   email: 'email',
   title: 'title',

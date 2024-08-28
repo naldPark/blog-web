@@ -6,13 +6,14 @@
       <VRow class="pt-5 align-center">
         <div class="main-content" :class="{ 'is-mobile': isMobile }">
           <div>
-            <VIcon class="text-primary pr-3">mdi-duck</VIcon>{{ $t('hello') }}
+            <VIcon class="text-primary pr-3">mdi-duck</VIcon
+            >{{ $t('mainTitle') }}
           </div>
           <p class="main-title">
-            <b>{{ $t('nald') }}</b>
+            <b>{{ $t('mainSubTitle') }}</b>
           </p>
           <span class="main-title-sub">
-            인테리어 확장공사중 (소음심한날: 빨간날, 칼퇴한날)
+            {{ $t('mainDescription') }}
             <v-btn @click="onTest()">Open Dialog</v-btn>
             <Dialog
               v-model:visible="showDialog"

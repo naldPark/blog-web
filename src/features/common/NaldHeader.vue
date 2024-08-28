@@ -144,7 +144,7 @@ const listItems: RightMenuItems[] = [
     :accountInfo="accountInfo"
     @update:showLoginDialog="showLoginDialog = $event"
   />
-  <LoginDialog v-model="showLoginDialog" />
+  <LoginDialog v-model:showDialog="showLoginDialog" />
   <ChangePasswordDialog
     v-model:showDialog="showEditPasswordDialog"
     v-if="accountInfo?.accountId"

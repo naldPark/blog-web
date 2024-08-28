@@ -1,62 +1,49 @@
 <template>
-  <VDialog
-    width="444px"
-    content-class="app-g-dialog"
-    @update:model-value="updateModelValue"
-  >
-    <VCard>
-      <VToolbar density="compact" dark color="grey-darken-3">
-        <VToolbarTitle>
-          <VIcon class="text-primary">mdi-key</VIcon>
-          {{ t('login') }}
-        </VToolbarTitle>
-        <VSpacer />
-      </VToolbar>
-      <VCardText class="mt-5">
-        <VContainer>
-          <VRow>
-            <VCol cols="12" class="pa-0">
-              <InputText v-model="accountId" :label="t('id')" required />
-            </VCol>
-            <VCol cols="12" class="pa-0">
-              <InputText
-                v-model="accountPassword"
-                :label="t('password')"
-                :passwordIcon="true"
-                required
-                :icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
-                type="password"
-                @enter="onClickLogin"
-              />
-            </VCol>
-          </VRow>
-        </VContainer>
-        <VBtn
-          class="mb-3"
-          color="primary"
-          variant="tonal"
-          block
-          @click="onClickLogin"
-        >
-          Log In
-        </VBtn>
-      </VCardText>
-    </VCard>
-  </VDialog>
+  <Dialog v-model:visible="showDialog" width="450px">
+    <template #header>
+      <VIcon class="text-primary" icon="mdi-key" />
+      {{ t('login') }}
+    </template>
+    <template #default>
+      <InputText v-model="accountId" :label="t('id')" required />
+      <InputText
+        v-model="accountPassword"
+        :label="t('password')"
+        :passwordIcon="true"
+        required
+        :icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+        type="password"
+        @enter="onClickLogin"
+      />
+    </template>
+    <template #footer>
+      <Button
+        :disabled="any(isEmpty, [accountId, accountPassword])"
+        label="Log In"
+        class="mb-3"
+        block
+        color="primary"
+        variant="tonal"
+        @click="onClickLogin"
+      />
+    </template>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import Dialog from '@/components/common/Dialog.vue';
 import { login, getRsa } from '@/api/accountService';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useUserStore } from '@/store/userStore';
 import { decodeToken, encryptPassword } from '@/utils/commonUtil';
 import InputText from '@/components/common/InputText.vue';
 import { useCookies } from '@vueuse/integrations/useCookies';
-import JSEncrypt from 'jsencrypt';
 import useMutation from '@/hook/useMutation';
-import { ApiErrorResponse, ApiResponse, ApiResult } from '@/types/axios';
+import Button from '@/components/common/Button.vue';
+import { isEmpty, any } from 'ramda';
+import { ApiErrorResponse } from '@/types/axios';
 
 const { t } = useI18n();
 const accountId = ref('');
@@ -65,11 +52,10 @@ const passwordVisible = ref(false);
 const cookies = useCookies();
 const userStore = useUserStore();
 const appStatusStore = useAppCommonStore();
-const emits = defineEmits(['update:modelValue']);
 
-const updateModelValue = (value: boolean) => {
-  emits('update:modelValue', value);
-};
+const showDialog = defineModel('showDialog', {
+  type: Boolean,
+});
 
 const { mutate: postLogin } = useMutation({
   mutationFn: (encryptedValue: string) =>
@@ -90,7 +76,7 @@ const { mutate: postLogin } = useMutation({
       },
       token,
     );
-    updateModelValue(false);
+    showDialog.value = false;
   },
   onError: (error: ApiErrorResponse) => {
     appStatusStore.showToast({
