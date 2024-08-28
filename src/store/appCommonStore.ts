@@ -105,7 +105,6 @@ export const useAppCommonStore = defineStore('app-common', () => {
   };
 
   const showToast = (info: ToastInfo) => {
-    console.log('머지');
     const timestamp = Date.now();
     toasts.value.push({
       key: timestamp.toString(),
