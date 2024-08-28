@@ -11,6 +11,10 @@ import { passwordRegExp, passwordVerifyRegExp } from '../../utils/regExpUtil';
 import useMutation from '@/hook/useMutation';
 import Dialog from '@/components/common/Dialog.vue';
 
+/** TODO: 비밀번호 변경할때 암호화 안되어있음.
+ * 변경 후 다이어로그 안닫힘
+ */
+
 const { accountId } = defineProps<{
   accountId: string;
 }>();
@@ -44,15 +48,15 @@ onMounted(() => {
 const { mutate: onClickEdit } = useMutation({
   mutationFn: () => editPassword(accountId, accountPassword.value),
   onSuccess: () => {
-    appStatusStore.addToast({
+    appStatusStore.showToast({
       type: 'success',
       message: t('confirmMsg'),
     });
   },
   onError: (error: ApiErrorResponse) => {
-    appStatusStore.addToast({
+    appStatusStore.showToast({
       type: 'error',
-      message: `${t(error.error_i18n)}`,
+      message: t(`error_code.${error.error_i18n}`),
     });
   },
   onSettled: () => {
@@ -75,7 +79,6 @@ const handleClickOutside = () => {
   <Dialog
     v-model:visible="showDialog"
     width="450px"
-    @update:model-value="updateShowValue"
     title="Dialog Header"
     @confirm="handleConfirm"
     @click:outside="handleClickOutside"

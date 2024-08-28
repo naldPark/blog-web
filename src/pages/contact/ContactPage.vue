@@ -214,14 +214,14 @@ const sendMessage = async (): Promise<void> => {
       });
     } catch (error: unknown) {
       appStatusStore.hideLoading();
-      appStatusStore.addToast({
+      appStatusStore.showToast({
         type: 'error',
         message: `${t('unknownError')}`,
       });
     }
   } else {
     appStatusStore.hideLoading();
-    appStatusStore.addToast({
+    appStatusStore.showToast({
       type: 'error',
       message: validate,
     });

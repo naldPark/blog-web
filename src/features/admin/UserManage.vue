@@ -111,7 +111,7 @@ const clickDeleteUsers = () => {
       // changeStatus(checkedUsers, 2).then((res: any) => {
       //   if (res.data.statusCode === 200) {
       //     fetchUserList();
-      //     appStatusStore.addToast({
+      //     appStatusStore.showToast({
       //       type: 'error',
       //       message: t('complete'),
       //     });

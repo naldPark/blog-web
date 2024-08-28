@@ -56,7 +56,7 @@ const createHttpClient = (): AxiosInstance => {
 
       if (errorData.status_code === 401) {
         const userStore = useUserStore();
-        appStatusStore.addToast({
+        appStatusStore.showToast({
           type: 'error',
           message: errorData.error_i18n,
         });

@@ -7,6 +7,7 @@ export default {
   name: '이름',
   email: '이메일',
   title: '제목',
+  alert: '알림',
   content: '내용',
   send: '보내기',
   category: '카테고리',
@@ -34,7 +35,7 @@ export default {
   loggedOut: '로그아웃 되었습니다',
   noGuestAccess: '게스트는 접근이 제한됩니다',
   changePwd: '변경할 Password를 입력해주세요',
-  loginFailed: 'login failed',
+  loginFailed: '로그인 실패',
   changePwdConfirm: '다시한번 Password를 입력해주세요',
   required: '필수항목입니다.',
   requiredError: '{0} 는 필수항목입니다.',
@@ -156,6 +157,8 @@ export default {
   prMessage: DOMPurify.sanitize(
     'Docker와 Kubernetes등의 환경에 익숙하며, Backend는 Java, Frontend는 Javascript(주로 Vue.js)를 다룹니다. \n도전적인 문제 해결에 성취감을 느낍니다.  \n 직관적이고 확장성있는 코드방식을 선호하고 효율적인 인프라 설계를 모색하는 편입니다.',
   ),
-  // message: DOMPurify.sanitize("<b>Docker와 Kubernetes</b> 등의 환경에 익숙하며, Backend는 <b>Java</b>, Frontend는 <b>Javascript(주로 Vue.js)</b>를 다룹니다.<br>도전적인 문제 해결에 성취감을 느낍니다. <br> 직관적이고 확장성있는 코드방식을 선호하고 효율적인 인프라 설계를 모색하는 편입니다.")
   contactMsg: '편하게 연락 주세요.',
+  error_code: {
+    error_bad_request_005: '비밀번호가 일치하지 않습니다.',
+  },
 };

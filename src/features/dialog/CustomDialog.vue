@@ -10,6 +10,7 @@
       rounded="lg"
       max-width="400"
       prepend-icon="mdi-information"
+      class="custom-dialog"
       :text="dialogInfo.description"
       :title="dialogInfo.title"
     >

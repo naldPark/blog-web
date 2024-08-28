@@ -54,7 +54,7 @@ const handleButtonClick = (toast: {
           </VIcon>
         </template>
         <template v-slot:title>
-          <div :style="{ color: getIcon(toast.info.type) }" class="title">
+          <div :style="{ color: getIcon(toast.info.type) }">
             {{ toast.info.title ?? toast.info.type }}
           </div>
         </template>

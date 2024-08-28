@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { clone } from 'ramda';
 import { Ref, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export interface DialogInfo {
   show?: boolean;
@@ -40,6 +41,7 @@ export interface AppStatus {
 }
 
 export const useAppCommonStore = defineStore('app-common', () => {
+  const { t } = useI18n();
   const timezone = ref('Asia/Seoul');
   const showBlocker = ref(false);
   const toasts: Ref<Toast[]> = ref([]);
@@ -69,13 +71,12 @@ export const useAppCommonStore = defineStore('app-common', () => {
   };
 
   const showDialog = (info: DialogInfo) => {
-    console.log('asd');
     setDialogInfo({
       show: true,
-      title: info.title || '알림',
-      description: info.description || '내용',
-      buttonText: info.buttonText || '확인',
-      cancelButtonText: info.cancelButtonText || '취소',
+      title: info.title,
+      description: info.description,
+      buttonText: info.buttonText || t('confirm'),
+      cancelButtonText: info.cancelButtonText || t('cancel'),
       action: info.action || null,
       cancelAction: info.cancelAction || null,
       showCloseButton: info.showCloseButton ?? false,
@@ -103,7 +104,8 @@ export const useAppCommonStore = defineStore('app-common', () => {
     setLoading({ val: false, cancel: false });
   };
 
-  const addToast = (info: ToastInfo) => {
+  const showToast = (info: ToastInfo) => {
+    console.log('머지');
     const timestamp = Date.now();
     toasts.value.push({
       key: timestamp.toString(),
@@ -124,7 +126,7 @@ export const useAppCommonStore = defineStore('app-common', () => {
     prevRouteName,
     showDialog,
     hideDialog,
-    addToast,
+    showToast,
     showLoading,
     hideLoading,
   };

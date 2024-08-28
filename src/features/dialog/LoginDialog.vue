@@ -93,16 +93,11 @@ const { mutate: postLogin } = useMutation({
     updateModelValue(false);
   },
   onError: (error: ApiErrorResponse) => {
-    appStatusStore.showDialog({
-      title: t('loginFailed'),
-      description: error.error_i18n,
-      showCloseButton: true,
-      action: () => {},
+    appStatusStore.showToast({
+      type: 'error',
+      message: t(`error_code.${error.error_i18n}`),
     });
     userStore.resetAccountInfo();
-  },
-  onSettled: () => {
-    console.log('사용자 onSettled 호출');
   },
 });
 

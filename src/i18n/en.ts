@@ -5,6 +5,7 @@ export default {
   name: 'name',
   email: 'email',
   title: 'title',
+  alert: 'Alert',
   content: 'content',
   send: 'send',
   category: 'category',
@@ -155,4 +156,7 @@ export default {
   prMessage:
     'Mainly specialized in Javascript for frontend, Java for backend as well DevOps tools like Docker, Kubernetes. \nHighly self-motivated about solving tech problem through writing clean code and build more efficient architecture. \n Check out my work below.',
   contactMsg: 'Please feel free to reach out to me',
+  error_code: {
+    error_bad_request_005: 'Password does not match.',
+  },
 };

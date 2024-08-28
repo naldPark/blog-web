@@ -252,12 +252,12 @@ const copyClipboard = async () => {
   const text = 'qwerty1234';
   try {
     await navigator.clipboard.writeText(text);
-    appStatusStore.addToast({
+    appStatusStore.showToast({
       type: 'success',
       message: `${t('copied')}`,
     });
   } catch (err) {
-    appStatusStore.addToast({
+    appStatusStore.showToast({
       type: 'error',
       message: `${t('copyFailed')}`,
     });

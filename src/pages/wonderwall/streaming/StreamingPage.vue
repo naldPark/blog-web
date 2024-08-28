@@ -202,7 +202,7 @@ const fetchVideoList = () => {
           movieList.value = response.data.list;
         } else {
           appStatusStore.hideLoading();
-          appStatusStore.addToast({
+          appStatusStore.showToast({
             type: 'error',
             message: response.data.data || response.data.message,
           });
