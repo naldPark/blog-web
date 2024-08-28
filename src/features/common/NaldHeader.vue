@@ -94,6 +94,7 @@ const listItems: RightMenuItems[] = [
       v-if="!accountInfo.accountId"
       @onClick="clickToShowLoginDialog"
       :label="t('login')"
+      variant="outlined"
       prepend-icon="mdi-account-outline"
       class="ma-2"
     />
@@ -145,7 +146,7 @@ const listItems: RightMenuItems[] = [
   />
   <LoginDialog v-model="showLoginDialog" />
   <ChangePasswordDialog
-    v-model="showEditPasswordDialog"
+    v-model:showDialog="showEditPasswordDialog"
     v-if="accountInfo?.accountId"
     :accountId="accountInfo.accountId"
   />

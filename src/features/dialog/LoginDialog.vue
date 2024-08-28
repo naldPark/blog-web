@@ -49,7 +49,8 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { login, getRsa } from '@/api/accountService';
-import { useUserStore, useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import { useUserStore } from '@/store/userStore';
 import { decodeToken } from '@/utils/commonUtil';
 import InputText from '@/components/common/InputText.vue';
 import { useCookies } from '@vueuse/integrations/useCookies';

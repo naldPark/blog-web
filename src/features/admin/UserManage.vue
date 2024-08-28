@@ -19,7 +19,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getUserList, createUser, editUser } from '@/api/accountService';
 import InputText from '@/components/common/InputText.vue';
-import { useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
 import { isEmpty } from 'ramda';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
 import { useQuery } from 'vue-query';
@@ -111,7 +111,7 @@ const clickDeleteUsers = () => {
       // changeStatus(checkedUsers, 2).then((res: any) => {
       //   if (res.data.statusCode === 200) {
       //     fetchUserList();
-      //     appStatusStore.addToastMessage({
+      //     appStatusStore.addToast({
       //       type: 'error',
       //       message: t('complete'),
       //     });

@@ -6,7 +6,8 @@ import Axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
-import { useUserStore, useAppCommonStore } from '@/store';
+import { useUserStore } from '@/store/userStore';
+import { useAppCommonStore } from '@/store/appCommonStore';
 import Config from '@/config';
 import { ApiErrorResponse } from '@/types/axios';
 
@@ -55,7 +56,7 @@ const createHttpClient = (): AxiosInstance => {
 
       if (errorData.status_code === 401) {
         const userStore = useUserStore();
-        appStatusStore.addToastMessage({
+        appStatusStore.addToast({
           type: 'error',
           message: errorData.error_i18n,
         });

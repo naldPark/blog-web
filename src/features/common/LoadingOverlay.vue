@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
 import { storeToRefs } from 'pinia';
 
 const appStatusStore = useAppCommonStore();

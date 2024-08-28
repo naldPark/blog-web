@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
-import { useLanguageStore } from '@/store';
+import { useLanguageStore } from '@/store/languageStore';
 import ToastMessage from '@/features/common/ToastMessage.vue';
 import LoadingOverlay from '@/features/common/LoadingOverlay.vue';
 import CustomDialog from '@/features/dialog/CustomDialog.vue';

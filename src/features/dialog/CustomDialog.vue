@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
 import { storeToRefs } from 'pinia';
 
 const appStatusStore = useAppCommonStore();

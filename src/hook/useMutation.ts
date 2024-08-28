@@ -4,7 +4,7 @@ import {
 } from 'vue-query';
 import { ApiErrorResponse, CustomMutationReturnType } from '@/types/axios';
 import { computed } from 'vue';
-import { useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
 
 const useCustomMutation = <
   TData = unknown,

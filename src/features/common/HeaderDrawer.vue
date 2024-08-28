@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import menuItems from '@/assets/data/menu';
 import { computed } from 'vue';
-import { useUserStore } from '@/store';
+import { useUserStore } from '@/store/userStore';
 import { MenuInfo, SubMenuInfo } from '@/types/common';
 import { storeToRefs } from 'pinia';
 import avatarOnline from '@/assets/icons/avatar_online.png';

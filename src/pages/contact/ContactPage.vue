@@ -126,7 +126,7 @@ const messageData = ref<MessageData>({
   content: '',
 });
 
-// Validation rules
+/** 검증 rules */
 const rules: {
   required: ValidationRule;
   email: ValidationRule;
@@ -214,14 +214,14 @@ const sendMessage = async (): Promise<void> => {
       });
     } catch (error: unknown) {
       appStatusStore.hideLoading();
-      appStatusStore.addToastMessage({
+      appStatusStore.addToast({
         type: 'error',
         message: `${t('unknownError')}`,
       });
     }
   } else {
     appStatusStore.hideLoading();
-    appStatusStore.addToastMessage({
+    appStatusStore.addToast({
       type: 'error',
       message: validate,
     });

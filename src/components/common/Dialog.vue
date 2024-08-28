@@ -1,51 +1,55 @@
 <template>
-  <v-dialog
+  <VDialog
     v-model="visible"
     :max-width="maxWidth"
+    min-width="300px"
     :max-height="maxHeight"
     :persistent="persistent"
     :scrollable="scrollable"
     :fullscreen="fullscreen"
-    :hide-overlay="hideOverlay"
-    :return-focus="returnFocus"
     :eager="eager"
     :width="width"
     :height="height"
-    @click:outside="onClickOutside"
-    @click:inside="onClickInside"
-    @drag="onDrag"
-    @dragend="onDragEnd"
-    @dragstart="onDragStart"
-    @resize="onResize"
-    @resizeend="onResizeEnd"
-    @resizestart="onResizeStart"
   >
     <template #default>
-      <v-card>
-        <v-card-title>
-          <slot name="header">{{ header }}</slot>
-          <v-spacer />
-          <v-btn icon @click="closeDialog">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text>
+      <VCard rounded="lg">
+        <VCardTitle class="fs-3 d-flex justify-space-between align-center">
+          <div class="text-h6 text-medium-emphasis">
+            <slot name="header">{{ title }}</slot>
+          </div>
+          <Button
+            color="gray"
+            icon="mdi-close"
+            variant="text"
+            size="xs"
+            @click="closeDialog"
+          />
+        </VCardTitle>
+        <VDivider class="mb-4" />
+        <VCardText>
           <slot></slot>
-        </v-card-text>
-        <v-card-actions>
+        </VCardText>
+        <VDivider class="mt-2" />
+        <VCardActions class="ma-2 d-flex justify-end">
           <slot name="footer">
-            <v-btn @click="closeDialog">{{ t('cancel') }}</v-btn>
-            <v-btn @click="confirm">{{ t('confirm') }}</v-btn>
+            <Button rounded="xl" :label="t('cancel')" @click="closeDialog" />
+            <Button
+              color="primary"
+              :label="t('confirm')"
+              variant="flat"
+              @click="confirm"
+            />
           </slot>
-        </v-card-actions>
-      </v-card>
+        </VCardActions>
+      </VCard>
     </template>
-  </v-dialog>
+  </VDialog>
 </template>
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { ref, defineProps, defineEmits, computed, onMounted, watch } from 'vue';
+import { defineProps, defineEmits } from 'vue';
+import Button from './Button.vue';
 // Props 정의
 const props = defineProps({
   maxWidth: {
@@ -59,8 +63,6 @@ const props = defineProps({
   persistent: Boolean,
   scrollable: Boolean,
   fullscreen: Boolean,
-  hideOverlay: Boolean,
-  returnFocus: Boolean,
   eager: Boolean,
   width: {
     type: [String, Number],
@@ -70,25 +72,23 @@ const props = defineProps({
     type: [String, Number],
     default: 'auto',
   },
-  header: String,
-  footer: String,
+  title: String,
 });
 
 // Emits 정의
-const emit = defineEmits([
-  'update:modelValue',
-  'confirm',
-  'click:outside',
-  'click:inside',
-  'drag',
-  'dragend',
-  'dragstart',
-  'resize',
-  'resizeend',
-  'resizestart',
-]);
+const emit = defineEmits(['confirm']);
 
 const { t } = useI18n();
+
+// 필수 defineModel({ required: true })
+
+// 기본값  defineModel({ default: 0 })
+
+// 타입 설정 defineModel({ type: String })
+
+// 로컬 변수로 설정하여 부모로부터 전달되지 않아도 사용. defineModel({ local: true })
+
+// 첫 번째 매개변수에 이름, 두번째에 설정값 defineModel('model', { required: true })
 
 const visible = defineModel('visible', {
   type: Boolean,
@@ -96,7 +96,8 @@ const visible = defineModel('visible', {
 
 // Dialog 닫기 함수
 const closeDialog = () => {
-  emit('update:modelValue', false);
+  visible.value = false;
+  // emit('update:modelValue', false);
 };
 
 // Dialog 확인 함수
@@ -104,16 +105,6 @@ const confirm = () => {
   emit('confirm');
   closeDialog();
 };
-
-// 이벤트 핸들러
-const onClickOutside = (event: Event) => emit('click:outside', event);
-const onClickInside = (event: Event) => emit('click:inside', event);
-const onDrag = (event: Event) => emit('drag', event);
-const onDragEnd = (event: Event) => emit('dragend', event);
-const onDragStart = (event: Event) => emit('dragstart', event);
-const onResize = (event: Event) => emit('resize', event);
-const onResizeEnd = (event: Event) => emit('resizeend', event);
-const onResizeStart = (event: Event) => emit('resizestart', event);
 </script>
 
 <style lang="scss" scoped></style>

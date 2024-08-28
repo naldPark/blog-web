@@ -116,7 +116,7 @@
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import storageService from '@/api/storageService';
-import { useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
 import type { MovieInfoData } from '@/types/wonderwall/video';
 import { fileToBase64 } from '@/utils/fileUtil';
 

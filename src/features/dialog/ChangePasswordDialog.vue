@@ -1,76 +1,15 @@
-<template>
-  <VDialog
-    width="444px"
-    content-class="app-g-dialog"
-    @update:model-value="updateShowValue"
-  >
-    <VCard>
-      <VToolbar density="compact" dark color="grey-darken-3">
-        <VToolbarTitle>
-          <VIcon class="text-primary">mdi-security</VIcon>
-          {{ t('editPassword') }}
-        </VToolbarTitle>
-        <VSpacer></VSpacer>
-      </VToolbar>
-      <VCardText class="mt-5">
-        <VContainer>
-          <VRow>
-            <VCol cols="12" class="pa-0">
-              <VTextField
-                v-model="accountPassword"
-                :label="t('password')"
-                :placeholder="t('changePwd')"
-                type="password"
-                required
-                @keyup.enter="onClickEdit"
-                flat
-              />
-            </VCol>
-            <VCol cols="12" class="pa-0">
-              <VTextField
-                v-model="accountPasswordConfirm"
-                :label="t('passwordConfirm')"
-                :placeholder="t('changePwdConfirm')"
-                type="password"
-                required
-                @keyup.enter="onClickEdit"
-                flat
-              />
-            </VCol>
-          </VRow>
-        </VContainer>
-      </VCardText>
-      <VCardActions>
-        <VSpacer />
-        <VBtn class="ma-2" color="primary" rounded variant="outlined">
-          {{ t('cancel') }}
-        </VBtn>
-        <VBtn
-          class="ma-2"
-          :disabled="
-            isEmpty(accountPassword) ||
-            not(equals(accountPassword, accountPasswordConfirm))
-          "
-          color="primary"
-          rounded
-          variant="outlined"
-          dark
-          @click="onClickEdit"
-        >
-          {{ t('confirm') }}
-        </VBtn>
-      </VCardActions>
-    </VCard>
-  </VDialog>
-</template>
-
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useI18n } from 'vue-i18n';
 import { editPassword } from '@/api/accountService';
-import { ApiResponse } from '@/types/axios';
+import { ApiErrorResponse, ApiResponse } from '@/types/axios';
 import { isEmpty, equals, not } from 'ramda';
+import Button from '@/components/common/Button.vue';
+import InputText from '@/components/common/InputText.vue';
+import { passwordRegExp, passwordVerifyRegExp } from '../../utils/regExpUtil';
+import useMutation from '@/hook/useMutation';
+import Dialog from '@/components/common/Dialog.vue';
 
 const { accountId } = defineProps<{
   accountId: string;
@@ -85,52 +24,169 @@ const updateShowValue = (value: any) => {
   emits('update:modelValue', value);
 };
 
-const onClickEdit = async () => {
-  if (
-    accountPassword.value === '' ||
-    accountPassword.value !== accountPasswordConfirm.value
-  ) {
-    appStatusStore.showDialog({
-      title: t('error'),
-      description: t('passwordRulesError'),
-      showCloseButton: true,
-      action: () => {},
-    });
-    return;
-  }
+const showDialog = defineModel('showDialog', {
+  type: Boolean,
+});
 
-  try {
-    appStatusStore.showLoading();
-    const response = (await editPassword(
-      accountId,
-      accountPassword.value,
-    )) as ApiResponse;
-    if (response.status_code === 200) {
-      appStatusStore.showDialog({
-        title: t('complete'),
-        description: t('confirmMsg'),
-        showCloseButton: true,
-        action: () => {},
-      });
-    } else {
-      appStatusStore.showDialog({
-        title: t('error'),
-        description: response.data.data.error,
-        showCloseButton: true,
-        action: () => {},
-      });
-    }
-  } catch (error) {
-    appStatusStore.showDialog({
-      title: t('error'),
-      description: 'unknown error',
-      showCloseButton: true,
-      action: () => {},
+const rules = {
+  required: (v: string) => !!v || t('required'),
+  passwordExp: (v: string) =>
+    passwordRegExp().test(v) || t('passwordRulesError'),
+  passwordVerify: (v: string) =>
+    passwordVerifyRegExp(accountPassword.value).test(v) ||
+    t('passwordMatchRulesError'),
+};
+
+onMounted(() => {
+  console.log('마운');
+});
+
+const { mutate: onClickEdit } = useMutation({
+  mutationFn: () => editPassword(accountId, accountPassword.value),
+  onSuccess: () => {
+    appStatusStore.addToast({
+      type: 'success',
+      message: t('confirmMsg'),
     });
-  }
-  updateShowValue(false);
-  appStatusStore.hideLoading();
+  },
+  onError: (error: ApiErrorResponse) => {
+    appStatusStore.addToast({
+      type: 'error',
+      message: `${t(error.error_i18n)}`,
+    });
+  },
+  onSettled: () => {
+    updateShowValue(false);
+  },
+});
+
+// Confirm 버튼 클릭 처리 함수
+const handleConfirm = () => {
+  console.log('Confirm button clicked');
+};
+
+// 다이얼로그 외부 클릭 처리 함수
+const handleClickOutside = () => {
+  console.log('Clicked outside the dialog');
 };
 </script>
+
+<template>
+  <Dialog
+    v-model:visible="showDialog"
+    width="450px"
+    @update:model-value="updateShowValue"
+    title="Dialog Header"
+    @confirm="handleConfirm"
+    @click:outside="handleClickOutside"
+  >
+    <template #header>
+      <VIcon class="text-primary" icon="mdi-security" />
+      {{ t('editPassword') }}
+    </template>
+    <template #default>
+      <InputText
+        class="mb-2"
+        v-model="accountPassword"
+        :label="t('password')"
+        :placeholder="t('changePwd')"
+        :rules="[rules.required, rules.passwordExp]"
+        type="password"
+        required
+        @keyup.enter="onClickEdit"
+        flat
+      />
+      <InputText
+        v-model="accountPasswordConfirm"
+        :label="t('passwordConfirm')"
+        :placeholder="t('changePwdConfirm')"
+        type="password"
+        :rules="[rules.required, rules.passwordVerify]"
+        required
+        @keyup.enter="onClickEdit"
+        flat
+        validate-on-blur
+      />
+    </template>
+    <template #footer>
+      <Button
+        rounded="xl"
+        :label="t('cancel')"
+        @click="updateShowValue(false)"
+      />
+      <Button
+        color="primary"
+        :disabled="
+          isEmpty(accountPassword) ||
+          not(equals(accountPassword, accountPasswordConfirm))
+        "
+        :label="t('confirm')"
+        variant="flat"
+        @click="onClickEdit"
+      />
+    </template>
+  </Dialog>
+
+  <!-- <VDialog width="450px" @update:model-value="updateShowValue">
+    <VCard rounded="lg">
+      <VCardTitle class="d-flex justify-space-between align-center">
+        <div class="text-h6 text-medium-emphasis">
+          <VIcon class="text-primary" icon="mdi-security" />
+          {{ t('editPassword') }}
+        </div>
+        <Button
+          color="gray"
+          icon="mdi-close"
+          variant="text"
+          size="xs"
+          @click="updateShowValue(false)"
+        />
+      </VCardTitle>
+      <VDivider class="mb-4" />
+      <VCardText>
+        <InputText
+          class="mb-2"
+          v-model="accountPassword"
+          :label="t('password')"
+          :placeholder="t('changePwd')"
+          :rules="[rules.required, rules.passwordExp]"
+          type="password"
+          required
+          @keyup.enter="onClickEdit"
+          flat
+        />
+        <InputText
+          v-model="accountPasswordConfirm"
+          :label="t('passwordConfirm')"
+          :placeholder="t('changePwdConfirm')"
+          type="password"
+          :rules="[rules.required, rules.passwordVerify]"
+          required
+          @keyup.enter="onClickEdit"
+          flat
+          validate-on-blur
+        />
+      </VCardText>
+      <VDivider class="mt-2" />
+      <VCardActions class="ma-2 d-flex justify-end">
+        <Button
+          rounded="xl"
+          :label="t('cancel')"
+          @click="updateShowValue(false)"
+        />
+        <Button
+          color="primary"
+          :disabled="
+            isEmpty(accountPassword) ||
+            not(equals(accountPassword, accountPasswordConfirm))
+          "
+          :label="t('confirm')"
+          variant="flat"
+          @click="onClickEdit"
+        />
+      </VCardActions>
+    </VCard>
+  </VDialog> -->
+</template>
 
 <style lang="scss" scoped></style>

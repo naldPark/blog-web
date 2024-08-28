@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
 import { storeToRefs } from 'pinia';
 import Button from '@/components/common/Button.vue';
+import { VSnackbar } from 'vuetify/lib/components/index.mjs';
 
-const { toastMessages } = storeToRefs(useAppCommonStore());
+const { toasts } = storeToRefs(useAppCommonStore());
 
 const getIconAndColor = (type: string) =>
   ({
@@ -25,8 +26,8 @@ const handleButtonClick = (toast: {
 
 <template>
   <div class="text-center">
-    <v-snackbar
-      v-for="(toast, index) in toastMessages"
+    <VSnackbar
+      v-for="(toast, index) in toasts"
       :key="index"
       v-model="toast.show"
       multi-line
@@ -38,7 +39,7 @@ const handleButtonClick = (toast: {
       content-class="snackbar-content"
       tile
     >
-      <v-alert
+      <VAlert
         :color="getColor(toast.info.type)"
         :border="'top'"
         style="background-color: #212121"
@@ -48,9 +49,9 @@ const handleButtonClick = (toast: {
         theme="dark"
       >
         <template v-slot:prepend>
-          <v-icon :size="28" :color="getColor(toast.info.type)">
+          <VIcon :size="28" :color="getColor(toast.info.type)">
             {{ getIcon(toast.info.type) }}
-          </v-icon>
+          </VIcon>
         </template>
         <template v-slot:title>
           <div :style="{ color: getIcon(toast.info.type) }" class="title">
@@ -60,7 +61,7 @@ const handleButtonClick = (toast: {
         <template v-slot:text>
           <div class="message">{{ toast.info.message }}</div>
         </template>
-      </v-alert>
+      </VAlert>
       <template v-slot:actions v-if="toast.info.showButton">
         <Button
           color="grey"
@@ -69,7 +70,7 @@ const handleButtonClick = (toast: {
           :label="toast.info.buttonMsg ?? $t('close')"
         />
       </template>
-    </v-snackbar>
+    </VSnackbar>
   </div>
 </template>
 

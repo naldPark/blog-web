@@ -9,7 +9,7 @@ const { shape, href } = defineProps({
     type: String as PropType<
       'flat' | 'text' | 'elevated' | 'tonal' | 'outlined' | 'plain'
     >,
-    default: 'outlined',
+    default: 'tonal',
     required: false,
   },
   label: { type: String, required: false },

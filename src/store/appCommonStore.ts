@@ -13,7 +13,7 @@ export interface DialogInfo {
   showCloseButton?: boolean;
 }
 
-export interface ToastMessageInfo {
+interface ToastInfo {
   type: 'success' | 'error' | 'warning';
   title?: string;
   showButton?: boolean;
@@ -25,16 +25,16 @@ export interface ToastMessageInfo {
   inputTime?: number;
 }
 
-interface ToastMessage {
+interface Toast {
   key: string;
   show: boolean;
-  info: ToastMessageInfo;
+  info: ToastInfo;
 }
 
 export interface AppStatus {
   timezone: string;
   showBlocker: boolean;
-  toastMessages: Array<ToastMessage>;
+  toasts: Toast[];
   dialogInfo: DialogInfo;
   prevRouteName: string | null | undefined;
 }
@@ -42,7 +42,7 @@ export interface AppStatus {
 export const useAppCommonStore = defineStore('app-common', () => {
   const timezone = ref('Asia/Seoul');
   const showBlocker = ref(false);
-  const toastMessages: Ref<ToastMessage[]> = ref([]);
+  const toasts: Ref<Toast[]> = ref([]);
   const dialogInfo: Ref<DialogInfo> = ref({
     show: false,
     title: '',
@@ -103,9 +103,9 @@ export const useAppCommonStore = defineStore('app-common', () => {
     setLoading({ val: false, cancel: false });
   };
 
-  const addToastMessage = (info: ToastMessageInfo) => {
+  const addToast = (info: ToastInfo) => {
     const timestamp = Date.now();
-    toastMessages.value.push({
+    toasts.value.push({
       key: timestamp.toString(),
       show: true,
       info: {
@@ -119,12 +119,12 @@ export const useAppCommonStore = defineStore('app-common', () => {
   return {
     timezone,
     showBlocker,
-    toastMessages,
+    toasts,
     dialogInfo,
     prevRouteName,
     showDialog,
     hideDialog,
-    addToastMessage,
+    addToast,
     showLoading,
     hideLoading,
   };
