@@ -1,3 +1,5 @@
+import JSEncrypt from 'jsencrypt';
+
 /**
  *
  * @param path /src/assets/svgs
@@ -46,4 +48,18 @@ export const dataURItoBlob = (dataURI: string): string => {
 
 export const shuffleArray = (array: any[]) => {
   return array.sort(() => Math.random() - 0.5);
+};
+
+export const encryptPassword = (rsaRes: string, password: string) => {
+  const rsa = new JSEncrypt({ default_key_size: '2048' });
+  rsa.setPublicKey(rsaRes);
+  const chunkSize = 117;
+  const chunks = [];
+  for (let i = 0; i < password.length; i += chunkSize) {
+    const chunk = password.slice(i, i + chunkSize);
+    const encryptedChunk = rsa.encrypt(chunk);
+    chunks.push(encryptedChunk);
+  }
+  const encryptedValue = chunks.join(':');
+  return encryptedValue;
 };

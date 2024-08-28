@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useI18n } from 'vue-i18n';
-import { editPassword } from '@/api/accountService';
+import { editPassword, getRsa } from '@/api/accountService';
 import { ApiErrorResponse, ApiResponse } from '@/types/axios';
 import { isEmpty, equals, not } from 'ramda';
 import Button from '@/components/common/Button.vue';
@@ -10,10 +10,7 @@ import InputText from '@/components/common/InputText.vue';
 import { passwordRegExp, passwordVerifyRegExp } from '../../utils/regExpUtil';
 import useMutation from '@/hook/useMutation';
 import Dialog from '@/components/common/Dialog.vue';
-
-/** TODO: 비밀번호 변경할때 암호화 안되어있음.
- * 변경 후 다이어로그 안닫힘
- */
+import { encryptPassword } from '@/utils/commonUtil';
 
 const { accountId } = defineProps<{
   accountId: string;
@@ -23,11 +20,6 @@ const accountPassword = ref<string>('');
 const accountPasswordConfirm = ref('');
 const { t } = useI18n();
 const appStatusStore = useAppCommonStore();
-const emits = defineEmits(['update:modelValue']);
-const updateShowValue = (value: any) => {
-  emits('update:modelValue', value);
-};
-
 const showDialog = defineModel('showDialog', {
   type: Boolean,
 });
@@ -41,26 +33,24 @@ const rules = {
     t('passwordMatchRulesError'),
 };
 
-onMounted(() => {
-  console.log('마운');
-});
-
 const { mutate: onClickEdit } = useMutation({
-  mutationFn: () => editPassword(accountId, accountPassword.value),
+  mutationFn: () => {
+    const rsaRes = getRsa() as any;
+    const encryptedValue = encryptPassword(rsaRes.data, accountPassword.value);
+    return editPassword(accountId, encryptedValue);
+  },
   onSuccess: () => {
     appStatusStore.showToast({
       type: 'success',
       message: t('confirmMsg'),
     });
+    showDialog.value = false;
   },
   onError: (error: ApiErrorResponse) => {
     appStatusStore.showToast({
       type: 'error',
       message: t(`error_code.${error.error_i18n}`),
     });
-  },
-  onSettled: () => {
-    updateShowValue(false);
   },
 });
 
@@ -112,11 +102,7 @@ const handleClickOutside = () => {
       />
     </template>
     <template #footer>
-      <Button
-        rounded="xl"
-        :label="t('cancel')"
-        @click="updateShowValue(false)"
-      />
+      <Button rounded="xl" :label="t('cancel')" @click="showDialog = false" />
       <Button
         color="primary"
         :disabled="

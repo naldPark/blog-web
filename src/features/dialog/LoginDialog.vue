@@ -51,7 +51,7 @@ import { useI18n } from 'vue-i18n';
 import { login, getRsa } from '@/api/accountService';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useUserStore } from '@/store/userStore';
-import { decodeToken } from '@/utils/commonUtil';
+import { decodeToken, encryptPassword } from '@/utils/commonUtil';
 import InputText from '@/components/common/InputText.vue';
 import { useCookies } from '@vueuse/integrations/useCookies';
 import JSEncrypt from 'jsencrypt';
@@ -104,16 +104,7 @@ const { mutate: postLogin } = useMutation({
 const onClickLogin = async () => {
   try {
     const rsaRes = (await getRsa()) as any;
-    const rsa = new JSEncrypt({ default_key_size: '2048' });
-    rsa.setPublicKey(rsaRes.data);
-    const chunkSize = 117;
-    const chunks = [];
-    for (let i = 0; i < accountPassword.value.length; i += chunkSize) {
-      const chunk = accountPassword.value.slice(i, i + chunkSize);
-      const encryptedChunk = rsa.encrypt(chunk);
-      chunks.push(encryptedChunk);
-    }
-    const encryptedValue = chunks.join(':');
+    const encryptedValue = encryptPassword(rsaRes.data, accountPassword.value);
     postLogin(encryptedValue);
   } catch (error) {
     appStatusStore.showDialog({
