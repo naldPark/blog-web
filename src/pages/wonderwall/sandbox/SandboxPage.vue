@@ -265,7 +265,6 @@ const copyClipboard = async () => {
 };
 
 const onChangeStatus = (e: any) => {
-  console.log('e는 ', e);
   if (e === 'Start') {
     infraService.getSandboxAccessPoint().then((res: any) => {
       console.log(res);

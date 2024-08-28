@@ -16,7 +16,6 @@ export const availableLanguages = [
 
 // 로케일을 결정하는 함수
 export const getLocale = () => {
-  console.log('로케일');
   const lang = localStorage.getItem(LOCAL_STORAGE_KEYS.LANGUAGE);
   return lang ? lang : 'ko';
 };

@@ -42,7 +42,6 @@ const createHttpClient = (): AxiosInstance => {
   const responseInterceptorHandler = async (
     response: AxiosResponse,
   ): Promise<AxiosResponse> => {
-    // console.log('리스폰스');
     return response;
   };
 

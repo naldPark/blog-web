@@ -51,11 +51,6 @@ const onClickDialog = () => {
     dialogInfo.value.action();
   }
 };
-
-onMounted(() => {
-  console.log('??');
-  // Your initialization code here
-});
 </script>
 
 <style lang="scss" scoped></style>

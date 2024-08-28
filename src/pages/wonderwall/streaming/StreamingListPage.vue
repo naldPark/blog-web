@@ -93,8 +93,8 @@ const movieList: Ref<VideoDetailData[]> = ref([]);
 const searchText: Ref<string> = ref('');
 const searchCategory: Ref<string> = ref('');
 
-const showUploadDialog = ref(false); // 다이얼로그가 열린 상태로 초기화
-// v-model에 대한 update 이벤트를 처리하는 함수를 정의합니다.
+const showUploadDialog = ref(false);
+// v-model에 대한 update 이벤트를 처리하는 함수 정의
 const updateShowUploadDialog = (newValue: boolean) => {
   showUploadDialog.value = newValue;
 };
@@ -138,7 +138,6 @@ const playAny = () => {
 };
 
 const onClickMovie = (item: VideoDetailData) => {
-  // console.log('엄마 클릭', item.fileC)
   if (item.fileSrc !== null && item.fileSrc !== '') {
     router
       .push({

@@ -137,7 +137,6 @@ useEffect(() => {
 }, [showDialog]);
 
 const onTest = () => {
-  console.log('왜반응을안하지');
   showDialog.value = !showDialog.value;
 };
 

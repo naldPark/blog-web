@@ -55,7 +55,7 @@ import InputText from '@/components/common/InputText.vue';
 import { useCookies } from '@vueuse/integrations/useCookies';
 import JSEncrypt from 'jsencrypt';
 import useMutation from '@/hook/useMutation';
-import { ApiErrorResponse, ApiResponse } from '@/types/axios';
+import { ApiErrorResponse, ApiResponse, ApiResult } from '@/types/axios';
 
 const { t } = useI18n();
 const accountId = ref('');
@@ -70,42 +70,42 @@ const updateModelValue = (value: boolean) => {
   emits('update:modelValue', value);
 };
 
-const { mutate: postLogin } = useMutation(
-  (encryptedValue: string) =>
+const { mutate: postLogin } = useMutation({
+  mutationFn: (encryptedValue: string) =>
     login({
       accountId: accountId.value,
       password: encryptedValue,
     }),
-  {
-    onSuccess: (res) => {
-      const token = res.data.access_token;
-      cookies.set('access_token', token);
-      const tokenInfo = JSON.parse(decodeToken(token));
-      userStore.setAccountInfo(
-        {
-          accountId: tokenInfo.user_id,
-          accountName: tokenInfo.user_name,
-          authority: tokenInfo.authority,
-          email: tokenInfo.user_email,
-        },
-        token,
-      );
-      updateModelValue(false);
-    },
-    onError: (error: ApiErrorResponse) => {
-      appStatusStore.showDialog({
-        title: t('loginFailed'),
-        description: error.error_i18n,
-        showCloseButton: true,
-        action: () => {},
-      });
-      userStore.resetAccountInfo();
-    },
+  onSuccess: (res) => {
+    const token = res.data.access_token;
+    cookies.set('access_token', token);
+    const tokenInfo = JSON.parse(decodeToken(token));
+    userStore.setAccountInfo(
+      {
+        accountId: tokenInfo.user_id,
+        accountName: tokenInfo.user_name,
+        authority: tokenInfo.authority,
+        email: tokenInfo.user_email,
+      },
+      token,
+    );
+    updateModelValue(false);
   },
-);
+  onError: (error: ApiErrorResponse) => {
+    appStatusStore.showDialog({
+      title: t('loginFailed'),
+      description: error.error_i18n,
+      showCloseButton: true,
+      action: () => {},
+    });
+    userStore.resetAccountInfo();
+  },
+  onSettled: () => {
+    console.log('사용자 onSettled 호출');
+  },
+});
 
 const onClickLogin = async () => {
-  appStatusStore.showLoading();
   try {
     const rsaRes = (await getRsa()) as any;
     const rsa = new JSEncrypt({ default_key_size: '2048' });
@@ -119,7 +119,6 @@ const onClickLogin = async () => {
     }
     const encryptedValue = chunks.join(':');
     postLogin(encryptedValue);
-    appStatusStore.hideLoading();
   } catch (error) {
     appStatusStore.showDialog({
       title: t('error'),
@@ -127,7 +126,6 @@ const onClickLogin = async () => {
       showCloseButton: true,
       action: () => {},
     });
-    appStatusStore.hideLoading();
   }
 };
 </script>
