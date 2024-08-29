@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "jsx": "preserve",
+    "typeRoots": ["src/types/*", "node_modules/@types"],
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "baseUrl": "./",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
+    "allowJs": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "composite": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true, //빌드시 js로 변환하지 않는다. prod 빌드시에는 false가 권장됨
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src", "vite.config.ts"],
+  "exclude": ["node_modules"]
+}
