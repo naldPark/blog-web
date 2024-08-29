@@ -1,8 +1,7 @@
 <template>
   <VDialog
     v-model="visible"
-    :max-width="maxWidth"
-    min-width="300px"
+    :max-width="maxWidth ? maxWidth : '100%'"
     :max-height="maxHeight"
     :persistent="persistent"
     :scrollable="scrollable"
