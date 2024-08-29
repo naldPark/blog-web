@@ -2,7 +2,6 @@
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { storeToRefs } from 'pinia';
 import Button from '@/components/common/Button.vue';
-import { VSnackbar } from 'vuetify/lib/components/index.mjs';
 
 const { toasts } = storeToRefs(useAppCommonStore());
 

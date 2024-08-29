@@ -102,7 +102,7 @@ const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
           v-model="menu.active"
           no-action
           @click="onChangePage(menu)"
-          :append-icon="menu.subMenus ? 'mdi-chevron-up' : null"
+          :append-icon="menu.subMenus ? 'mdi-chevron-up' : undefined"
         >
           <template v-slot:prepend>
             <VIcon :icon="menu.icon" />
