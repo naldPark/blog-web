@@ -1,7 +1,7 @@
 <template>
   <VDialog
     v-model="visible"
-    :max-width="maxWidth ? maxWidth : '100%'"
+    :max-width="maxWidth"
     :max-height="maxHeight"
     :persistent="persistent"
     :scrollable="scrollable"
@@ -52,7 +52,7 @@ import Button from './Button.vue';
 const props = defineProps({
   maxWidth: {
     type: [String, Number],
-    default: '600px',
+    default: '100%',
   },
   maxHeight: {
     type: [String, Number],
