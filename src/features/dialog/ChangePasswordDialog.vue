@@ -46,12 +46,6 @@ const { mutate: onClickEdit } = useMutation({
     });
     showDialog.value = false;
   },
-  onError: (error: ApiErrorResponse) => {
-    appStatusStore.showToast({
-      type: 'error',
-      message: t(`error_code.${error.error_i18n}`),
-    });
-  },
 });
 </script>
 

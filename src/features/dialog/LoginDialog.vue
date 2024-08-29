@@ -43,7 +43,7 @@ import { useCookies } from '@vueuse/integrations/useCookies';
 import useMutation from '@/hook/useMutation';
 import Button from '@/components/common/Button.vue';
 import { isEmpty, any } from 'ramda';
-import { ApiErrorResponse } from '@/types/axios';
+import { ApiResponse } from '@/types/axios';
 
 const { t } = useI18n();
 const accountId = ref('');
@@ -78,31 +78,16 @@ const { mutate: postLogin } = useMutation({
     );
     showDialog.value = false;
   },
-  onError: (error: ApiErrorResponse) => {
-    appStatusStore.showToast({
-      type: 'error',
-      message: t(`error_code.${error.error_i18n}`),
-    });
+  onError: () => {
     userStore.resetAccountInfo();
   },
 });
 
 const onClickLogin = async () => {
-  try {
-    const rsaRes = (await getRsa()) as any;
-    const encryptedValue = encryptPassword(rsaRes.data, accountPassword.value);
-    postLogin(encryptedValue);
-  } catch (error) {
-    appStatusStore.showDialog({
-      title: t('error'),
-      description: 'unknown error',
-      showCloseButton: true,
-      action: () => {},
-    });
-  }
+  const rsaRes: ApiResponse = await getRsa();
+  const encryptedValue = encryptPassword(rsaRes.data, accountPassword.value);
+  postLogin(encryptedValue);
 };
 </script>
 
-<style lang="scss" scoped>
-/* 스타일 정의 부분 */
-</style>
+<style lang="scss" scoped></style>

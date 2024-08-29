@@ -1,29 +1,38 @@
 <template>
-  <VDialog max-width="1200" @update:model-value="updateShowValue">
-    <VCard color="#161616">
-      <VCardText>
-        <h4 class="mb-5">
-          <VIcon class="text-primary mr-3"> mdi-video </VIcon
-          >{{ t('video.uploadVideo') }}
-        </h4>
-        <ImportLocalFile
-          selected-type="nan"
-          :file-types="availableFileTypes"
-          :is-multiple="isMultiple"
-          @updated-uploadfiles="updatedUploadfiles"
-        />
-        <VDivider class="mt-10" />
-        <FileUpload v-model="movieInfo" @close-dialog="closeDialog" />
-      </VCardText>
-      <VCardActions>
-        <VSpacer />
-      </VCardActions>
-    </VCard>
-  </VDialog>
+  <Dialog
+    v-model:visible="showDialog"
+    max-width="1200"
+    min-width="1000"
+    @confirm="handleConfirm"
+    @click:outside="handleClickOutside"
+  >
+    <template #header>
+      <VIcon class="text-primary mr-3" icon="mdi-video" />
+      {{ t('video.uploadVideo') }}
+    </template>
+    <template #default>
+      <h4 class="mb-5">
+        <VIcon class="text-primary mr-3" icon="mdi-video" />
+        {{ t('video.uploadVideo') }}
+      </h4>
+      <ImportLocalFile
+        selected-type="nan"
+        :file-types="availableFileTypes"
+        :is-multiple="isMultiple"
+        @updated-uploadfiles="updatedUploadfiles"
+      />
+      <VDivider class="mt-10" />
+      <FileUpload v-model="movieInfo" @close-dialog="closeDialog" />
+    </template>
+    <!-- <template #footer>
+      <VSpacer />
+    </template> -->
+  </Dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch, Ref } from 'vue';
+import Dialog from '@/components/common/Dialog.vue';
 import { useI18n } from 'vue-i18n';
 import ImportLocalFile from '@/features/wonderwall/video/ImportLocalFIle.vue';
 import FileUpload from '@/features/wonderwall/video/FileUpload.vue';
@@ -36,12 +45,24 @@ const { isMultiple } = defineProps({
   },
 });
 
-const emit = defineEmits(['close', 'fetchVideoList', 'update:modelValue']);
-const updateShowValue = (value: boolean) => {
-  emit('update:modelValue', value);
-};
+const showDialog = defineModel('showDialog', {
+  type: Boolean,
+});
+
+const emit = defineEmits(['close', 'fetchVideoList']);
 
 const availableFileTypes = ['.mp4'];
+
+// Confirm 버튼 클릭 처리 함수
+const handleConfirm = () => {
+  console.log('Confirm button clicked');
+  showDialog.value = false; // 다이얼로그 닫기
+};
+
+// 다이얼로그 외부 클릭 처리 함수
+const handleClickOutside = () => {
+  console.log('Clicked outside the dialog');
+};
 
 const movieInfo: Ref<MovieInfoData> = ref({
   category: '',
@@ -60,7 +81,7 @@ const movieInfo: Ref<MovieInfoData> = ref({
 
 const closeDialog = () => {
   console.log();
-  updateShowValue(false);
+  showDialog.value = false;
   emit('fetchVideoList');
 };
 

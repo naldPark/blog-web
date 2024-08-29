@@ -62,7 +62,7 @@
     </template>
     <VideoUploadDialog
       :isMultiple="true"
-      v-model:modelValue="showUploadDialog"
+      v-model:showDialog="showUploadDialog"
       @fetchVideoList="fetchVideoList"
     />
   </VContainer>
