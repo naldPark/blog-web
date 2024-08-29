@@ -41,17 +41,18 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 @media only screen and (max-device-width: 640px) {
   .main-layout {
-    height: calc(var(--vh, 1vh) * 100) !important;
+    height: calc(var(--vh, 1dvh) * 100) !important;
   }
 }
 
 .main-cover {
   height: 100%;
-
+  width: 100%;
   .main-layout {
     position: relative;
     margin: auto;
     height: 100%;
+    // height: calc(var(--vh, 1dvh) * 100) !important;
     width: 100%;
     background-color: #0e0e0e;
 

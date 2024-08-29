@@ -3,6 +3,7 @@
   <VDivider class="mt-5" />
   <Experience />
   <VDivider class="mt-5" />
+
   <BlogExplore />
   <div class="mt-10 hidden-sm-and-down"></div>
 </template>
@@ -43,21 +44,7 @@ const onClickVisit = (url: any) => {
 };
 </script>
 
-<style lang="scss" scoped>
-.blog-wrapper-box {
-  border: 0;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.8);
-  background-color: rgba(20, 20, 20, 0.3);
-  border-radius: 24px;
-
-  max-height: 400px;
-
-  &:hover {
-    cursor: pointer;
-    opacity: 0.5;
-  }
-}
-</style>
+<style lang="scss" scoped></style>
 
 <!-- <template>
   <div>

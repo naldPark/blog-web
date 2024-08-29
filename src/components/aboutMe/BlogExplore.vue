@@ -49,31 +49,47 @@ const onClickVisit = (url: string) => window.open(url, '_blank');
 </script>
 
 <template>
-  <div class="blog-wrapper">
-    <h2 class="text-primary mb-3">BLOG EXPLORE</h2>
-    <VRow>
-      <VCol v-for="(item, index) in cardList" :key="index" cols="12" md="4">
-        <div
-          class="blog-wrapper-box mx-auto pa-5"
-          @click="onClickVisit(item.href)"
-        >
-          <div>
-            <div class="text-overline mb-4">
-              {{ item.title }} / {{ item.header }}
+  <div class="text-md-left pa-7">
+    <div class="blog-wrapper">
+      <h2 class="text-primary mb-3">BLOG EXPLORE</h2>
+      <VRow>
+        <VCol v-for="(item, index) in cardList" :key="index" cols="12" md="4">
+          <div
+            class="blog-wrapper-box mx-auto pa-5"
+            @click="onClickVisit(item.href)"
+          >
+            <div>
+              <div class="text-overline mb-4">
+                {{ item.title }} / {{ item.header }}
+              </div>
+              <h5>{{ item.text }}</h5>
             </div>
-            <h5>{{ item.text }}</h5>
+            <VImg
+              width="200"
+              height="80"
+              contain
+              class="mx-auto"
+              :src="getImageUrl(item.src)"
+            />
           </div>
-          <VImg
-            width="200"
-            height="80"
-            contain
-            class="mx-auto"
-            :src="getImageUrl(item.src)"
-          />
-        </div>
-      </VCol>
-    </VRow>
+        </VCol>
+      </VRow>
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.blog-wrapper-box {
+  border: 0;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.8);
+  background-color: rgba(20, 20, 20, 0.3);
+  border-radius: 24px;
+
+  max-height: 400px;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+}
+</style>

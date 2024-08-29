@@ -34,9 +34,12 @@ const currentYear = computed(() => new Date().getFullYear());
   background-color: #212121;
   left: 0;
   right: 0;
+  // position: absolute;
   align-items: center;
   display: flex;
-  position: relative;
+  // flex: 1 1 auto;
+  // padding: 8px 16px;
+  // position: relative;
 }
 .not-mobile {
   padding: 8px;
