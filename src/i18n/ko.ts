@@ -65,6 +65,7 @@ export default {
   edit: '수정',
   delete: '삭제',
   userManage: '사용자 관리',
+  userList: '유저리스트',
   resourceManage: '리소스 관리',
   emptyManage: '미정',
   addUser: '사용자 추가',

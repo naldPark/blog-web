@@ -48,7 +48,6 @@
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { defineProps, defineEmits } from 'vue';
 import Button from './Button.vue';
 // Props 정의
 const props = defineProps({

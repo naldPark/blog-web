@@ -1,34 +1,4 @@
-<template>
-  <Dialog v-model:visible="showDialog" width="450px">
-    <template #header>
-      <VIcon class="text-primary" icon="mdi-key" />
-      {{ t('login') }}
-    </template>
-    <template #default>
-      <InputText v-model="accountId" :label="t('id')" required />
-      <InputText
-        v-model="accountPassword"
-        :label="t('password')"
-        :passwordIcon="true"
-        required
-        :icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
-        type="password"
-        @enter="onClickLogin"
-      />
-    </template>
-    <template #footer>
-      <Button
-        :disabled="any(isEmpty, [accountId, accountPassword])"
-        label="Log In"
-        class="mb-3"
-        block
-        color="primary"
-        variant="tonal"
-        @click="onClickLogin"
-      />
-    </template>
-  </Dialog>
-</template>
+
 
 <script setup lang="ts">
 import { ref } from 'vue';
@@ -89,5 +59,37 @@ const onClickLogin = async () => {
   postLogin(encryptedValue);
 };
 </script>
+
+<template>
+  <Dialog v-model:visible="showDialog" width="450px">
+    <template #header>
+      <VIcon class="text-primary" icon="mdi-key" />
+      {{ t('login') }}
+    </template>
+    <template #default>
+      <InputText v-model="accountId" :label="t('id')" required />
+      <InputText
+        v-model="accountPassword"
+        :label="t('password')"
+        :passwordIcon="true"
+        required
+        :icon="passwordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+        type="password"
+        @enter="onClickLogin"
+      />
+    </template>
+    <template #footer>
+      <Button
+        :disabled="any(isEmpty, [accountId, accountPassword])"
+        label="Log In"
+        class="mb-3"
+        block
+        color="primary"
+        variant="tonal"
+        @click="onClickLogin"
+      />
+    </template>
+  </Dialog>
+</template>
 
 <style lang="scss" scoped></style>

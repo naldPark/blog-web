@@ -1,33 +1,94 @@
 <template>
-  <div>
-    <div>
-      <VDataTable v-model="selected" :headers="userHeaders" :items="userList">
-        <template v-slot:item.status="{ value }">
-          <span :style="{ color: value.color }">{{ value.key }}</span>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <VIcon class="text-success" size="small"> mdi-pencil </VIcon>
-          <VIcon size="small"> mdi-delete </VIcon>
-        </template>
-      </VDataTable>
-    </div>
-  </div>
+  <VCard flat>
+    <VCardTitle class="d-flex align-center pe-2">
+      <VIcon icon="mdi-account-group" size="sm" color="secondary" />
+      <span class="ml-3">{{ t('userList') }}</span>
+      <VSpacer />
+      <InputText
+        v-model="userSearch"
+        density="compact"
+        append-inner-icon="mdi-magnify"
+        variant="solo-filled"
+        flat
+        hide-details
+        single-line
+      />
+    </VCardTitle>
+    <VDivider />
+    <VDataTable
+      class="ps-3 pe-3"
+      v-model:search="userSearch"
+      :headers="userHeaders"
+      :items="userList"
+      :page="listOptions.page"
+      :itemsPerPage="listOptions.itemsPerPage"
+    >
+      <template v-slot:item.status="{ value }">
+        <span :style="{ color: value.color }">{{ value.key }}</span>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <VTooltip :text="t('edit')">
+          <template v-slot:activator="{ props }">
+            <Button
+              color=""
+              class="text-amber-lighten-1 mr-3"
+              icon="mdi-pencil"
+              size="sm"
+              variant="text"
+              v-bind="props"
+            />
+          </template>
+        </VTooltip>
+        <VTooltip :text="t('delete')">
+          <template v-slot:activator="{ props }">
+            <Button
+              color=""
+              class="text-grey-lighten-1"
+              icon="mdi-delete"
+              size="sm"
+              variant="text"
+              v-bind="props"
+              @onClick="clickDeleteUser(item)"
+            />
+          </template>
+        </VTooltip>
+      </template>
+    </VDataTable>
+  </VCard>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { getUserList, createUser, editUser } from '@/api/accountService';
+import {
+  getUserList,
+  createUser,
+  editUser,
+  changeStatus,
+} from '@/api/accountService';
 import InputText from '@/components/common/InputText.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
-import { isEmpty } from 'ramda';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
 import { useQuery } from 'vue-query';
 import { ApiErrorResponse, ApiResponse } from '@/types/axios';
+import Button from '@/components/common/Button.vue';
+
+interface UserManage {
+  accountId: string;
+  accountName: string;
+  authority: number;
+  recentLoginDt: string;
+  status: number;
+  email: string;
+  createdDt: string;
+  loginFailCnt: number;
+}
 
 const appStatusStore = useAppCommonStore();
 const { t } = useI18n();
 const props = defineProps<{ isMobile?: boolean }>();
+
+const userSearch = ref('');
 
 const isMobile = props.isMobile ?? false;
 const newUserInfo = ref({
@@ -37,22 +98,18 @@ const newUserInfo = ref({
   password: '',
   authority: 4,
 });
-const selected = ref<any[]>([]);
 const addUserDialog = ref(false);
 const editUserDialog = ref(false);
 const showEditAccountPasswordDialog = ref(false);
 const selectedItems = ref<any[]>([]);
-const userList = ref<any[]>([]);
+const userList = ref<UserManage[]>([]);
 const showPassword = ref(false);
 const confirmPassword = ref('');
 const totalPageNumber = ref(0);
 
 const listOptions = ref({
   page: 1,
-  itemsPerPage: 12,
-  pageItem: 12,
-  pageItems: [12, 24, 48],
-  totalCount: 0,
+  itemsPerPage: 5,
 });
 
 const authority = ref([
@@ -77,7 +134,7 @@ const userHeaders = ref([
     width: 150,
   },
   { title: t('createdDt'), key: 'createdDt', sortable: false, width: 150 },
-  { title: '', key: 'actions', sortable: false },
+  { title: 'Action', key: 'actions', sortable: false, width: 150 },
 ]);
 
 const currentPageNumber = computed({
@@ -101,22 +158,22 @@ const resetInput = () => {
   confirmPassword.value = '';
 };
 
-const clickDeleteUsers = () => {
-  const checkedUsers = selectedItems.value.map((m) => m.accountName);
+const clickDeleteUser = (rowData: UserManage) => {
   appStatusStore.showDialog({
     title: t('deleteUsers'),
-    description: `${t('deleteUsersMsg', [checkedUsers.join(', ')])}`,
+    description: `${t('deleteUsersMsg', '')}`,
     showCloseButton: true,
     action: () => {
-      // changeStatus(checkedUsers, 2).then((res: any) => {
-      //   if (res.data.statusCode === 200) {
-      //     fetchUserList();
-      //     appStatusStore.showToast({
-      //       type: 'error',
-      //       message: t('complete'),
-      //     });
-      //   }
-      // });
+      console.log('action');
+      changeStatus(rowData.accountId, 2).then((res: any) => {
+        if (res.data.statusCode === 200) {
+          refetch;
+          appStatusStore.showToast({
+            type: 'error',
+            message: t('complete'),
+          });
+        }
+      });
     },
   });
 };

@@ -44,7 +44,7 @@ $display-breakpoints: (
 );
 
 #app {
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100dvh;
   overflow: unset;
 
   .v-application--wrap {

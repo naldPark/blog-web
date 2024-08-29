@@ -63,6 +63,7 @@ export default {
   edit: 'edit',
   delete: 'delete',
   userManage: 'User Manage',
+  userList: 'User List',
   resourceManage: 'resource Manage',
   emptyManage: 'Manage',
   addUser: 'add User',

@@ -1,24 +1,33 @@
 <template>
-  <div class="page">
-    <h3 class="display-1 font-weight-bold mb-3 text-right text--disabled">
-      Admin Page
-    </h3>
-    <VTabs right icons-and-text background-color="#0e0e0e" v-model="currentTab">
-      <VTab>
-        {{ t('userManage') }}
-        <VIcon>mdi-account-wrench-outline</VIcon>
-      </VTab>
-      <VTab>
-        {{ t('resourceManage') }}
-        <VIcon>mdi-video-outline</VIcon>
-      </VTab>
-      <VTab>
-        {{ t('emptyManage') }}
-        <VIcon>mdi-help</VIcon>
-      </VTab>
-    </VTabs>
-    <UserManage v-if="currentTab === 0" :isMobile="isMobile" />
-    <!-- <resource-manage v-if="currentTab === 1" :isMobile="isMobile"></resource-manage> -->
+  <div class="admin-wrapper">
+    <v-sheet color="grey-darken-4 pa-5" elevation="3" rounded="lg" width="95%">
+      <VIcon icon="mdi-cogs" />
+      <span class="ml-3 text-orange-lighten-1 text-h6">Admin</span>
+      <VTabs
+        v-model="currentTab"
+        class="tab-group"
+        slider-color="primary"
+        align-tabs="center"
+        height="60"
+        color="white"
+      >
+        <VTab>
+          <VIcon icon="mdi-account-outline" />
+          {{ t('userManage') }}
+        </VTab>
+        <VTab>
+          <VIcon icon="mdi-video-outline" />
+          {{ t('resourceManage') }}
+        </VTab>
+        <VTab>
+          <VIcon icon="mdi-help" />
+          {{ t('emptyManage') }}
+        </VTab>
+      </VTabs>
+      <div class="tab-content">
+        <UserManage v-if="currentTab === 0" :isMobile="isMobile" />
+      </div>
+    </v-sheet>
   </div>
 </template>
 
@@ -50,4 +59,21 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.admin-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  .tab-group {
+    margin-bottom: 5px;
+    height: 60px;
+  }
+  .tab-content {
+    border: 1px solid #424242;
+    min-height: 800px;
+    padding: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}
+</style>

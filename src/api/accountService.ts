@@ -45,12 +45,12 @@ const editPassword = async (
 
 /**
  * 사용자 상태 변경 메서드
- * @param {Array<string>} userIds - 상태를 변경할 사용자 아이디 배열
+ * @param {string} userId - 상태를 변경할 사용자 아이디 배열
  * @param {number} status - 새로운 상태 값
  * @returns {Promise<ApiResult<any>>} 상태 변경 결과를 반환하는 Promise
  */
 const changeStatus = async (
-  userIds: Array<string>,
+  userIds: string,
   status: number,
 ): Promise<ApiResult<any>> => {
   const requestParam = {

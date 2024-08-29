@@ -31,6 +31,7 @@ const computedRounded = computed(() => {
     :rounded="computedRounded"
     :color="color"
     :href="href"
+    :size="size"
     :icon="icon"
     :variant="variant"
     :target="href != undefined ? '_blank' : undefined"
