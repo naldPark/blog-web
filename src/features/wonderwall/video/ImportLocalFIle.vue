@@ -56,7 +56,7 @@ import { ref, computed } from 'vue';
 import Config from '@/config';
 import { useI18n } from 'vue-i18n';
 import { clone } from 'ramda';
-import { useAppCommonStore } from '@/store';
+import { useAppCommonStore } from '@/store/appCommonStore';
 const { t } = useI18n();
 let fileInput: any = [];
 const props = defineProps({
