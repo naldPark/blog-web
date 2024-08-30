@@ -20,9 +20,9 @@
       v-model:search="userSearch"
       :headers="userHeaders"
       :items="userList"
-      :page="listOptions.page"
-      :itemsPerPage="listOptions.itemsPerPage"
     >
+      <!-- :page="listOptions.page"
+      :itemsPerPage="listOptions.itemsPerPage" -->
       <template v-slot:item.status="{ value }">
         <span :style="{ color: value.color }">{{ value.key }}</span>
       </template>
@@ -69,9 +69,11 @@ import {
 import InputText from '@/components/common/InputText.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
-import { useQuery } from 'vue-query';
 import { ApiErrorResponse, ApiResponse } from '@/types/axios';
 import Button from '@/components/common/Button.vue';
+import useMutation from '@/hook/useMutation';
+import useCustomQuery from '@/hook/useCustomQuery';
+import { useQuery } from 'vue-query';
 
 interface UserManage {
   accountId: string;
@@ -105,12 +107,12 @@ const selectedItems = ref<any[]>([]);
 const userList = ref<UserManage[]>([]);
 const showPassword = ref(false);
 const confirmPassword = ref('');
-const totalPageNumber = ref(0);
+// const totalPageNumber = ref(0);
 
-const listOptions = ref({
-  page: 1,
-  itemsPerPage: 5,
-});
+// const listOptions = ref({
+//   page: 1,
+//   itemsPerPage: 5,
+// });
 
 const authority = ref([
   { value: 0, label: 'Super' },
@@ -137,10 +139,10 @@ const userHeaders = ref([
   { title: 'Action', key: 'actions', sortable: false, width: 150 },
 ]);
 
-const currentPageNumber = computed({
-  get: () => listOptions.value.page,
-  set: (value) => (listOptions.value.page = value),
-});
+// const currentPageNumber = computed({
+//   get: () => listOptions.value.page,
+//   set: (value) => (listOptions.value.page = value),
+// });
 
 const onClickRow = (click: any, row: any) => {
   console.log('로우클릭', click, row);
@@ -158,24 +160,23 @@ const resetInput = () => {
   confirmPassword.value = '';
 };
 
+const { mutate: deleteUser } = useMutation({
+  mutationFn: (rowData: UserManage) => changeStatus(rowData.accountId, 2),
+  onSuccess: () => {
+    appStatusStore.showToast({
+      type: 'success',
+      message: t('complete'),
+    });
+  },
+});
+
 const clickDeleteUser = (rowData: UserManage) => {
-  appStatusStore.showDialog({
-    title: t('deleteUsers'),
-    description: `${t('deleteUsersMsg', '')}`,
-    showCloseButton: true,
-    action: () => {
-      console.log('action');
-      changeStatus(rowData.accountId, 2).then((res: any) => {
-        if (res.data.statusCode === 200) {
-          refetch;
-          appStatusStore.showToast({
-            type: 'error',
-            message: t('complete'),
-          });
-        }
-      });
-    },
-  });
+  // appStatusStore.showDialog({
+  //   title: t('deleteUsers'),
+  //   description: `${t('deleteUsersMsg', rowData.accountName)}`,
+  //   showCloseButton: true,
+  //   action: () => deleteUser(rowData),
+  // });
 };
 
 const getGroup = (authority: number) => {
@@ -191,7 +192,8 @@ const getStatus = (status: number) => {
   ];
   return statuses[status] || { key: 'active', color: 'green' };
 };
-const { refetch } = useQuery({
+
+const { refetch } = useCustomQuery({
   queryKey: [COMMON_QUERY_KEY.USER_LIST],
   queryFn: getUserList,
   onSuccess: (res: ApiResponse) => {
@@ -202,12 +204,9 @@ const { refetch } = useQuery({
         status: getStatus(status),
       }),
     );
-
-    totalPageNumber.value = Math.ceil(
-      res.data.total / listOptions.value.itemsPerPage,
-    );
   },
 });
+
 const onClickCreate = async () => {
   if (newUserInfo.value.password !== confirmPassword.value) {
     alert(t('passwordMismatch'));
@@ -287,7 +286,7 @@ const clickToChangeAccountInfo = () => {
 };
 
 const changePageItem = () => {
-  listOptions.value.page = 1;
+  // listOptions.value.page = 1;
   // fetchUserList();
 };
 

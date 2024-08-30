@@ -15,9 +15,7 @@ const useCustomMutation = <
 >(
   options: UseMutationOptions<TData, TError, TVariables, TContext>,
 ): CustomMutationReturnType<TData, TError, TVariables, TContext> => {
-  const appStatusStore = useAppCommonStore(); // Pinia store 사용
-  const { showLoading, hideLoading } = appStatusStore;
-  const { t } = useI18n();
+  const { showLoading, hideLoading, showTransErrorToast } = useAppCommonStore();
   const { mutate, isLoading, isError, data } = originUseMutation({
     ...options,
     mutationFn: async (variables: TVariables) => {
@@ -45,7 +43,7 @@ const useCustomMutation = <
 
   /**  ApiErrorResponse타입인 경우 정의된 에러 메세지 반환 */
   const showErrorToast = (error: unknown) => {
-    appStatusStore.showTransErrorToast({
+    showTransErrorToast({
       type: 'error',
       message: isApiErrorResponse(error) ? error.error_i18n : 'error_unknown',
     });
