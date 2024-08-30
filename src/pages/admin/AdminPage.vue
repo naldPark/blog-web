@@ -17,6 +17,7 @@
         </VTab>
         <VTab>
           <VIcon icon="mdi-video-outline" />
+          <!-- 여기는 스트리밍 동영상 수정삭제 할 수 있는 기능을 넣자 -->
           {{ t('resourceManage') }}
         </VTab>
         <VTab>

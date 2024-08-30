@@ -38,6 +38,9 @@ const {
 /** 비밀번호 가시성 ref */
 const passwordVisible = ref(false);
 
+/**ref: 데이터의 상태를 저장하고 반응형으로 만들어주는 데 사용
+computed: 다른 반응형 데이터에 의존하여 자동으로 계산된 값을 제공 */
+
 /** computed로 기본 placeholder 값 설정 */
 const computedPlaceholder = computed(
   () => placeholder || t('defaultPlaceHolder'),

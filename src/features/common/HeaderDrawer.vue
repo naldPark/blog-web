@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import menuItems from '@/assets/data/menu';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useUserStore } from '@/store/userStore';
 import { MenuInfo, SubMenuInfo } from '@/types/common';
 import { storeToRefs } from 'pinia';
@@ -55,6 +55,8 @@ const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
   if ('active' in menu) menu.active = !menu.active;
   router.push({ name: menu.value });
 };
+
+// 전체 그룹을 열기 위해 true로 초기화
 </script>
 
 <template>
@@ -95,7 +97,7 @@ const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
       </VListItem>
     </VList>
     <VDivider />
-    <VList density="compact">
+    <VList density="compact" open-strategy="single">
       <template v-for="(menu, index) in menuInfo" :key="index">
         <VListItem
           v-if="!menu.subMenus"
@@ -109,7 +111,7 @@ const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
           </template>
           <VListItemTitle>{{ t(menu.title) }}</VListItemTitle>
         </VListItem>
-        <VListGroup v-else>
+        <VListGroup v-else open-strategy="single">
           <template v-slot:activator="{ props }">
             <VListItem v-bind="props">
               <template v-slot:prepend>

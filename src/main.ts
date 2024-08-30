@@ -5,7 +5,7 @@ import i18n from './i18n/i18n';
 import { vuetifyPlugins } from './plugins/vuetify';
 import router from './router';
 import '@/styles/settings.scss';
-import 'xterm/css/xterm.css';
+  import '@xterm/xterm/css/xterm.css'
 import { globalConfigPlugins } from './plugins/global';
 import { VueQueryPlugin } from 'vue-query';
 

@@ -2,11 +2,6 @@
 import { computed } from 'vue';
 import SkillCategory from '@/components/aboutMe/SkillCategory.vue';
 import aboutDataAsset from '@/assets/data/about';
-
-const workExperience = computed(() => aboutDataAsset.workExperience);
-const frontendSkills = computed(() => aboutDataAsset.skills.frontend);
-const backendSkills = computed(() => aboutDataAsset.skills.backend);
-const operationSkills = computed(() => aboutDataAsset.skills.operation);
 </script>
 
 <template>
@@ -16,7 +11,7 @@ const operationSkills = computed(() => aboutDataAsset.skills.operation);
         <h2 class="text-primary mb-3">WORK EXPERIENCE</h2>
         <VTimeline>
           <VTimelineItem
-            v-for="(item, index) in workExperience"
+            v-for="(item, index) in aboutDataAsset.workExperience"
             :key="index"
             :dot-color="item.dotColor"
             size="x-small"
@@ -31,9 +26,18 @@ const operationSkills = computed(() => aboutDataAsset.skills.operation);
       <VCol cols="12" sm="6">
         <h2 class="text-primary mb-3">SKILL AND EXPERTISE</h2>
         <VCard color="rgba(0, 0, 0, 0)" class="mx-auto" tile elevation="0">
-          <SkillCategory title="FRONTEND" :skills="frontendSkills" />
-          <SkillCategory title="BACKEND" :skills="backendSkills" />
-          <SkillCategory title="OPERATION" :skills="operationSkills" />
+          <SkillCategory
+            title="FRONTEND"
+            :skills="aboutDataAsset.skills.frontend"
+          />
+          <SkillCategory
+            title="BACKEND"
+            :skills="aboutDataAsset.skills.backend"
+          />
+          <SkillCategory
+            title="OPERATION"
+            :skills="aboutDataAsset.skills.operation"
+          />
         </VCard>
       </VCol>
     </VRow>

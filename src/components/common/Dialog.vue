@@ -5,15 +5,17 @@
     :max-height="maxHeight"
     :persistent="persistent"
     :scrollable="scrollable"
+    :draggable="true"
     :fullscreen="fullscreen"
     :eager="eager"
     :width="width"
+    onDrag={onDrag}
     :height="height"
   >
     <template #default>
       <VCard rounded="lg">
         <VCardTitle class="fs-3 d-flex justify-space-between align-center">
-          <div class="text-h6 text-medium-emphasis">
+          <div class="text-subtitle-1 text-medium-emphasis">
             <slot name="header">{{ title }}</slot>
           </div>
           <Button

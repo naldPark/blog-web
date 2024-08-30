@@ -9,6 +9,7 @@ import { UserManage } from '@/types/admin';
 import { AUTHORITY } from '@/types/constants';
 import SelectBox from '@/components/common/SelectBox.vue';
 import { clone } from 'ramda';
+import InputText from '@/components/common/InputText.vue';
 
 const showDialog = defineModel('showDialog', {
   type: Boolean,
@@ -60,6 +61,19 @@ const select = 0;
           item-title="label"
           label="권한"
         />
+        <InputText
+          v-model="editUserInfo.accountName"
+          required
+          flat
+          validate-on-blur
+        />
+        <InputText
+          v-model="editUserInfo.email"
+          required
+          flat
+          validate-on-blur
+        />
+
         <p class="mb-8">
           {{ editUserInfo.authority }}
 

@@ -1,7 +1,7 @@
 import { ref, onUnmounted, onMounted } from 'vue';
 import { io, Socket as SocketIOClient } from 'socket.io-client';
-import { Terminal as xterm } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
+import { FitAddon } from '@xterm/addon-fit';
+import { Terminal as xterm } from '@xterm/xterm';
 
 const useSocketConfig = () => {
   const socket = ref<SocketIOClient | null>(null);

@@ -12,7 +12,7 @@ const { showBlocker } = storeToRefs(appStatusStore);
     class="align-center justify-center"
     z-index="1000"
   >
-    <VProgressCircular color="primary" indeterminate></VProgressCircular>
+    <VProgressCircular color="primary" indeterminate />
   </VOverlay>
 </template>
 

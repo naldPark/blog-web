@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue';
-  import 'xterm/css/xterm.css';
+  import '@xterm/xterm/css/xterm.css'
   import useSocketConfig from '@/hook/useSocketConfig';
   import { useSocketTerminal } from '@/hook/useSocketTerminal';
 
@@ -20,10 +20,10 @@
 <style lang="scss" scoped>
   #terminal {
     margin-top: 40px;
-    height: 100dvh;
-    max-height: 1000px;
+    height: calc( 100dvh - 150px );
+    max-height: 100%;
     :deep(.xterm-text-layer) {
-      width: 100%;
+      width: calc( 100dvh - 150px );
       height: 100%;
     }
   }

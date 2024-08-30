@@ -13,6 +13,8 @@
     "@mdi/font": "6.2.95",
     "@stomp/stompjs": "^6.1.2",
     "@vueuse/integrations": "^10.9.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
     "axios": "^1.7.2",
     "dompurify": "^3.1.5",
     "gojs": "~2.1.35",
@@ -29,9 +31,7 @@
     "vue-i18n": "^9.13.1",
     "vue-query": "^1.26.0",
     "vue-router": "^4.0.12",
-    "vuetify": "3.6.0",
-    "xterm": "^5.3.0",
-    "xterm-addon-fit": "^0.8.0"
+    "vuetify": "3.6.0"
   },
   "devDependencies": {
     "@babel/types": "^7.24.0",
@@ -39,7 +39,6 @@
     "@types/dompurify": "^3.0.5",
     "@types/node": "^20.11.25",
     "@types/ramda": "^0.30.0",
-    "@types/socket.io-client": "^3.0.0",
     "@types/sockjs-client": "^1.5.4",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
@@ -64,6 +63,6 @@
     "vue-tsc": "^2.0.6"
   },
   "engines": {
-    "node": "18.18.0"
+    "node": "20.17.0"
   }
 }

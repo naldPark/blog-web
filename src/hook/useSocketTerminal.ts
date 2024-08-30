@@ -1,6 +1,6 @@
 import { ref, onUnmounted, onMounted, watch } from 'vue';
-import { Terminal as xterm, ITerminalOptions } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
+import { FitAddon } from '@xterm/addon-fit';
+import { Terminal as xterm, ITerminalOptions } from '@xterm/xterm';
 
 type SocketCommand = {
   init: (term: xterm) => void;
