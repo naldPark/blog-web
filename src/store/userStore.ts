@@ -75,7 +75,6 @@ export const useUserStore = defineStore('user', () => {
     setAuthToken(null);
     localStorage.removeItem(ACCOUNT_INFO_KEY);
     cookies.remove(ACCESS_TOKEN);
-    router.push('/');
     if (location.pathname == '/' || location.pathname !== '/main') return;
     router.push('/');
   };
