@@ -1,5 +1,3 @@
-
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -14,6 +12,7 @@ import useMutation from '@/hook/useMutation';
 import Button from '@/components/common/Button.vue';
 import { isEmpty, any } from 'ramda';
 import { ApiResponse } from '@/types/axios';
+import { ACCESS_TOKEN } from '@/types/constants';
 
 const { t } = useI18n();
 const accountId = ref('');
@@ -35,7 +34,7 @@ const { mutate: postLogin } = useMutation({
     }),
   onSuccess: (res) => {
     const token = res.data.access_token;
-    cookies.set('access_token', token);
+    cookies.set(ACCESS_TOKEN, token);
     const tokenInfo = JSON.parse(decodeToken(token));
     userStore.setAccountInfo(
       {

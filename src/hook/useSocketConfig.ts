@@ -16,28 +16,28 @@ const useSocketConfig = () => {
     });
   });
 
-  // Initialize socket connection
+  /** 소켓 init */
   const initSocket = (term: xterm) => {
     socket.value!.on('output', (message) => {
       term.write(message);
     });
   };
 
-  // Handle terminal input and send it through the socket
+  /** 소켓 command */
   const executeCommand = (command: string) => {
     socket.value!.emit('input', command);
   };
 
-  // Open terminal and apply FitAddon
+  /** 터미널 fit 화면에 적용  */
   const openTerminal = (element: HTMLElement) => {
     if (term.value) {
       term.value.open(element);
       term.value.loadAddon(fitAddon);
-      fitAddon.fit(); // Ensure this method is called from FitAddon instance
+      fitAddon.fit();
     }
   };
 
-  // Cleanup on component unmount
+  /** 마운트 해제시 소켓 off */
   onUnmounted(() => {
     if (socket.value) {
       socket.value.off('output');
@@ -45,7 +45,7 @@ const useSocketConfig = () => {
     }
   });
 
-  // Initialize terminal instance
+  /** 터미널 초기화 */
   term.value = new xterm({
     cursorBlink: true,
     scrollSensitivity: 2,

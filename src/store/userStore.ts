@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
 import { useCookies } from '@vueuse/integrations/useCookies';
 import { ref } from 'vue';
+import { ACCOUNT_INFO_KEY, ACCESS_TOKEN } from '@/types/constants';
+import { useRouter } from 'vue-router';
 
-/** 상수 정의 */
-const AUTH_TOKEN_COOKIE_KEY = 'access_token';
-const ACCOUNT_INFO_KEY = 'ACCOUNT_INFO';
 export interface AccountInfo {
   accountId: string;
   accountName: string;
@@ -15,10 +14,9 @@ export interface AccountInfo {
 /** 유저 정보 스토어 **/
 export const useUserStore = defineStore('user', () => {
   const cookies = useCookies();
+  const router = useRouter();
 
-  const authToken = ref<string | null>(
-    cookies.get(AUTH_TOKEN_COOKIE_KEY) || null,
-  );
+  const authToken = ref<string | null>(cookies.get(ACCESS_TOKEN) || null);
   const initAccountValue: AccountInfo = {
     accountId: '',
     accountName: '',
@@ -34,12 +32,11 @@ export const useUserStore = defineStore('user', () => {
   /** 토큰 세팅 */
   const setAuthToken = (token: string | null) => {
     authToken.value = token;
-    console.log('!!token', !!token);
     // isSignIn.value = !!token;
     if (token) {
-      cookies.set(AUTH_TOKEN_COOKIE_KEY, token);
+      cookies.set(ACCESS_TOKEN, token);
     } else {
-      cookies.remove(AUTH_TOKEN_COOKIE_KEY);
+      cookies.remove(ACCESS_TOKEN);
       localStorage.removeItem(ACCOUNT_INFO_KEY);
       accountInfo.value = initAccountValue;
     }
@@ -56,7 +53,7 @@ export const useUserStore = defineStore('user', () => {
   // /** 토큰 불러오기 */
   // /** 이것도 없애는게 맞고 그냥 authToken만 있으면 됨 */
   // const getAuthToken = (): string | null => {
-  //   const storedToken = cookies.get(AUTH_TOKEN_COOKIE_KEY);
+  //   const storedToken = cookies.get(ACCESS_TOKEN);
   //   if (storedToken) {
   //     authToken.value = storedToken;
   //     isSignIn.value = true;
@@ -77,7 +74,10 @@ export const useUserStore = defineStore('user', () => {
     accountInfo.value = initAccountValue;
     setAuthToken(null);
     localStorage.removeItem(ACCOUNT_INFO_KEY);
-    cookies.remove(AUTH_TOKEN_COOKIE_KEY);
+    cookies.remove(ACCESS_TOKEN);
+    router.push('/');
+    if (location.pathname == '/' || location.pathname !== '/main') return;
+    router.push('/');
   };
 
   return {

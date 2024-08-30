@@ -117,6 +117,20 @@ export const useAppCommonStore = defineStore('app-common', () => {
     });
   };
 
+  const showTransErrorToast = (info: ToastInfo) => {
+    const timestamp = Date.now();
+    toasts.value.push({
+      key: timestamp.toString(),
+      show: true,
+      info: {
+        type: 'error',
+        message: t(`error_code.${info.message}`),
+        inputTime: timestamp,
+        timeout: info.timeout && info.timeout > 0 ? info.timeout : 2000,
+      },
+    });
+  };
+
   return {
     timezone,
     showBlocker,
@@ -128,5 +142,6 @@ export const useAppCommonStore = defineStore('app-common', () => {
     showToast,
     showLoading,
     hideLoading,
+    showTransErrorToast,
   };
 });

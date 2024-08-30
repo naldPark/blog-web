@@ -45,12 +45,9 @@ const useCustomMutation = <
 
   /**  ApiErrorResponse타입인 경우 정의된 에러 메세지 반환 */
   const showErrorToast = (error: unknown) => {
-    const message = isApiErrorResponse(error)
-      ? t(`error_code.${error.error_i18n}`)
-      : t('unknown_error');
-    appStatusStore.showToast({
+    appStatusStore.showTransErrorToast({
       type: 'error',
-      message: message,
+      message: isApiErrorResponse(error) ? error.error_i18n : 'error_unknown',
     });
   };
 

@@ -159,6 +159,8 @@ export default {
     'Mainly specialized in Javascript for frontend, Java for backend as well DevOps tools like Docker, Kubernetes. \nHighly self-motivated about solving tech problem through writing clean code and build more efficient architecture. \n Check out my work below.',
   contactMsg: 'Please feel free to reach out to me',
   error_code: {
+    error_unknown: 'Unknown error',
     error_bad_request_005: 'Password does not match.',
+    error_unauthorized_004: 'Access denied. Please log in again.',
   },
 };

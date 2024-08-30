@@ -51,19 +51,16 @@ const createHttpClient = (): AxiosInstance => {
   ): Promise<never> => {
     const appStatusStore = useAppCommonStore();
 
+    /** 토큰, 로그인 권한 문제일 경우 로그아웃 하고 메인페이지로 이동 */
     if (error.response && error.response.data) {
       const errorData = error.response.data as ApiErrorResponse;
-
       if (errorData.status_code === 401) {
         const userStore = useUserStore();
-        appStatusStore.showToast({
+        appStatusStore.showTransErrorToast({
           type: 'error',
           message: errorData.error_i18n,
         });
         userStore.resetAccountInfo();
-        if (location.pathname !== '/' && location.pathname !== '/main') {
-          location.href = `${location.origin}`;
-        }
       }
     }
     appStatusStore.hideLoading();

@@ -161,6 +161,8 @@ export default {
   ),
   contactMsg: '편하게 연락 주세요.',
   error_code: {
+    error_unknown: '알 수 없는 에러가 발생 했습니다.',
     error_bad_request_005: '비밀번호가 일치하지 않습니다.',
+    error_unauthorized_004: '권한이 없습니다. 다시 로그인 해 주세요.',
   },
 };
