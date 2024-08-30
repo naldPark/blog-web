@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { useRef } from '@/hook/useRef';
-import { ValidationRule } from '@/types/common';
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 /** 다국어 사용  */
@@ -17,12 +15,12 @@ const props = defineProps<{
   label: string;
 }>();
 
-// Emits 정의
+/** Emits 정의*/
 const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void;
 }>();
 
-// Computed property로 modelValue를 v-select와 연결
+/**Computed property로 modelValue를 v-select와 연결 */
 const modelValue = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value),

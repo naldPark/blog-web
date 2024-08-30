@@ -22,7 +22,6 @@ const { t } = useI18n();
 const appStatusStore = useAppCommonStore();
 const editUserInfo: Ref<UserManage> = ref(props.selectedUser);
 
-
 const rules = {
   required: (v: string) => !!v || t('required'),
 };
