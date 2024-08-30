@@ -1,25 +1,27 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, Ref, ref, watch } from 'vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useI18n } from 'vue-i18n';
 import Button from '@/components/common/Button.vue';
-import InputText from '@/components/common/InputText.vue';
-import { passwordRegExp, passwordVerifyRegExp } from '../../utils/regExpUtil';
 import useMutation from '@/hook/useMutation';
 import Dialog from '@/components/common/Dialog.vue';
-import { encryptPassword } from '@/utils/commonUtil';
 import { UserManage } from '@/types/admin';
+import { AUTHORITY } from '@/types/constants';
+import SelectBox from '@/components/common/SelectBox.vue';
+import { clone } from 'ramda';
 
 const showDialog = defineModel('showDialog', {
   type: Boolean,
 });
 
-defineProps<{
-  selectedUser: UserManage | undefined;
+const props = defineProps<{
+  selectedUser: UserManage;
 }>();
 
 const { t } = useI18n();
 const appStatusStore = useAppCommonStore();
+const editUserInfo: Ref<UserManage> = ref(props.selectedUser);
+
 
 const rules = {
   required: (v: string) => !!v || t('required'),
@@ -38,33 +40,7 @@ const { mutate: onClickEdit } = useMutation({
     showDialog.value = false;
   },
 });
-const select = 'John';
-const items = [
-  {
-    name: 'John',
-    department: 'Marketing',
-  },
-  {
-    name: 'Jane',
-    department: 'Engineering',
-  },
-  {
-    name: 'Joe',
-    department: 'Sales',
-  },
-  {
-    name: 'Janet',
-    department: 'Engineering',
-  },
-  {
-    name: 'Jake',
-    department: 'Marketing',
-  },
-  {
-    name: 'Jack',
-    department: 'Sales',
-  },
-];
+const select = 0;
 </script>
 
 <template>
@@ -76,23 +52,17 @@ const items = [
     <template #default>
       <v-sheet :border="'md'" class="pa-6 text-white mx-auto" max-width="400">
         <h4 class="text-h5 font-weight-bold mb-4">
-          {{ selectedUser?.accountName }}
+          {{ editUserInfo.accountName }}z
         </h4>
         <SelectBox
-          v-model:model="select"
-          :items="items"
-          item-title="name"
+          v-model="editUserInfo.authority"
+          :items="clone(AUTHORITY)"
+          item-value="value"
+          item-title="label"
           label="권한"
         />
         <p class="mb-8">
-          {{ select }}
-          This business determines the use of personal data collectied on our
-          media properties and across the internet. We may collect data that you
-          submit to us directly or data that we collect automatically including
-          from cookies (such as device information or IP address).
-
-          <br />
-          <br />
+          {{ editUserInfo.authority }}
 
           Please read our
           <a class="text-red-accent-2" href="#">Privacy Policy</a> to learn

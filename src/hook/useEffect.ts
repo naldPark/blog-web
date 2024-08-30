@@ -1,9 +1,9 @@
-import { Ref, ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch, Ref } from 'vue';
 
 type EffectCallback = () => void;
 type Dependencies = Ref<any>[];
 
-/** watch를 사용해 react의 useEffect와 같은 형태로 구현 */
+/** watch를 사용해 React의 useEffect와 같은 형태로 구현 */
 export const useEffect = (callback: EffectCallback, deps: Dependencies) => {
   const hasChanged = ref(true);
 

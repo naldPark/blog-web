@@ -59,6 +59,7 @@
     </VDataTable>
   </VCard>
   <UserEditDialog
+    v-if="selectedUser && showUserEditDialog"
     v-model:showDialog="showUserEditDialog"
     :selectedUser="selectedUser"
   />
@@ -186,6 +187,7 @@ const { refetch } = useCustomQuery({
     userList.value = res.data.list.map(
       ({ authority, status, ...rest }: any) => ({
         ...rest,
+        authority,
         group: getGroup(authority),
         status: getStatus(status),
       }),

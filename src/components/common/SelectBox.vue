@@ -8,14 +8,25 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 /** Props정의 required 기본값: true*/
-interface Props {
-  items: any;
-  label?: string;
+const props = defineProps<{
+  modelValue: any;
+  items: any[];
+  itemValue: string;
+  itemTitle: string;
   placeholder?: string;
-}
-const props = defineProps<Props>();
+  label: string;
+}>();
 
-const model = defineModel();
+// Emits 정의
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: any): void;
+}>();
+
+// Computed property로 modelValue를 v-select와 연결
+const modelValue = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value),
+});
 
 const { items, label, placeholder } = props;
 
@@ -27,10 +38,12 @@ const computedPlaceholder = computed(
 
 <template>
   <VSelect
+    v-model="modelValue"
     :items="items"
-    :placeholder="computedPlaceholder"
-    v-model="model"
+    :item-value="itemValue"
+    :item-title="itemTitle"
     :label="label"
+    :placeholder="computedPlaceholder"
   />
 </template>
 
