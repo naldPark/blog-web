@@ -96,7 +96,7 @@ const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
     </VList>
     <VDivider />
     <VList density="compact">
-      <template v-for="menu in menuInfo" :key="menu.title">
+      <template v-for="(menu, index) in menuInfo" :key="index">
         <VListItem
           v-if="!menu.subMenus"
           v-model="menu.active"
@@ -119,8 +119,8 @@ const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
             </VListItem>
           </template>
           <VListItem
-            v-for="child in menu.subMenus"
-            :key="child.title"
+            v-for="(child, index) in menu.subMenus"
+            :key="index"
             :prepend-icon="child.icon"
             @click="onChangePage(child)"
           >

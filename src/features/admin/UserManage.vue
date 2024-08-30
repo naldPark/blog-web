@@ -20,9 +20,9 @@
       v-model:search="userSearch"
       :headers="userHeaders"
       :items="userList"
+      :page="listOptions.page"
+      :itemsPerPage="listOptions.itemsPerPage"
     >
-      <!-- :page="listOptions.page"
-      :itemsPerPage="listOptions.itemsPerPage" -->
       <template v-slot:item.status="{ value }">
         <span :style="{ color: value.color }">{{ value.key }}</span>
       </template>
@@ -34,7 +34,9 @@
               class="text-amber-lighten-1 mr-3"
               icon="mdi-pencil"
               size="sm"
+              :disabled="item.status.key === 'deleted'"
               variant="text"
+              @onClick="clickEditUser(item)"
               v-bind="props"
             />
           </template>
@@ -47,6 +49,7 @@
               icon="mdi-delete"
               size="sm"
               variant="text"
+              :disabled="item.status.key === 'deleted'"
               v-bind="props"
               @onClick="clickDeleteUser(item)"
             />
@@ -55,6 +58,10 @@
       </template>
     </VDataTable>
   </VCard>
+  <UserEditDialog
+    v-model:showDialog="showUserEditDialog"
+    :selectedUser="selectedUser"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -69,30 +76,20 @@ import {
 import InputText from '@/components/common/InputText.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
-import { ApiErrorResponse, ApiResponse } from '@/types/axios';
+import { ApiResponse } from '@/types/axios';
 import Button from '@/components/common/Button.vue';
 import useMutation from '@/hook/useMutation';
 import useCustomQuery from '@/hook/useCustomQuery';
-import { useQuery } from 'vue-query';
+import UserEditDialog from '../dialog/UserEditDialog.vue';
+import { UserManage } from '@/types/admin';
 
-interface UserManage {
-  accountId: string;
-  accountName: string;
-  authority: number;
-  recentLoginDt: string;
-  status: number;
-  email: string;
-  createdDt: string;
-  loginFailCnt: number;
-}
-
+const selectedUser = ref<UserManage>();
 const appStatusStore = useAppCommonStore();
 const { t } = useI18n();
 const props = defineProps<{ isMobile?: boolean }>();
 
 const userSearch = ref('');
 
-const isMobile = props.isMobile ?? false;
 const newUserInfo = ref({
   accountId: '',
   accountName: '',
@@ -100,6 +97,7 @@ const newUserInfo = ref({
   password: '',
   authority: 4,
 });
+const showUserEditDialog = ref(false);
 const addUserDialog = ref(false);
 const editUserDialog = ref(false);
 const showEditAccountPasswordDialog = ref(false);
@@ -109,18 +107,10 @@ const showPassword = ref(false);
 const confirmPassword = ref('');
 // const totalPageNumber = ref(0);
 
-// const listOptions = ref({
-//   page: 1,
-//   itemsPerPage: 5,
-// });
-
-const authority = ref([
-  { value: 0, label: 'Super' },
-  { value: 1, label: 'All' },
-  { value: 2, label: 'Buddy' },
-  { value: 3, label: 'Biz' },
-  { value: 4, label: 'Viewer' },
-]);
+const listOptions = ref({
+  page: 1,
+  itemsPerPage: 5,
+});
 
 const userHeaders = ref([
   { title: 'ID', key: 'accountId', sortable: false },
@@ -139,11 +129,6 @@ const userHeaders = ref([
   { title: 'Action', key: 'actions', sortable: false, width: 150 },
 ]);
 
-// const currentPageNumber = computed({
-//   get: () => listOptions.value.page,
-//   set: (value) => (listOptions.value.page = value),
-// });
-
 const onClickRow = (click: any, row: any) => {
   console.log('로우클릭', click, row);
   // selectedItems.value = [item];
@@ -161,22 +146,23 @@ const resetInput = () => {
 };
 
 const { mutate: deleteUser } = useMutation({
-  mutationFn: (rowData: UserManage) => changeStatus(rowData.accountId, 2),
+  mutationFn: (rowData: UserManage) => changeStatus([rowData.accountId], 2),
   onSuccess: () => {
     appStatusStore.showToast({
       type: 'success',
       message: t('complete'),
     });
+    appStatusStore.hideDialog();
   },
 });
 
 const clickDeleteUser = (rowData: UserManage) => {
-  // appStatusStore.showDialog({
-  //   title: t('deleteUsers'),
-  //   description: `${t('deleteUsersMsg', rowData.accountName)}`,
-  //   showCloseButton: true,
-  //   action: () => deleteUser(rowData),
-  // });
+  appStatusStore.showDialog({
+    title: t('deleteUsers'),
+    description: `${t('deleteUsersMsg', rowData.accountName)}`,
+    showCloseButton: true,
+    action: () => deleteUser(rowData),
+  });
 };
 
 const getGroup = (authority: number) => {
@@ -214,7 +200,7 @@ const onClickCreate = async () => {
   }
   await createUser(newUserInfo.value);
   addUserDialog.value = false;
-  // await refetch();
+  refetch();
 };
 const checkValidate = (type: 'edit' | 'create') => {
   const messages: string[] = [];
@@ -248,37 +234,9 @@ const checkValidate = (type: 'edit' | 'create') => {
   return { result: messages.length === 0, msg: messages.join('\n ') };
 };
 
-const onClickEdit = async () => {
-  const { result, msg } = checkValidate('edit');
-  if (!result) {
-    appStatusStore.showDialog({
-      title: t('error'),
-      description: msg,
-      showCloseButton: true,
-      action: () => {},
-    });
-    return;
-  }
-
-  const res = await editUser(selectedItems.value[0]);
-  console.log('res', res);
-  // if (res.data.statusCode === 200) {
-  //   appStatusStore.showDialog({
-  //     title: t('complete'),
-  //     description: t('confirmMsg'),
-  //     showCloseButton: true,
-  //     action: fetchUserList,
-  //   });
-  //   editUserDialog.value = false;
-  //   showEditAccountPasswordDialog.value = false;
-  // } else {
-  //   appStatusStore.showDialog({
-  //     title: t('error'),
-  //     description: 'dddddd',
-  //     showCloseButton: true,
-  //     action: () => {},
-  //   });
-  // }
+const clickEditUser = (rowData: UserManage) => {
+  selectedUser.value = rowData;
+  showUserEditDialog.value = true;
 };
 
 const clickToChangeAccountInfo = () => {
@@ -286,11 +244,9 @@ const clickToChangeAccountInfo = () => {
 };
 
 const changePageItem = () => {
-  // listOptions.value.page = 1;
-  // fetchUserList();
+  listOptions.value.page = 1;
+  refetch();
 };
-
-// onMounted(fetchUserList);
 </script>
 
 <style scoped>

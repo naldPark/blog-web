@@ -28,6 +28,7 @@ export default {
   logout: 'logout',
   id: 'id',
   defaultPlaceHolder: 'Please Enter',
+  defaultSelectPlaceHolder: 'Please Select',
   cancel: 'cancel',
   confirm: 'confirm',
   doLogin: 'Please log in to access',
@@ -160,6 +161,7 @@ export default {
   contactMsg: 'Please feel free to reach out to me',
   error_code: {
     error_unknown: 'Unknown error',
+    error_bad_request_001: '"An issue occurred while fetching the information.',
     error_bad_request_005: 'Password does not match.',
     error_unauthorized_004: 'Access denied. Please log in again.',
   },

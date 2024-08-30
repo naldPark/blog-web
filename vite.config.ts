@@ -11,11 +11,10 @@ import path from 'path';
 // Utilities
 import { defineConfig } from 'vite';
 export default defineConfig({
-  optimizeDeps: {
-    entries: ['src/router/**/+*.{js,ts}', 'src/hook*.{js,ts}'],
-    include: ['esm-dep > cjs-dep'],
-    force: false,
-  },
+  // optimizeDeps: {
+  //   entries: ['src/router/**/+*.{js,ts}', 'src/hook*.{js,ts}'],
+  //   force: false,
+  // },
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts',
@@ -47,7 +46,7 @@ export default defineConfig({
         outputFilePath: path.resolve(__dirname, './src/style.d.ts'),
       },
       sourceDir: path.resolve(__dirname, './src'),
-      outputDir: path.resolve(__dirname, './dist'),
+      outputDir: path.resolve(__dirname, './build'),
     }),
   ],
   css: {
@@ -80,6 +79,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  build: {
+    outDir: './build',
+  },
   server: {
     host: '0.0.0.0',
     port: 8082,
@@ -104,8 +106,6 @@ export default defineConfig({
         secure: false,
       },
     },
-    // hmr: false,
-
     hmr: {
       protocol: 'ws',
       overlay: false, // 오류 오버레이 비활성화

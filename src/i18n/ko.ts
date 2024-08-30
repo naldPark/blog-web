@@ -30,6 +30,7 @@ export default {
   logout: '로그아웃',
   id: '아이디',
   defaultPlaceHolder: '입력하세요',
+  defaultSelectPlaceHolder: '선택하세요',
   cancel: '취소',
   confirm: '확인',
   doLogin: '로그인 해 주세요',
@@ -162,6 +163,7 @@ export default {
   contactMsg: '편하게 연락 주세요.',
   error_code: {
     error_unknown: '알 수 없는 에러가 발생 했습니다.',
+    error_bad_request_001: '정보를 불러오는데 문제가 발생했습니다.',
     error_bad_request_005: '비밀번호가 일치하지 않습니다.',
     error_unauthorized_004: '권한이 없습니다. 다시 로그인 해 주세요.',
   },

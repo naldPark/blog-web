@@ -1,3 +1,22 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import { storeToRefs } from 'pinia';
+
+const appStatusStore = useAppCommonStore();
+const showDialog = ref(false);
+const { dialogInfo } = storeToRefs(appStatusStore);
+
+const onClickDialogClose = () => {
+  showDialog.value = false;
+  appStatusStore.hideDialog();
+};
+
+const onClickDialog = () => {
+  if (dialogInfo.value.action) dialogInfo.value.action();
+};
+</script>
+
 <template>
   <VDialog
     v-model="dialogInfo.show"
@@ -32,26 +51,5 @@
     </VCard>
   </VDialog>
 </template>
-
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { useAppCommonStore } from '@/store/appCommonStore';
-import { storeToRefs } from 'pinia';
-
-const appStatusStore = useAppCommonStore();
-const showDialog = ref(false);
-const { dialogInfo } = storeToRefs(appStatusStore);
-
-const onClickDialogClose = () => {
-  showDialog.value = false;
-  appStatusStore.hideDialog();
-};
-
-const onClickDialog = () => {
-  if (dialogInfo.value.action) {
-    dialogInfo.value.action();
-  }
-};
-</script>
 
 <style lang="scss" scoped></style>
