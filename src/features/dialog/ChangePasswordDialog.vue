@@ -56,6 +56,9 @@ const { mutate: onClickEdit } = useMutation({
       {{ t('editPassword') }}
     </template>
     <template #default>
+      <div class="font-italic font-weight-thin text-grey-lighten-2 mb-3">
+        {{ t('editUserPassword', [accountId]) }}
+      </div>
       <InputText
         class="mb-2"
         v-model="accountPassword"

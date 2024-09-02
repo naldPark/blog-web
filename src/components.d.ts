@@ -16,6 +16,7 @@ declare module 'vue' {
     ProfileCard: typeof import('./components/aboutMe/ProfileCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Select: typeof import('./components/common/Select.vue')['default']
     SelectBox: typeof import('./components/common/SelectBox.vue')['default']
     SkillCategory: typeof import('./components/aboutMe/SkillCategory.vue')['default']
     TextArea: typeof import('./components/common/TextArea.vue')['default']

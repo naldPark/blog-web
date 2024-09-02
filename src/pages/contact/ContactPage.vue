@@ -131,9 +131,9 @@ const rules: {
   required: ValidationRule;
   email: ValidationRule;
 } = {
-  required: (value: string) => !!value || 'Required.',
+  required: (value: string) => !!value || t('required'),
   email: (value: string) => {
-    return emailRegExp().test(value) || 'Invalid e-mail.';
+    return emailRegExp().test(value) || t('emailValidate');
   },
 };
 

@@ -37,20 +37,23 @@ const useCustomQuery = ({
     },
     /**데이터가 stale 상태일 경우 재 연결 될 때 refetch를 실행하는 옵션 */
     refetchOnWindowFocus: false,
+    enabled: true,
   });
 
   /** 타입 가드 && narrowing */
   const isApiErrorResponse = (error: any): error is ApiErrorResponse =>
     typeof error.error_i18n === 'string';
 
-  /** refetch가 fn 타입으로 선언이 안되어서 임시 조치 */
-  const customRefetch = () => refetch;
-
+  // /** refetch가 fn 타입으로 선언이 안되어서 임시 조치 */
+  // const customRefetch = () => {
+  //   refetch;
+  // };
   return {
     data: ref(data),
     isLoading: ref(isLoading),
     isError: ref(isError),
-    refetch: customRefetch,
+    refetch: refetch,
+    // refetch: customRefetch,
   };
 };
 

@@ -50,6 +50,7 @@ export const shuffleArray = (array: any[]) => {
   return array.sort(() => Math.random() - 0.5);
 };
 
+/** 비밀번호 암호화 처리 */
 export const encryptPassword = (rsaRes: string, password: string) => {
   const rsa = new JSEncrypt({ default_key_size: '2048' });
   rsa.setPublicKey(rsaRes);
@@ -62,4 +63,22 @@ export const encryptPassword = (rsaRes: string, password: string) => {
   }
   const encryptedValue = chunks.join(':');
   return encryptedValue;
+};
+
+/**
+ * object형식에서 필요한 키만 추출하여 새로운 object로 반환
+ * @param {string[]} selectedKeys
+ * @param {Object} objectData
+ */
+export const filterKeysFromObject = (
+  selectedKeys: string[],
+  objectData: any,
+) => {
+  const newObject: any = {};
+  selectedKeys.forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(objectData, key)) {
+      newObject[key] = objectData[key];
+    }
+  });
+  return newObject;
 };

@@ -12,3 +12,8 @@ export const passwordRegExp = () => {
 export const passwordVerifyRegExp = (pwd: string) => {
   return new RegExp('^' + pwd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$');
 };
+
+// 영문 대소문자 / 숫자 /  한글 포함 2 ~ 10 자리
+export const nameRegExp = () => {
+  return new RegExp('^(?!.*\\s\\s)[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\s]{2,10}$');
+};

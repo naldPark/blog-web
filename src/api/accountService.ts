@@ -1,6 +1,7 @@
 import Config from '@/config';
 import { get, post, put } from './axiosMethod';
 import { ApiResult } from '@/types/axios';
+import { PutUserRequestBody } from '@/types/admin';
 
 const defaultAPI = `${Config.backend}`;
 
@@ -73,10 +74,10 @@ const createUser = async (
 
 /**
  * 사용자 수정 메서드
- * @param {Record<string, any>} body - 수정할 사용자 정보
+ * @param {PutUserRequestBody} body - 수정할 사용자 정보
  * @returns {Promise<ApiResult<any>>} 사용자 수정 결과를 반환하는 Promise
  */
-const editUser = async (body: Record<string, any>): Promise<ApiResult<any>> => {
+const editUser = async (body: PutUserRequestBody): Promise<ApiResult<any>> => {
   return await put(`${defaultAPI}/user/editUser`, body);
 };
 

@@ -49,6 +49,8 @@ export default {
   accessDenied: 'Access Denied',
   inputEmpty: 'Please fill in the required fields.',
   emailValidate: 'Please fill in E-mail field correctly',
+  nameValidate:
+    'Please enter 2 to 10 characters, including letters, numbers, or Korean.',
   typeMessage: 'Type your message here',
   searchPlaceHolder: 'Search',
   countPerPage: 'case/page',

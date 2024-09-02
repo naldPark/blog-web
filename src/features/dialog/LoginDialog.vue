@@ -3,24 +3,19 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Dialog from '@/components/common/Dialog.vue';
 import { login, getRsa } from '@/api/accountService';
-import { useAppCommonStore } from '@/store/appCommonStore';
 import { useUserStore } from '@/store/userStore';
-import { decodeToken, encryptPassword } from '@/utils/commonUtil';
+import { encryptPassword } from '@/utils/commonUtil';
 import InputText from '@/components/common/InputText.vue';
-import { useCookies } from '@vueuse/integrations/useCookies';
 import useMutation from '@/hook/useMutation';
 import Button from '@/components/common/Button.vue';
 import { isEmpty, any } from 'ramda';
 import { ApiResponse } from '@/types/axios';
-import { ACCESS_TOKEN } from '@/types/constants';
 
 const { t } = useI18n();
 const accountId = ref('');
 const accountPassword = ref('');
 const passwordVisible = ref(false);
-const cookies = useCookies();
 const userStore = useUserStore();
-const appStatusStore = useAppCommonStore();
 
 const showDialog = defineModel('showDialog', {
   type: Boolean,
@@ -34,17 +29,7 @@ const { mutate: postLogin } = useMutation({
     }),
   onSuccess: (res) => {
     const token = res.data.access_token;
-    cookies.set(ACCESS_TOKEN, token);
-    const tokenInfo = JSON.parse(decodeToken(token));
-    userStore.setAccountInfo(
-      {
-        accountId: tokenInfo.user_id,
-        accountName: tokenInfo.user_name,
-        authority: tokenInfo.authority,
-        email: tokenInfo.user_email,
-      },
-      token,
-    );
+    userStore.setAuthToken(token);
     showDialog.value = false;
   },
   onError: () => {

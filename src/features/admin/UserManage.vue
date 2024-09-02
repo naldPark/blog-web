@@ -61,19 +61,15 @@
   <UserEditDialog
     v-if="selectedUser && showUserEditDialog"
     v-model:showDialog="showUserEditDialog"
+    @confirm="editConfirm"
     :selectedUser="selectedUser"
   />
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import {
-  getUserList,
-  createUser,
-  editUser,
-  changeStatus,
-} from '@/api/accountService';
+import { getUserList, createUser, changeStatus } from '@/api/accountService';
 import InputText from '@/components/common/InputText.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
@@ -83,11 +79,11 @@ import useMutation from '@/hook/useMutation';
 import useCustomQuery from '@/hook/useCustomQuery';
 import UserEditDialog from '../dialog/UserEditDialog.vue';
 import { UserManage } from '@/types/admin';
+import { clone } from 'ramda';
 
 const selectedUser = ref<UserManage>();
 const appStatusStore = useAppCommonStore();
 const { t } = useI18n();
-const props = defineProps<{ isMobile?: boolean }>();
 
 const userSearch = ref('');
 
@@ -100,13 +96,8 @@ const newUserInfo = ref({
 });
 const showUserEditDialog = ref(false);
 const addUserDialog = ref(false);
-const editUserDialog = ref(false);
-const showEditAccountPasswordDialog = ref(false);
-const selectedItems = ref<any[]>([]);
 const userList = ref<UserManage[]>([]);
-const showPassword = ref(false);
 const confirmPassword = ref('');
-// const totalPageNumber = ref(0);
 
 const listOptions = ref({
   page: 1,
@@ -130,20 +121,10 @@ const userHeaders = ref([
   { title: 'Action', key: 'actions', sortable: false, width: 150 },
 ]);
 
-const onClickRow = (click: any, row: any) => {
-  console.log('로우클릭', click, row);
-  // selectedItems.value = [item];
-};
-
-const resetInput = () => {
-  newUserInfo.value = {
-    accountId: '',
-    accountName: '',
-    email: '',
-    password: '',
-    authority: 4,
-  };
-  confirmPassword.value = '';
+const editConfirm = () => {
+  showUserEditDialog.value = false;
+  selectedUser.value = undefined;
+  refetch;
 };
 
 const { mutate: deleteUser } = useMutation({
@@ -160,7 +141,7 @@ const { mutate: deleteUser } = useMutation({
 const clickDeleteUser = (rowData: UserManage) => {
   appStatusStore.showDialog({
     title: t('deleteUsers'),
-    description: `${t('deleteUsersMsg', rowData.accountName)}`,
+    description: `${t('deleteUsersMsg', [rowData.accountName])}`,
     showCloseButton: true,
     action: () => deleteUser(rowData),
   });
@@ -202,71 +183,12 @@ const onClickCreate = async () => {
   }
   await createUser(newUserInfo.value);
   addUserDialog.value = false;
-  refetch();
+  refetch;
 };
-const checkValidate = (type: 'edit' | 'create') => {
-  const messages: string[] = [];
-  const {
-    accountId = '',
-    accountName = '',
-    email = '',
-    password = '',
-  } = newUserInfo.value;
-
-  type === 'edit' && Object.assign(newUserInfo.value, selectedItems.value[0]);
-
-  const validate = (condition: boolean, errorMsg: string) =>
-    !condition && messages.push(errorMsg);
-
-  validate(!!accountId, t('requiredError', ['Id']));
-  accountId && validate(/^[a-z0-9]*$/.test(accountId), t('idRulesError'));
-  accountId &&
-    validate(accountId.length <= 15, t('lengthRulesError', ['Id', 15]));
-
-  validate(!!accountName, t('requiredError', ['Name']));
-  accountName &&
-    validate(accountName.length <= 10, t('lengthRulesError', ['Name', 10]));
-
-  validate(!!email, t('requiredError', ['E-mail']));
-  email && validate(/.+@.+\..+/.test(email), t('emailRulesError'));
-
-  type === 'create' &&
-    validate(password === confirmPassword.value, t('passwordRulesError'));
-
-  return { result: messages.length === 0, msg: messages.join('\n ') };
-};
-
 const clickEditUser = (rowData: UserManage) => {
-  selectedUser.value = rowData;
+  selectedUser.value = clone(rowData);
   showUserEditDialog.value = true;
-};
-
-const clickToChangeAccountInfo = () => {
-  showEditAccountPasswordDialog.value = true;
-};
-
-const changePageItem = () => {
-  listOptions.value.page = 1;
-  refetch();
 };
 </script>
 
-<style scoped>
-.pagination-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-}
-
-.selectPageCount {
-  width: 100px;
-}
-
-.icon-page-first,
-.icon-page-last {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>
+<style lang="scss" scoped></style>
