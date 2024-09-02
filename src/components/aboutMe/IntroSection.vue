@@ -36,7 +36,7 @@ const getStarStyle = (index: number) => {
         <div class="text-md-left pa-7 intro-box">
           <h3 class="font-weight-bold">
             <span>HELLO ALL </span>
-            <VIcon class="text-primary">mdi-duck</VIcon>
+            <VIcon class="text-primary" icon="mdi-duck" />
           </h3>
           <br />
           <h1 class="pr-3 font-weight-bold">
@@ -65,10 +65,10 @@ const getStarStyle = (index: number) => {
         <VCard>
           <VCardText>
             <VImg src="@/assets/images/profiles/me.jpg">
-              <div class="inner-border"></div>
+              <div class="inner-border" />
             </VImg>
             <VCardActions>
-              <VSpacer></VSpacer>
+              <VSpacer />
               <Button
                 v-for="(social, i) in aboutDataAsset.snsList"
                 :key="i"
@@ -118,16 +118,6 @@ const getStarStyle = (index: number) => {
     &.is-mobile {
       position: relative !important;
       margin: auto;
-    }
-
-    .inner-border {
-      width: 90%;
-      height: 90%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 1.5px solid #fff8e8;
     }
   }
   .intro-box {

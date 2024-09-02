@@ -18,10 +18,9 @@
             v-if="selectedLocalFiles.length === 0"
             size="60"
             color="secondary"
-          >
-            mdi-cloud-upload
-          </VIcon>
-          <VIcon v-else size="60" color="grey"> mdi-cloud-check </VIcon>
+            icon=" mdi-cloud-upload"
+          />
+          <VIcon v-else size="60" color="grey" icon="mdi-cloud-check" />
           <p class="pt-3" v-if="selectedLocalFiles.length === 0">
             {{ t('video.uploadDetail') }}
           </p>
@@ -34,7 +33,7 @@
     <VCard v-else class="file-drop-area">
       <VCardText>
         <div class="text-center">
-          <VProgressCircular indeterminate color="amber"></VProgressCircular>
+          <VProgressCircular indeterminate color="amber" />
         </div>
       </VCardText>
     </VCard>

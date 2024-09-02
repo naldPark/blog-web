@@ -39,7 +39,7 @@ const computedRounded = computed(() => {
     class="app-g-button line-button size-xsmall"
   >
     <slot name="text" v-if="label">{{ label }}</slot>
-    <VIcon v-if="icon">{{ icon }}</VIcon>
+    <VIcon v-if="icon" :icon="icon" />
   </VBtn>
 </template>
 

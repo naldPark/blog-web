@@ -1,5 +1,5 @@
 import Config from '@/config';
-import { get, post } from './axiosMethod';
+import { del, get, post } from './axiosMethod';
 import { ApiResult } from '@/types/axios';
 
 const storageService = {
@@ -27,7 +27,7 @@ const storageService = {
     const config: any = {
       params: params, // 요청 파라미터 설정
     };
-    return get(`${this.dafaultAPI}/storage/videoList`, config);
+    return get(`${this.dafaultAPI}/storage/video/list`, config);
   },
 
   /**
@@ -36,7 +36,7 @@ const storageService = {
    * @returns {Promise<ApiResult<any>>} 비디오 세부 정보를 포함하는 API 결과를 반환하는 Promise
    */
   getVideoDetail(fileSeq: number): Promise<ApiResult<any>> {
-    return get(`${this.dafaultAPI}/storage/getVideoDetail/${fileSeq}`);
+    return get(`${this.dafaultAPI}/storage/video/detail/${fileSeq}`);
   },
 
   /**
@@ -68,6 +68,10 @@ const storageService = {
     bodyForm.append('file', movieInfo.file); // 업로드할 파일 추가
 
     return post(`${this.dafaultAPI}/storage/uploadLocal`, bodyForm, config);
+  },
+
+  deleteVideo(fileSeq: number[]): Promise<ApiResult<any>> {
+    return del(`${this.dafaultAPI}/storage/${fileSeq}`);
   },
 };
 

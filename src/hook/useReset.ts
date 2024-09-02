@@ -18,10 +18,7 @@ const defaultValues: Record<string, any> = {
 };
 
 // 객체 초기화 함수
-const initializeObject = <T>(
-  item: Record<string, any>,
-  recursive: boolean,
-): InitializeType<T> => {
+const initializeObject = <T>(item: Record<string, any>, recursive: boolean) => {
   const initValue: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(item)) {
@@ -32,30 +29,25 @@ const initializeObject = <T>(
       initValue[key] =
         defaultValues[type] !== undefined
           ? type === 'array'
-            ? ([] as InitializeType<T>)
+            ? []
             : defaultValues[type]
           : null;
     }
   }
 
-  return initValue as InitializeType<T>;
+  return initValue;
 };
 
 // 초기화 함수
-const initialize = <T>(
-  item: T,
-  recursive: boolean = true,
-): InitializeType<T> => {
+const initialize = <T>(item: T, recursive: boolean = true) => {
   if (Array.isArray(item)) {
-    return [] as InitializeType<T>;
+    return [] as T;
   }
-
   if (item !== null && typeof item === 'object') {
-    return initializeObject(item, recursive);
+    return initializeObject(item, recursive) as T;
   }
-
   // 원시 타입의 경우 그대로 반환
-  return item as InitializeType<T>;
+  return item as T;
 };
 
 const useReset = () => {

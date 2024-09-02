@@ -1,7 +1,7 @@
 import Config from '@/config';
 import { get, post, put } from './axiosMethod';
 import { ApiResult } from '@/types/axios';
-import { PutUserRequestBody } from '@/types/admin';
+import { UserRequestBody } from '@/types/admin';
 
 const defaultAPI = `${Config.backend}`;
 
@@ -41,7 +41,7 @@ const editPassword = async (
     accountId,
     password,
   };
-  return await put(`${defaultAPI}/user/editPassword`, requestParam);
+  return await put(`${defaultAPI}/user/password`, requestParam);
 };
 
 /**
@@ -58,7 +58,7 @@ const changeStatus = async (
     userIds,
     status,
   };
-  return await put(`${defaultAPI}/user/changeStatus`, requestParam);
+  return await put(`${defaultAPI}/user/status`, requestParam);
 };
 
 /**
@@ -66,19 +66,19 @@ const changeStatus = async (
  * @param {Record<string, any>} body - 사용자 생성에 필요한 정보
  * @returns {Promise<ApiResult<any>>} 사용자 생성 결과를 반환하는 Promise
  */
-const createUser = async (
+const postCreateUser = async (
   body: Record<string, any>,
 ): Promise<ApiResult<any>> => {
-  return await post(`${defaultAPI}/user/createUser`, body);
+  return await post(`${defaultAPI}/user`, body);
 };
 
 /**
  * 사용자 수정 메서드
- * @param {PutUserRequestBody} body - 수정할 사용자 정보
+ * @param {UserRequestBody} body - 수정할 사용자 정보
  * @returns {Promise<ApiResult<any>>} 사용자 수정 결과를 반환하는 Promise
  */
-const editUser = async (body: PutUserRequestBody): Promise<ApiResult<any>> => {
-  return await put(`${defaultAPI}/user/editUser`, body);
+const putEditUser = async (body: UserRequestBody): Promise<ApiResult<any>> => {
+  return await put(`${defaultAPI}/user`, body);
 };
 
 /**
@@ -94,8 +94,8 @@ export {
   login,
   editPassword,
   changeStatus,
-  createUser,
-  editUser,
+  postCreateUser,
+  putEditUser,
   getUserList,
   getRsa,
 };

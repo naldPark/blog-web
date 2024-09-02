@@ -16,19 +16,17 @@
               style="display: block; margin: 0 auto"
               src="@/assets/images/profiles/me.jpg"
             >
-              <div class="inner-border"></div>
+              <div class="inner-border" />
             </VImg>
             <VCardActions>
-              <VSpacer></VSpacer>
+              <VSpacer />
               <VBtn
                 v-for="(social, i) in socials"
                 :key="i"
                 :color="social.color"
                 small
               >
-                <VIcon @click="exploreSNS(social.link)">{{
-                  social.icon
-                }}</VIcon>
+                <VIcon @click="exploreSNS(social.link)" :icon="social.icon" />
               </VBtn>
             </VCardActions>
           </VCardText>
@@ -85,7 +83,7 @@
                   variant="outlined"
                   @click="sendMessage"
                 >
-                  <VIcon>mdi-check</VIcon>
+                  <VIcon icon="mdi-check" />
                   {{ t('send') }}
                 </VBtn>
               </VCol>
@@ -232,16 +230,6 @@ const sendMessage = async (): Promise<void> => {
 <style lang="scss" scoped>
 .contact-page-wrap {
   margin-top: 50px;
-
-  .inner-border {
-    width: 90%;
-    height: 90%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1.5px solid #fff8e8;
-  }
 
   .contact-box {
     background-color: rgba(20, 20, 20, 0.6);

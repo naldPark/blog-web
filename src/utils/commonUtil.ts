@@ -1,3 +1,4 @@
+import { getRsa } from '@/api/accountService';
 import JSEncrypt from 'jsencrypt';
 
 /**
@@ -51,9 +52,10 @@ export const shuffleArray = (array: any[]) => {
 };
 
 /** 비밀번호 암호화 처리 */
-export const encryptPassword = (rsaRes: string, password: string) => {
+export const encryptPassword = async (password: string) => {
+  const rsaRes = (await getRsa()) as any;
   const rsa = new JSEncrypt({ default_key_size: '2048' });
-  rsa.setPublicKey(rsaRes);
+  rsa.setPublicKey(rsaRes.data);
   const chunkSize = 117;
   const chunks = [];
   for (let i = 0; i < password.length; i += chunkSize) {

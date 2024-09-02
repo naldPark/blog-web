@@ -19,3 +19,9 @@ export interface SubMenuInfo {
 }
 
 export type ValidationRule = (value: string) => string | boolean;
+
+export interface CommonListRequestData {
+  pageNumber?: number;
+  pageSize?: number;
+  sort?: string;
+}

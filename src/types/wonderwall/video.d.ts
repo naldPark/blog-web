@@ -1,3 +1,5 @@
+import { CommonListRequestData } from '../common';
+
 export interface VideoDetailData {
   storageId: number;
   fileName: string;
@@ -31,4 +33,10 @@ export interface FileInfo {
   name: string;
   size: number;
   status: string;
+}
+
+export interface VideoListRequestData extends CommonListRequestData {
+  type?: string;
+  searchText?: string;
+  withCover?: boolean;
 }

@@ -1,19 +1,20 @@
 <script lang="ts" setup>
-import { Ref, ref } from 'vue';
-import { useAppCommonStore } from '@/store/appCommonStore';
+import { onBeforeMount, Ref, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Button from '@/components/common/Button.vue';
-import useMutation from '@/hook/useMutation';
 import Dialog from '@/components/common/Dialog.vue';
-import { PutUserRequestBody, UserManage } from '@/types/admin';
+import { UserManage, UserRequestBody } from '@/types/admin';
 import { AUTHORITY } from '@/types/constants';
 import SelectBox from '@/components/common/SelectBox.vue';
 import { clone } from 'ramda';
 import InputText from '@/components/common/InputText.vue';
-import { ValidationRule } from '@/types/common';
-import { emailRegExp, nameRegExp } from '@/utils/regExpUtil';
+import {
+  emailRegExp,
+  nameRegExp,
+  passwordRegExp,
+  passwordVerifyRegExp,
+} from '@/utils/regExpUtil';
 import ChangePasswordDialog from '@/features/dialog/ChangePasswordDialog.vue';
-import { editUser } from '@/api/accountService';
 import { filterKeysFromObject } from '@/utils/commonUtil';
 
 const showDialog = defineModel('showDialog', {
@@ -21,63 +22,76 @@ const showDialog = defineModel('showDialog', {
 });
 
 const props = defineProps<{
-  selectedUser: UserManage;
+  selectedUser: UserManage | undefined;
 }>();
 
 const { t } = useI18n();
-const appStatusStore = useAppCommonStore();
+
+/** 기존 Name 식별 & 수정  */
+const userName: string = props.selectedUser?.accountName ?? '';
+/** 수정 or 생성 모드 구분 목적  */
+const isEdit: Ref<boolean> = ref(!!props.selectedUser?.accountId);
 
 /** api에 불필요한 key filter처리 */
 const editRequestKeys = ['accountId', 'accountName', 'authority', 'email'];
-const editUserInfo: Ref<PutUserRequestBody> = ref(
-  filterKeysFromObject(editRequestKeys, props.selectedUser),
-);
-const userName: string = props.selectedUser.accountName;
+const editUserInfo: Ref<UserRequestBody> = ref({
+  accountId: '',
+  accountName: '',
+  authority: 4,
+  email: '',
+  password: '',
+});
+const accountPasswordConfirm = ref('');
+
 const showEditPasswordDialog = ref(false);
 
-// Emits 정의
-const emit = defineEmits(['confirm']);
+onBeforeMount(() => {
+  if (isEdit.value)
+    editUserInfo.value = filterKeysFromObject(
+      editRequestKeys,
+      props.selectedUser,
+    );
+});
+
+/** data - calulating - action
+ *  action은 되도록 상위 컴포넌트에 전달
+ */
+const emit = defineEmits(['actionOnEdit', 'actionOnCreate']);
 
 /** 검증 rules */
-const rules: {
-  required: ValidationRule;
-  email: ValidationRule;
-  name: ValidationRule;
-} = {
+const rules = {
   required: (value: string) => !!value || t('required'),
   email: (value: string) => emailRegExp().test(value) || t('emailValidate'),
   name: (value: string) => nameRegExp().test(value) || t('nameValidate'),
+  passwordExp: (v: string) =>
+    passwordRegExp().test(v) || t('passwordRulesError'),
+  passwordVerify: (v: string) =>
+    passwordVerifyRegExp(editUserInfo.value.password).test(v) ||
+    t('passwordMatchRulesError'),
 };
 
-/** 유저 정보 수정 mutation */
-const { mutate: onClickEdit } = useMutation({
-  mutationFn: () => editUser(editUserInfo.value),
-  onSuccess: () => {
-    appStatusStore.showToast({
-      type: 'success',
-      message: t('confirmMsg'),
-    });
-    emit('confirm');
-  },
-});
+const onConfirm = () => {
+  emit(isEdit.value ? 'actionOnEdit' : 'actionOnCreate', editUserInfo.value);
+};
 </script>
 
 <template>
   <Dialog v-model:visible="showDialog" width="450px">
     <template #header>
       <VIcon class="text-primary" icon="mdi-account-edit" />
-      {{ t('editUser') }}
+      {{ isEdit ? t('editUser') : t('addUser') }}
     </template>
     <template #default>
       <v-sheet :border="'md'" class="pa-6 text-white mx-auto" max-width="400">
         <div class="text-subtitle-1 font-weight-bold mb-4 d-flex">
           <VIcon class="text-grey-lighten-1 mr-2" icon="mdi-account-box" />
-          {{ userName }}
+          {{ isEdit ? userName : t('registerUser') }}
         </div>
         <InputText
           :label="`${t('id')} *`"
+          :rules="[rules.required]"
           v-model="editUserInfo.accountId"
-          disabled
+          :disabled="isEdit"
         />
         <InputText
           flat
@@ -95,12 +109,35 @@ const { mutate: onClickEdit } = useMutation({
           label="권한"
         />
         <InputText
+          v-if="!isEdit"
+          class="mb-2"
+          v-model="editUserInfo.password"
+          :label="t('password')"
+          :placeholder="t('changePwd')"
+          :rules="[rules.required, rules.passwordExp]"
+          type="password"
+          required
+          flat
+        />
+        <InputText
+          v-if="!isEdit"
+          class="mb-2"
+          v-model="accountPasswordConfirm"
+          :label="t('passwordConfirm')"
+          :placeholder="t('changePwdConfirm')"
+          :rules="[rules.required, rules.passwordVerify]"
+          type="password"
+          required
+          flat
+        />
+        <InputText
           v-model="editUserInfo.email"
           :rules="[rules.required, rules.email]"
           :label="`${t('email')} *`"
           :placeholder="`${t('email')} *`"
         />
         <Button
+          v-if="isEdit"
           :label="t('editPassword')"
           color="grey"
           variant="tonal"
@@ -108,6 +145,7 @@ const { mutate: onClickEdit } = useMutation({
           block
         />
         <ChangePasswordDialog
+          v-if="isEdit"
           v-model:showDialog="showEditPasswordDialog"
           :accountId="editUserInfo.accountId"
         />
@@ -119,7 +157,7 @@ const { mutate: onClickEdit } = useMutation({
         color="primary"
         :label="t('confirm')"
         variant="flat"
-        @click="onClickEdit"
+        @click="onConfirm"
       />
     </template>
   </Dialog>

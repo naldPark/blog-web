@@ -14,7 +14,7 @@ defineProps<{
     <VListItemTitle>{{ title }}</VListItemTitle>
     <VListItemSubtitle v-for="skill in skills" :key="skill.name" class="pa-2">
       <p class="font-weight-regular text-h6">
-        <VIcon class="text-secondary">{{ skill.icon }}</VIcon>
+        <VIcon class="text-secondary" :icon="skill.icon" />
         {{ skill.name }}
       </p>
       <VProgressLinear

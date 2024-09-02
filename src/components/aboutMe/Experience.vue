@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
 import SkillCategory from '@/components/aboutMe/SkillCategory.vue';
 import aboutDataAsset from '@/assets/data/about';
 </script>

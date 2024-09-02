@@ -35,8 +35,7 @@ const rules = {
 
 const { mutate: onClickEdit } = useMutation({
   mutationFn: async () => {
-    const rsaRes = (await getRsa()) as any;
-    const encryptedValue = encryptPassword(rsaRes.data, accountPassword.value);
+    const encryptedValue = await encryptPassword(accountPassword.value);
     return editPassword(accountId, encryptedValue);
   },
   onSuccess: () => {

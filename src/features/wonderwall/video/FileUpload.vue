@@ -86,7 +86,7 @@
       </VCol>
     </VRow>
     <VCardActions>
-      <VSpacer></VSpacer>
+      <VSpacer />
       <VBtn
         outlined
         rounded
@@ -106,7 +106,7 @@
         min-width="100"
         @click="onSubmit"
       >
-        {{ t('confirm') }} <VIcon right dark>mdi-cloud-upload</VIcon>
+        {{ t('confirm') }} <VIcon right icon="mdi-cloud-upload" dark />
       </VBtn>
     </VCardActions>
   </VCard>

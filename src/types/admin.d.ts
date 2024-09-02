@@ -9,10 +9,11 @@ export type UserManage = {
   loginFailCnt: number;
 };
 
-/** User 수정 요청 데이터 */
-export type PutUserRequestBody = {
+/** User 생성 / 수정 요청 데이터 */
+export type UserRequestBody = {
   accountId: string;
   accountName: string;
   authority: number;
   email: string;
+  password: string;
 };

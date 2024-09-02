@@ -17,7 +17,6 @@
         </VTab>
         <VTab>
           <VIcon icon="mdi-video-outline" />
-          <!-- 여기는 스트리밍 동영상 수정삭제 할 수 있는 기능을 넣자 -->
           {{ t('resourceManage') }}
         </VTab>
         <VTab>
@@ -26,7 +25,9 @@
         </VTab>
       </VTabs>
       <div class="tab-content">
-        <UserManage v-if="currentTab === 0" :isMobile="isMobile" />
+        <UserManage v-if="currentTab === 0" />
+        <ResourceManage v-if="currentTab === 1" />
+        <DataManage v-if="currentTab === 2" />
       </div>
     </v-sheet>
   </div>
@@ -36,14 +37,16 @@
 import { ref, watch, onMounted, Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import UserManage from '@/features/admin/UserManage.vue';
+import DataManage from '@/features/admin/DataManage.vue';
+import ResourceManage from '@/features/admin/ResourceManage.vue';
 import { useDisplay } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const { smAndDown: isMobile } = useDisplay();
-const currentTab = ref(0);
+
 const route = useRoute();
 const router = useRouter();
-
+const currentTab = ref(Number(route.query.tab));
 watch(currentTab, (newTab) => {
   router
     .replace({

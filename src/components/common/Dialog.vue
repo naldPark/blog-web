@@ -9,7 +9,6 @@
     :fullscreen="fullscreen"
     :eager="eager"
     :width="width"
-    onDrag={onDrag}
     :height="height"
   >
     <template #default>

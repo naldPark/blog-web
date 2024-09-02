@@ -76,7 +76,10 @@ import storageService from '@/api/storageService';
 import { useI18n } from 'vue-i18n';
 import VideoSlider from '@/features/wonderwall/video/VideoSlider.vue';
 import { shuffleArray } from '@/utils/commonUtil';
-import { VideoDetailData } from '@/types/wonderwall/video';
+import {
+  VideoDetailData,
+  VideoListRequestData,
+} from '@/types/wonderwall/video';
 import { ApiResponse } from '@/types/axios';
 const { t } = useI18n();
 const categories: any = [
@@ -108,7 +111,7 @@ onMounted(() => {
 
 const fetchVideoList = async () => {
   try {
-    const param = {
+    const param: VideoListRequestData = {
       type: searchCategory.value,
       searchText: searchText.value,
     };

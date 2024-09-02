@@ -5,7 +5,7 @@ const infraService = {
   dafaultAPI: `${Config.backend}`,
 
   getDiagramList() {
-    return get(`${this.dafaultAPI}/infra/diagramList`);
+    return get(`${this.dafaultAPI}/infra/diagram/list`);
   },
   getClusterInfo() {
     return get(`${this.dafaultAPI}/infra/clusterInfo`);

@@ -115,7 +115,7 @@ const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
           <template v-slot:activator="{ props }">
             <VListItem v-bind="props">
               <template v-slot:prepend>
-                <VIcon :icon="menu.icon"></VIcon>
+                <VIcon :icon="menu.icon" />
               </template>
               <VListItemTitle>{{ t(menu.title) }}</VListItemTitle>
             </VListItem>

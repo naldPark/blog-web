@@ -6,8 +6,9 @@
       <VRow class="pt-5 align-center">
         <div class="main-content" :class="{ 'is-mobile': isMobile }">
           <div>
-            <VIcon class="text-primary pr-3">mdi-duck</VIcon
-            >{{ $t('mainTitle') }}
+            <VIcon class="text-primary pr-3" icon="mdi-duck" />{{
+              $t('mainTitle')
+            }}
           </div>
           <p class="main-title">
             <b>{{ $t('mainSubTitle') }}</b>

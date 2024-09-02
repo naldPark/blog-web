@@ -37,6 +37,8 @@ const handleButtonClick = (toast: {
       rounded="md"
       content-class="snackbar-content"
       tile
+      max-width="100%"
+      class="ml-3"
     >
       <VAlert
         :color="getColor(toast.info.type)"

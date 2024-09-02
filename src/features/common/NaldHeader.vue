@@ -35,7 +35,7 @@ const showDrawer = ref(false);
  * storeToRefs 는 반응형으로 작동하게 해줌
  */
 const userStore = useUserStore();
-const { accountInfo } = storeToRefs(userStore);
+const { accountInfo, isSuper } = storeToRefs(userStore);
 
 const toggleDrawer = () => (showDrawer.value = !showDrawer.value);
 
@@ -73,7 +73,9 @@ const listItems: RightMenuItems[] = [
       router.push({ name: 'MainPage' });
     },
   },
-];
+].filter((f) => !f.requiresAdmin || isSuper.value);
+
+console.log(listItems, isSuper.value);
 </script>
 
 <template>
@@ -117,23 +119,21 @@ const listItems: RightMenuItems[] = [
           :key="index"
           class="right-panel-item"
         >
-          <template v-if="!item.requiresAdmin || accountInfo.authority === 0">
-            <VListItemTitle @click="item.onClick">
-              <VIcon :icon="item.icon" />
-              {{ item.text }}
-              <VAvatar
-                v-if="item.showAvatar"
-                :image="
-                  getImageUrl(
-                    `/assets/svgs/${langSetting === 'ko' ? 'us' : 'kr'}.svg`,
-                  )
-                "
-                size="20px"
-                rounded="0"
-                :tile="true"
-              />
-            </VListItemTitle>
-          </template>
+          <VListItemTitle @click="item.onClick">
+            <VIcon :icon="item.icon" />
+            {{ item.text }}
+            <VAvatar
+              v-if="item.showAvatar"
+              :image="
+                getImageUrl(
+                  `/assets/svgs/${langSetting === 'ko' ? 'us' : 'kr'}.svg`,
+                )
+              "
+              size="20px"
+              rounded="0"
+              :tile="true"
+            />
+          </VListItemTitle>
         </VListItem>
       </VList>
     </VMenu>

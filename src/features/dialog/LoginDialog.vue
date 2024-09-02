@@ -38,8 +38,7 @@ const { mutate: postLogin } = useMutation({
 });
 
 const onClickLogin = async () => {
-  const rsaRes: ApiResponse = await getRsa();
-  const encryptedValue = encryptPassword(rsaRes.data, accountPassword.value);
+  const encryptedValue = await encryptPassword(accountPassword.value);
   postLogin(encryptedValue);
 };
 </script>
