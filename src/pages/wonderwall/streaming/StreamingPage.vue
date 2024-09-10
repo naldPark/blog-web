@@ -192,8 +192,8 @@ const clickToDownload = async () => {
 const fetchVideoList = () => {
   return new Promise((resolve) => {
     const param: any = {
-      limit: 4,
-      offset: 0,
+      pageSize: 4,
+      pageNumber: 0,
       sort: 'random',
     };
     StorageService.getVideoList(param)
