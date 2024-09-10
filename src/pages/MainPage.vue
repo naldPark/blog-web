@@ -15,7 +15,7 @@
           </p>
           <span class="main-title-sub">
             {{ $t('mainDescription') }}
-            <v-btn @click="onTest()">Open Dialog</v-btn>
+            <!-- <v-btn @click="onTest()">Open Dialog</v-btn>
             <Dialog
               v-model:visible="showDialog"
               title="Dialog Header"
@@ -29,7 +29,7 @@
               <template #footer>
                 <p>Here's some contact info</p>
               </template>
-            </Dialog>
+            </Dialog> -->
           </span>
           <p class="typing text-right">
             . . of
