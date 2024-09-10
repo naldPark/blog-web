@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { getImageUrl } from '@/utils/commonUtil';
 import Button from '@/components/common/Button.vue';
 import { useRouter } from 'vue-router';
@@ -43,9 +43,9 @@ const toggleDrawer = () => (showDrawer.value = !showDrawer.value);
 const clickToShowLoginDialog = () =>
   (showLoginDialog.value = !showLoginDialog.value);
 
-const listItems: RightMenuItems[] = [
+const listItems = computed<RightMenuItems[]>(() => [
   {
-    text: t('editPassword'),
+    text: 'editPassword',
     icon: 'mdi-account-edit-outline',
     onClick: () => (showEditPasswordDialog.value = true),
     requiresAdmin: true,
@@ -60,22 +60,25 @@ const listItems: RightMenuItems[] = [
     showAvatar: true,
   },
   {
-    text: t('adminPage'),
+    text: 'adminPage',
     icon: 'mdi-security',
     onClick: () => router.push({ name: 'AdminPage' }),
     requiresAdmin: true,
   },
   {
-    text: t('logout'),
+    text: 'logout',
     icon: 'mdi-logout-variant',
     onClick: () => {
       userStore.resetAccountInfo();
       router.push({ name: 'MainPage' });
     },
   },
-].filter((f) => !f.requiresAdmin || isSuper.value);
+]);
 
-console.log(listItems, isSuper.value);
+const getRightPanelItems = () => {
+  if (isSuper.value) return listItems.value;
+  else return listItems.value.filter((f) => !f.requiresAdmin);
+};
 </script>
 
 <template>
@@ -115,14 +118,15 @@ console.log(listItems, isSuper.value);
       <VList>
         <VListSubheader>{{ accountInfo.accountName }}</VListSubheader>
         <VListItem
-          v-for="(item, index) in listItems"
+          v-for="(item, index) in getRightPanelItems()"
           :key="index"
           class="right-panel-item"
         >
           <VListItemTitle @click="item.onClick">
             <VIcon :icon="item.icon" />
-            {{ item.text }}
+            {{ t(item.text) }}
             <VAvatar
+              style="width: 30px"
               v-if="item.showAvatar"
               :image="
                 getImageUrl(

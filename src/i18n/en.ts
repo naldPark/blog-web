@@ -1,5 +1,7 @@
 export default {
   lang: 'en',
+  en: 'English',
+  ko: 'Korean',
   mainTitle: 'HELLO ALL',
   mainSubTitle: "Nald's pensieve box.",
   mainDescription: 'Continuously updating (though sporadically).',

@@ -2,6 +2,8 @@ import DOMPurify from 'dompurify';
 
 export default {
   lang: 'ko',
+  en: '영어',
+  ko: '한국어',
   mainTitle: '클라우드 내 집',
   mainSubTitle: '스크린뷰 날드파크',
   mainDescription: '인테리어 확장공사중 (소음심한날: 빨간날, 칼퇴한날)',
