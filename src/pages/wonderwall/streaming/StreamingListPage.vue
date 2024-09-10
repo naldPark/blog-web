@@ -49,7 +49,7 @@
     </VCard>
     <template v-for="(category, index) in categories" :key="index">
       <VDivider class="mb-10 mt-10"></VDivider>
-      <h2 class="text-primary mb-3">{{ t(category.label) }}</h2>
+      <h2 class="text-primary mb-3">{{ category.label }}</h2>
       <VideoSlider
         :category="category.value"
         :videoList="

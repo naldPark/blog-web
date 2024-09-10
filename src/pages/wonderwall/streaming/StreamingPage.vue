@@ -103,10 +103,9 @@ import { useI18n } from 'vue-i18n';
 const { proxy: pxy } = getCurrentInstance()!;
 const { t } = useI18n();
 const categories = [
-  { label: pxy!.$t('all'), value: '' },
-  { label: pxy!.$t('movie'), value: 'movie' },
-  { label: pxy!.$t('personal'), value: 'personal' },
-  { label: pxy!.$t('etc'), value: 'etc' },
+  { label: pxy!.$t('video.all'), value: '' },
+  { label: pxy!.$t('video.movie'), value: 'movie' },
+  { label: pxy!.$t('video.nald'), value: 'personal' },
 ];
 const searchCategory: Ref<string> = ref('');
 const currentMovie: Ref<VideoDetailData> = ref({
