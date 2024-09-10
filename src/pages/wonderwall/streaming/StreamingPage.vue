@@ -155,11 +155,10 @@ const onClickMovie = async (storageId: number) => {
   await StorageService.getVideoDetail(fileSeq).then(async (res: any) => {
     let vttSrc = '';
     if (res.data.vttSrc) {
-      await StorageService.videoVtt(fileSeq).then((vttRes: any) => {
-        vttSrc = URL.createObjectURL(
-          new Blob([vttRes.data], { type: 'text/vtt;charset=utf-8;' }),
-        );
-      });
+      const response: Blob = await StorageService.videoVtt(storageId);
+      vttSrc = URL.createObjectURL(
+        new Blob([response], { type: 'text/vtt;charset=utf-8;' }),
+      );
     }
     const videoSrc = `/api/storage${res.data.fileSrc}`;
     currentMovie.value = {

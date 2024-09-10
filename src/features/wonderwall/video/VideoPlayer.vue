@@ -59,6 +59,15 @@ onMounted(() => {
         qualitySelector: true,
       },
     });
+    if (vttSrc) {
+      videoPlayer.value.addRemoteTextTrack({
+        kind: 'subtitles',
+        src: vttSrc,
+        srclang: 'ko',
+        label: 'Korean',
+        default: true,
+      });
+    }
   }
 });
 
