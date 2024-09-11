@@ -222,7 +222,6 @@ const doCheckFiles = (files: Array<any>, isFolder?: boolean) => {
       }
 
       if (availUpload) {
-        obj.status = 'checked';
         obj.type = obj.file.type;
         obj.size = obj.file.size;
         obj.name = obj.file.name;

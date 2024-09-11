@@ -3,8 +3,10 @@ import { useDisplay } from 'vuetify';
 import aboutDataAsset from '@/assets/data/about';
 import Button from '@/components/common/Button.vue';
 import { useI18n } from 'vue-i18n';
+import { getCurrentInstance } from 'vue';
 
-const { t } = useI18n();
+/** globalConfig 사용 */
+const { proxy: pxy } = getCurrentInstance()!;
 const { smAndDown: isMobile } = useDisplay();
 
 const stars = Array(3).fill(null);
@@ -43,7 +45,7 @@ const getStarStyle = (index: number) => {
             All I can imagine is able to create.
           </h1>
           <h4 class="pr-3 font-weight-thin mt-3" v-if="!isMobile">
-            {{ t('prMessage') }}
+            {{ pxy!.$t('prMessage') }}
           </h4>
           <div class="mt-2 pt-2">
             <Button

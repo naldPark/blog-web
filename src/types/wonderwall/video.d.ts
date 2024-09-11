@@ -13,21 +13,15 @@ export interface VideoDetailData {
   downloadable?: string;
 }
 
-export interface MovieInfoData {
-  category: string;
-  file: File | null;
+export interface MovieInfoRequestData {
   originName: string;
+  fileName: string;
   fileSize: number;
+  category: string;
   description: string;
-  name: string;
-  status: string;
-  fileType: string;
-  fileCover: File | File[] | undefined;
-  fileVtt: File | null;
-  fileDownload: boolean;
   fileAuth: boolean;
+  fileDownload: boolean;
 }
-
 export interface FileInfo {
   file: File;
   name: string;

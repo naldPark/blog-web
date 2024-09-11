@@ -2,50 +2,50 @@
   <VCard color="#161616" elevation="0">
     <VRow>
       <VCol md="7">
-        <VTextField
-          type="text"
-          :label="movieInfo?.file ? `${t('video.selectedFile')}` : ''"
-          :disabled="true"
+        <InputText
           v-model="movieInfo.originName"
+          :label="!movieInfo.fileName ? t('video.selectedFile') : ''"
+          placeholder="파일 업로드"
+          :disabled="true"
+          type="text"
         />
       </VCol>
       <VCol md="5">
-        <VTextField
-          type="text"
-          :label="`${t('video.uploadFileSize')}`"
-          :disabled="true"
+        <InputText
           v-model="movieInfo.fileSize"
+          :label="t('video.uploadFileSize')"
+          :disabled="true"
+          type="text"
         />
       </VCol>
     </VRow>
     <VRow>
       <VCol md="6">
-        <VTextField
+        <InputText
           class="input-aster"
           required
           counter="40"
           :label="`${t('video.movieName')}`"
           prepend-icon="mdi-pen"
-          v-model="movieInfo.name"
-        >
-        </VTextField>
+          v-model="movieInfo.fileName"
+        />
       </VCol>
       <VCol md="6">
-        <VSelect
-          required
+        <SelectBox
           v-model="movieInfo.category"
-          :label="`${t('video.category')}`"
-          prepend-icon="mdi-shape"
-          :items="categories"
-        >
-        </VSelect>
+          :items="streamimgCategories"
+          :rules="[rules.required]"
+          item-value="value"
+          item-title="label"
+          :label="t('video.category')"
+        />
       </VCol>
     </VRow>
     <VRow>
       <VCol md="12">
         <VTextField
           type="text"
-          :label="`${t('video.description')}`"
+          :label="t('video.description')"
           counter="100"
           prepend-icon="mdi-text-box"
           v-model="movieInfo.description"
@@ -56,18 +56,18 @@
     <VRow>
       <VCol md="3">
         <VFileInput
-          v-model="movieInfo.fileCover"
           :rules="coverRules"
           accept="image/png"
           :label="`${t('video.fileCover')}`"
           prepend-icon="mdi-camera"
+          @change="handleFileCoverChange"
         ></VFileInput>
       </VCol>
       <VCol md="3">
         <VFileInput
-          v-model="movieInfo.fileVtt"
           :label="`${t('video.subtitle')}`"
           accept=".vtt"
+          @change="handleFileVttChange"
         ></VFileInput>
       </VCol>
       <VCol md="3">
@@ -85,129 +85,69 @@
         ></VSwitch>
       </VCol>
     </VRow>
-    <VCardActions>
-      <VSpacer />
-      <VBtn
-        outlined
-        rounded
-        variant="text"
-        color="grey lighten-1"
-        min-width="100"
-        @click="$emit('closeDialog')"
-      >
-        {{ t('cancel') }}
-      </VBtn>
-      <VBtn
-        outlined
-        rounded
-        variant="text"
-        color="btnPrimary"
-        :disabled="movieInfo.name === '' || movieInfo.file === null"
-        min-width="100"
-        @click="onSubmit"
-      >
-        {{ t('confirm') }} <VIcon right icon="mdi-cloud-upload" dark />
-      </VBtn>
-    </VCardActions>
   </VCard>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import storageService from '@/api/storageService';
-import { useAppCommonStore } from '@/store/appCommonStore';
-import type { MovieInfoData } from '@/types/wonderwall/video';
-import { fileToBase64 } from '@/utils/fileUtil';
+import InputText from '@/components/common/InputText.vue';
+import SelectBox from '@/components/common/SelectBox.vue';
+import { MovieInfoRequestData } from '@/types/wonderwall/video';
+import { streamimgCategories } from '@/assets/data/streaming';
 
 const props = defineProps<{
-  modelValue: MovieInfoData;
+  modelValue: MovieInfoRequestData;
 }>();
 
-const emit = defineEmits(['update:modelValue', 'closeDialog']);
-const appStatusStore = useAppCommonStore();
+const emit = defineEmits([
+  'update:modelValue',
+  'onSubmit',
+  'updatedUploadCover',
+  'updatedUploadVtt',
+]);
 const { t } = useI18n();
 
-const categories = [
-  { label: t('video.movie'), value: 'movie', hint: t('video.movie') },
-  {
-    label: t('video.tomAndJerry'),
-    value: 'ani',
-    hint: t('video.tomAndJerry'),
-  },
-  { label: t('video.nald'), value: 'nald', hint: t('video.nald') },
-];
+/** 검증 rules */
+const rules = {
+  required: (value: string) => !!value || t('required'),
+};
 
 const coverRules = ref([
   (value: File | null) =>
     !value || value.size < 2000000 || 'Cover size should be less than 2 MB!',
 ]);
 
-// 초기 props 모델 값이 정의되지 않았을 경우에 대한 방어 코드
-const movieInfo = ref({
-  ...(props.modelValue || {
-    category: null,
-    file: null,
-    originName: '',
-    fileSize: 0,
-    description: '',
-    name: '',
-    status: '',
-    fileType: '',
-    fileCover: null,
-    fileVtt: null,
-    fileDownload: false,
-    fileAuth: false,
-  }),
+const movieInfo: Ref<MovieInfoRequestData> = ref({
+  ...props.modelValue,
 });
 
-watch(
-  props.modelValue,
-  (newValue) => {
-    movieInfo.value = props.modelValue;
-  },
-  { immediate: true },
-);
-
-const thumbnail = ref(null);
-
-const onSubmit = async () => {
-  if (movieInfo.value.fileCover) {
-    await fileToBase64(movieInfo.value.fileCover).then((result: any) => {
-      thumbnail.value = result;
-    });
+const handleFileCoverChange = (event: Event) => {
+  console.log('??!!!');
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    emit('updatedUploadCover', input.files[0]);
   }
-  const info = {
-    fileName: movieInfo.value.name,
-    fileSize: movieInfo.value.fileSize,
-    fileDownload: movieInfo.value.fileDownload,
-    description: movieInfo.value.description,
-    category: movieInfo.value.category
-      ? movieInfo.value.category
-      : categories[0].value,
-    fileAuth: movieInfo.value.fileAuth,
-    fileCover: thumbnail.value,
-  };
-  appStatusStore.showLoading();
-  await storageService
-    .localUploadFiles(info, movieInfo.value)
-    .then((res: any) => {
-      appStatusStore.hideLoading();
-      let title = `${t('complete')}`;
-      let msg = `${t('confirmMsg')}`;
-      if (res.status_code !== 200) {
-        title = `${t('error')}`;
-        msg = res.data.message;
-      }
-
-      appStatusStore.showDialog({
-        title: title,
-        description: msg,
-        showCloseButton: true,
-      });
-      emit('closeDialog');
-    });
+  console.log('movieinfo', movieInfo.value);
 };
+
+const handleFileVttChange = (event: Event) => {
+  console.log('movieInfo.value', movieInfo.value);
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    emit('updatedUploadVtt', input.files[0]);
+  }
+};
+
+// watch(
+//   props.modelValue,
+//   (newValue) => {
+//     movieInfo.value = {
+//       ...props.modelValue,
+//     };
+//   },
+//   { immediate: true },
+// );
 </script>
 
 <style lang="scss" scoped></style>

@@ -8,6 +8,7 @@ export default {
   name: 'name',
   email: 'email',
   title: 'title',
+  authority: 'authority',
   alert: 'Alert',
   content: 'content',
   send: 'send',
@@ -109,6 +110,7 @@ export default {
     movie: 'Movie (license expired)',
     tomAndJerry: 'Tom and Jerry ',
     nald: 'nald',
+    etc: 'etc',
   },
   menubar: {
     home: 'home',

@@ -12,8 +12,9 @@
               >{{ t('video.playAny') }}
             </VBtn>
             <VBtn color="background" @click="updateShowUploadDialog(true)">
-              <VIcon class="mr-2">mdi-cloud-upload-outline</VIcon
-              >{{ t('video.uploadVideo') }}
+              <VIcon class="mr-2" icon="mdi-cloud-upload-outline" />{{
+                t('video.uploadVideo')
+              }}
             </VBtn>
           </div>
         </div>
@@ -28,10 +29,10 @@
             item-value="value"
             v-model="searchCategory"
             solo
-            :items="categories"
+            :items="streamimgCategories"
             filled
             :label="t('category')"
-            @change="fetchVideoList"
+            @change="videoRefetch"
           ></VSelect>
         </VCol>
         <VCol class="d-flex pa-1" cols="12" sm="8">
@@ -41,14 +42,14 @@
             :label="t('searchPlaceHolder')"
             append-icon="mdi-magnify"
             v-model="searchText"
-            @keyup.enter="fetchVideoList"
-            @click:append="fetchVideoList"
+            @keyup.enter="videoRefetch"
+            @click:append="videoRefetch"
           ></VTextField>
         </VCol>
       </VRow>
     </VCard>
-    <template v-for="(category, index) in categories" :key="index">
-      <VDivider class="mb-10 mt-10"></VDivider>
+    <template v-for="(category, index) in streamimgCategories" :key="index">
+      <VDivider class="mb-10 mt-10" />
       <h2 class="text-primary mb-3">{{ category.label }}</h2>
       <VideoSlider
         :category="category.value"
@@ -63,7 +64,7 @@
     <VideoUploadDialog
       :isMultiple="true"
       v-model:showDialog="showUploadDialog"
-      @fetchVideoList="fetchVideoList"
+      @fetchVideoList="videoRefetch"
     />
   </VContainer>
 </template>
@@ -76,22 +77,12 @@ import storageService from '@/api/storageService';
 import { useI18n } from 'vue-i18n';
 import VideoSlider from '@/features/wonderwall/video/VideoSlider.vue';
 import { shuffleArray } from '@/utils/commonUtil';
-import {
-  VideoDetailData,
-  VideoListRequestData,
-} from '@/types/wonderwall/video';
+import { VideoDetailData } from '@/types/wonderwall/video';
 import { ApiResponse } from '@/types/axios';
+import { streamimgCategories } from '@/assets/data/streaming';
+import useCustomQuery from '@/hook/useCustomQuery';
+import { COMMON_QUERY_KEY } from '@/types/queryEnum';
 const { t } = useI18n();
-const categories: any = [
-  { label: t('video.movie'), value: 'movie', hint: t('video.movie') },
-  {
-    label: t('video.tomAndJerry'),
-    value: 'ani',
-    hint: t('video.tomAndJerry'),
-  },
-  { label: t('video.nald'), value: 'nald', hint: t('video.nald') },
-];
-
 const movieList: Ref<VideoDetailData[]> = ref([]);
 const searchText: Ref<string> = ref('');
 const searchCategory: Ref<string> = ref('');
@@ -104,32 +95,23 @@ const updateShowUploadDialog = (newValue: boolean) => {
 
 const router = useRouter();
 
-onMounted(() => {
-  fetchVideoList();
-  console.log(movieList.value);
-});
-
-const fetchVideoList = async () => {
-  try {
-    const param: VideoListRequestData = {
+/** VideoList Query */
+const { hardFetch: videoRefetch } = useCustomQuery({
+  queryKey: [COMMON_QUERY_KEY.VIDEO_LIST],
+  queryFn: () =>
+    storageService.getVideoList({
       type: searchCategory.value,
       searchText: searchText.value,
-    };
-    const response = (await storageService.getVideoList(param)) as ApiResponse;
-    if (response.status_code === 200) {
-      movieList.value = response.data.list;
-    }
-  } catch (error) {
-    console.error('Error fetching video list:', error);
-  }
-};
+    }),
+  onSuccess: (res: ApiResponse) => {
+    movieList.value = res.data.list;
+  },
+});
 
 const playAny = () => {
   const list: VideoDetailData[] = movieList.value.filter(
     (f: VideoDetailData) => f.fileSrc !== null && f.fileSrc !== '',
   );
-  console.log('list', list);
-  console.log('shuffleArray(list),', shuffleArray(list));
   router
     .push({
       name: 'StreamingPage',

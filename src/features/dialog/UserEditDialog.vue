@@ -106,7 +106,7 @@ const onConfirm = () => {
           :rules="[rules.required]"
           item-value="value"
           item-title="label"
-          label="권한"
+          :label="t('authority')"
         />
         <InputText
           v-if="!isEdit"

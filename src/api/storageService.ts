@@ -50,23 +50,13 @@ const storageService = {
 
   /**
    * 로컬 파일을 업로드하는 메서드
-   * @param {any} info - 파일 관련 정보
-   * @param {any} movieInfo - 업로드할 영화 정보 (파일과 VTT 파일 포함)
+   * @param {FormData} bodyForm - 업로드할 영상 FormData (파일과 VTT 파일 포함)
    * @returns {Promise<ApiResult<any>>} 파일 업로드 결과를 포함하는 API 결과를 반환하는 Promise
    */
-  localUploadFiles(info: any, movieInfo: any): Promise<ApiResult<any>> {
+  localUploadFiles(bodyForm: FormData): Promise<ApiResult<any>> {
     const config = {
       headers: { 'Content-type': 'multipart/form-data' }, // 폼 데이터 전송을 위한 헤더 설정
     };
-
-    const json = JSON.stringify(info); // JSON 문자열로 변환
-    const blob = new Blob([json], { type: 'application/json' }); // JSON Blob 생성
-
-    const bodyForm = new FormData(); // FormData 객체 생성
-    bodyForm.append('info', blob); // JSON 정보를 FormData에 추가
-    bodyForm.append('fileVtt', movieInfo.fileVtt); // VTT 파일 추가
-    bodyForm.append('file', movieInfo.file); // 업로드할 파일 추가
-
     return post(`${this.dafaultAPI}/storage/uploadLocal`, bodyForm, config);
   },
 

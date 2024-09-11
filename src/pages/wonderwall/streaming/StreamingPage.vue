@@ -10,7 +10,7 @@
               item-value="value"
               v-model="searchCategory"
               solo
-              :items="categories"
+              :items="streamimgCategories"
               filled
               :label="t('category')"
             ></VSelect>
@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, Ref, getCurrentInstance } from 'vue';
+import { ref, onMounted, Ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import StorageService from '@/api/storageService';
 import MovieItem from '@/features/wonderwall/video/MovieItem.vue';
@@ -98,15 +98,9 @@ import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { VideoDetailData } from '@/types/wonderwall/video';
 import { useI18n } from 'vue-i18n';
+import { streamimgCategories } from '@/assets/data/streaming';
 
-/** globalConfig 사용 */
-const { proxy: pxy } = getCurrentInstance()!;
 const { t } = useI18n();
-const categories = [
-  { label: pxy!.$t('video.all'), value: '' },
-  { label: pxy!.$t('video.movie'), value: 'movie' },
-  { label: pxy!.$t('video.nald'), value: 'personal' },
-];
 const searchCategory: Ref<string> = ref('');
 const currentMovie: Ref<VideoDetailData> = ref({
   storageId: 0,

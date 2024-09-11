@@ -10,6 +10,7 @@ export default {
   name: '이름',
   email: '이메일',
   title: '제목',
+  authority: '권한',
   alert: '알림',
   content: '내용',
   send: '보내기',
@@ -110,6 +111,7 @@ export default {
     movie: '영화 (저작권 만료)',
     tomAndJerry: '톰과제리 시리즈',
     nald: '날드',
+    etc: '그 외',
   },
   menubar: {
     home: '메인으로',
