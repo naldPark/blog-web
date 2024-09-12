@@ -106,7 +106,7 @@ const getRightPanelItems = () => {
     <VMenu v-else>
       <template v-slot:activator="{ props }">
         <Button
-          shape="none"
+          :rounded="false"
           variant="text"
           color="secondary"
           v-bind="props"

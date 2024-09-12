@@ -2,7 +2,7 @@
 import { computed, PropType } from 'vue';
 
 /** Props정의 */
-const { shape, href } = defineProps({
+const { href, rounded } = defineProps({
   color: { type: String, default: 'primary', required: false },
   href: { type: String, required: false },
   variant: {
@@ -12,15 +12,17 @@ const { shape, href } = defineProps({
     default: 'tonal',
     required: false,
   },
+  appendIcon: { type: String, required: false },
+  prependIcon: { type: String, required: false },
   label: { type: String, required: false },
   size: { type: String, required: false },
   icon: { type: String, required: false },
-  shape: { type: String, default: 'rounded', required: false },
+  rounded: { type: Boolean, default: true, required: false },
 });
 
 /** computed로 기본 placeholder 값 설정 */
 const computedRounded = computed(() => {
-  if (!shape || shape == 'rounded') return 'xl';
+  if (rounded) return 'xl';
   return 0;
 });
 </script>
@@ -36,10 +38,12 @@ const computedRounded = computed(() => {
     :variant="variant"
     :target="href != undefined ? '_blank' : undefined"
     @click="$emit('onClick')"
-    class="app-g-button line-button size-xsmall"
+    class="app-g-button line-button"
   >
-    <slot name="text" v-if="label">{{ label }}</slot>
+    <VIcon v-if="prependIcon" :icon="prependIcon" class="mr-2" />
     <VIcon v-if="icon" :icon="icon" />
+    <slot name="text" v-if="label">{{ label }}</slot>
+    <VIcon v-if="appendIcon" :icon="appendIcon" class="ml-2" />
   </VBtn>
 </template>
 

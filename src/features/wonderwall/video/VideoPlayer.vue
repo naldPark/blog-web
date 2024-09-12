@@ -1,37 +1,19 @@
-<template>
-  <div class="video-container">
-    <video
-      ref="videoPlayer"
-      class="video-js vjs-default-skin vjs-big-play-centered"
-      data-setup="{}"
-      crossorigin="anonymous"
-    >
-      <track
-        v-if="vttSrc"
-        :src="vttSrc"
-        kind="subtitles"
-        srclang="ko"
-        label="Korean"
-        default
-      />
-      <source :src="hlsSource" type="application/x-mpegURL" />
-    </video>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
+import { useI18n } from 'vue-i18n';
+import { useAppCommonStore } from '@/store/appCommonStore';
 
 type VideoJsPlayer = ReturnType<typeof videojs>;
-
 const videoPlayer = ref<VideoJsPlayer | null>(null);
-
 const { hlsSource, vttSrc } = defineProps<{
   hlsSource: string;
   vttSrc?: string;
 }>();
+const { t } = useI18n();
+const { showToast } = useAppCommonStore();
+const errorMessage = ref<string | null>(null);
 
 onMounted(() => {
   const videoElement = document.querySelector('.video-js') as HTMLVideoElement;
@@ -59,6 +41,7 @@ onMounted(() => {
         qualitySelector: true,
       },
     });
+    handleVideoPlayError();
     if (vttSrc) {
       videoPlayer.value.addRemoteTextTrack({
         kind: 'subtitles',
@@ -71,14 +54,68 @@ onMounted(() => {
   }
 });
 
+const handleVideoPlayError = () => {
+  videoPlayer.value?.on('error', (e: any) => {
+    const error = videoPlayer.value?.error();
+    errorMessage.value = t('video.playError');
+    const errorDisplay = document.querySelector('.vjs-error-display');
+    const bigPlayButton = document.querySelector('.vjs-big-play-button');
+    if (errorDisplay)
+      errorDisplay.setAttribute('style', 'display: none !important;');
+    if (bigPlayButton)
+      bigPlayButton.setAttribute('style', 'display: none !important;');
+    if (error)
+      showToast({
+        type: 'error',
+        message: t('video.playError'),
+      });
+  });
+};
+
 onUnmounted(() => {
   if (videoPlayer.value) videoPlayer.value.dispose();
 });
 </script>
 
-<style scoped>
-/* .video-js .vjs-control-bar {
-  display: flex;
-  flex-direction: row;
-} */
+<template>
+  <div class="video-container">
+    <video
+      ref="videoPlayer"
+      class="video-js vjs-default-skin vjs-big-play-centered"
+      data-setup="{}"
+      crossorigin="anonymous"
+    >
+      <track
+        v-if="vttSrc"
+        :src="vttSrc"
+        kind="subtitles"
+        srclang="ko"
+        label="Korean"
+        default
+      />
+      <source :src="hlsSource" type="application/x-mpegURL" />
+    </video>
+    <div v-if="errorMessage" class="custom-error-message">
+      <VIcon icon="mdi-alert-outline" />
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.video-container {
+  position: relative;
+}
+
+.custom-error-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--error);
+  font-size: 3.5em;
+}
+
+.vjs-error .vjs-big-play-button {
+  display: none !important;
+}
 </style>

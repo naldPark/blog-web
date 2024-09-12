@@ -9,12 +9,17 @@ import Button from '@/components/common/Button.vue';
 import { useI18n } from 'vue-i18n';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import useMutation from '@/hook/useMutation';
+import { clone } from 'ramda';
+import ResourceEditDialog from '@/features/dialog/ResourceEditDialog.vue';
 
 /** 전체 비디오 리스트 */
 const videoList = ref<VideoDetailData[]>([]);
 
 const { t } = useI18n();
 const appStatusStore = useAppCommonStore();
+const selectedVideo = ref<VideoDetailData>();
+
+const showResourceEditDialog = ref(false);
 
 /** 테이블 헤더 */
 const videoListHeaders = [
@@ -70,7 +75,12 @@ const clickDeleteVideo = (rowData: VideoDetailData) => {
 };
 
 const clickEditVideo = (rowData: VideoDetailData) => {
-  console.log(',,');
+  selectedVideo.value = clone(rowData);
+  showResourceEditDialog.value = true;
+};
+
+const onEditVideo = () => {
+  console.log('수정띠');
 };
 
 const downloadVtt = (rowData: VideoDetailData) => {
@@ -132,6 +142,12 @@ const downloadVtt = (rowData: VideoDetailData) => {
       </template>
     </VDataTable>
   </VCard>
+  <ResourceEditDialog
+    v-if="showResourceEditDialog"
+    v-model:showDialog="showResourceEditDialog"
+    :selectedVideo="selectedVideo"
+    @action-on-edit="onEditVideo"
+  />
 </template>
 
 <style lang="scss" scoped></style>

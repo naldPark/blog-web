@@ -38,7 +38,7 @@ const onClickDialog = () => {
           variant="text"
           class="ma-1"
           color="grey"
-          shape=""
+          :rounded="false"
           v-if="dialogInfo.showCloseButton"
           @click="onClickDialogClose"
         >

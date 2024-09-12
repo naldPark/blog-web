@@ -3,75 +3,59 @@ import { onBeforeMount, Ref, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Button from '@/components/common/Button.vue';
 import Dialog from '@/components/common/Dialog.vue';
-import { UserManage, UserRequestBody } from '@/types/admin';
-import { AUTHORITY } from '@/types/constants';
-import SelectBox from '@/components/common/SelectBox.vue';
-import { clone } from 'ramda';
-import InputText from '@/components/common/InputText.vue';
-import {
-  emailRegExp,
-  nameRegExp,
-  passwordRegExp,
-  passwordVerifyRegExp,
-} from '@/utils/regExpUtil';
-import ChangePasswordDialog from '@/features/dialog/ChangePasswordDialog.vue';
+import { VideoRequestBody } from '@/types/admin';
 import { filterKeysFromObject } from '@/utils/commonUtil';
+import { VideoDetailData } from '@/types/wonderwall/video';
 
 const showDialog = defineModel('showDialog', {
   type: Boolean,
 });
 
 const props = defineProps<{
-  selectedUser: UserManage | undefined;
+  selectedVideo: VideoDetailData | undefined;
 }>();
 
 const { t } = useI18n();
 
-/** 기존 Name 식별 & 수정  */
-const userName: string = props.selectedUser?.accountName ?? '';
-/** 수정 or 생성 모드 구분 목적  */
-const isEdit: Ref<boolean> = ref(!!props.selectedUser?.accountId);
-
 /** api에 불필요한 key filter처리 */
-const editRequestKeys = ['accountId', 'accountName', 'authority', 'email'];
-const editUserInfo: Ref<UserRequestBody> = ref({
-  accountId: '',
-  accountName: '',
-  authority: 4,
-  email: '',
-  password: '',
+const editRequestKeys = [
+  'storageId',
+  'downloadable',
+  'fileCover',
+  'fileName',
+  'fileDesc',
+  'fileType',
+  'vttSrc',
+];
+const editVideoInfo: Ref<VideoRequestBody> = ref({
+  storageId: '',
+  downloadable: false,
+  fileCover: '',
+  fileName: '',
+  fileDesc: '',
+  fileType: '',
+  vttSrc: '',
 });
-const accountPasswordConfirm = ref('');
-
-const showEditPasswordDialog = ref(false);
 
 onBeforeMount(() => {
-  if (isEdit.value)
-    editUserInfo.value = filterKeysFromObject(
-      editRequestKeys,
-      props.selectedUser,
-    );
+  editVideoInfo.value = filterKeysFromObject(
+    editRequestKeys,
+    props.selectedVideo,
+  );
 });
 
 /** data - calulating - action
  *  action은 되도록 상위 컴포넌트에 전달
  */
-const emit = defineEmits(['actionOnEdit', 'actionOnCreate']);
+const emit = defineEmits(['actionOnEdit']);
 
 /** 검증 rules */
 const rules = {
   required: (value: string) => !!value || t('required'),
-  email: (value: string) => emailRegExp().test(value) || t('emailValidate'),
-  name: (value: string) => nameRegExp().test(value) || t('nameValidate'),
-  passwordExp: (v: string) =>
-    passwordRegExp().test(v) || t('passwordRulesError'),
-  passwordVerify: (v: string) =>
-    passwordVerifyRegExp(editUserInfo.value.password).test(v) ||
-    t('passwordMatchRulesError'),
 };
 
 const onConfirm = () => {
-  emit(isEdit.value ? 'actionOnEdit' : 'actionOnCreate', editUserInfo.value);
+  emit('actionOnEdit', editVideoInfo.value);
 };
 </script>
 
@@ -79,15 +63,15 @@ const onConfirm = () => {
   <Dialog v-model:visible="showDialog" width="450px">
     <template #header>
       <VIcon class="text-primary" icon="mdi-account-edit" />
-      {{ isEdit ? t('editUser') : t('addUser') }}
+      {{ editVideoInfo.fileName }}
     </template>
     <template #default>
       <v-sheet :border="'md'" class="pa-6 text-white mx-auto" max-width="400">
         <div class="text-subtitle-1 font-weight-bold mb-4 d-flex">
           <VIcon class="text-grey-lighten-1 mr-2" icon="mdi-account-box" />
-          {{ isEdit ? userName : t('registerUser') }}
+          ddd
         </div>
-        <InputText
+        <!-- <InputText
           :label="`${t('id')} *`"
           :rules="[rules.required]"
           v-model="editUserInfo.accountId"
@@ -129,8 +113,8 @@ const onConfirm = () => {
           type="password"
           required
           flat
-        />
-        <InputText
+        /> -->
+        <!-- <InputText
           v-model="editUserInfo.email"
           :rules="[rules.required, rules.email]"
           :label="`${t('email')} *`"
@@ -148,7 +132,7 @@ const onConfirm = () => {
           v-if="isEdit"
           v-model:showDialog="showEditPasswordDialog"
           :accountId="editUserInfo.accountId"
-        />
+        /> -->
       </v-sheet>
     </template>
     <template #footer>

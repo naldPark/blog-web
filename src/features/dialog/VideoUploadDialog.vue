@@ -29,9 +29,6 @@
         @updated-uploadCover="updatedUploadCover"
       />
     </template>
-    <!-- <template #footer>
-      <VSpacer />
-    </template> -->
   </Dialog>
 </template>
 

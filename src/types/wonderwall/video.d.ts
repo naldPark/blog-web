@@ -26,7 +26,6 @@ export interface FileInfo {
   file: File;
   name: string;
   size: number;
-  status: string;
 }
 
 export interface VideoListRequestData extends CommonListRequestData {

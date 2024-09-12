@@ -154,7 +154,7 @@ const onClickMovie = async (storageId: number) => {
         new Blob([response], { type: 'text/vtt;charset=utf-8;' }),
       );
     }
-    const videoSrc = `/api/storage${res.data.fileSrc}`;
+    const videoSrc = `/api/storage/${res.data.fileSrc}`;
     currentMovie.value = {
       ...res.data,
       fileSrc: videoSrc,

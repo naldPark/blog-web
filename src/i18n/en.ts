@@ -111,6 +111,8 @@ export default {
     tomAndJerry: 'Tom and Jerry ',
     nald: 'nald',
     etc: 'etc',
+    playError:
+      'An issue occurred during playback. Please contact the administrator.',
   },
   menubar: {
     home: 'home',

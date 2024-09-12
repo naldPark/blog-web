@@ -112,6 +112,7 @@ export default {
     tomAndJerry: '톰과제리 시리즈',
     nald: '날드',
     etc: '그 외',
+    playError: '재생 중 문제가 발생했습니다. 관리자에게 문의하세요',
   },
   menubar: {
     home: '메인으로',
