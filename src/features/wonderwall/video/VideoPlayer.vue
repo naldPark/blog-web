@@ -58,7 +58,9 @@ const handleVideoPlayError = () => {
   videoPlayer.value?.on('error', (e: any) => {
     const error = videoPlayer.value?.error();
     errorMessage.value = t('video.playError');
+    /** 에러 발생시 라이브러리 default 에러 화면 숨김 */
     const errorDisplay = document.querySelector('.vjs-error-display');
+    /** 에러 발생시 플레이버튼 숨김  */
     const bigPlayButton = document.querySelector('.vjs-big-play-button');
     if (errorDisplay)
       errorDisplay.setAttribute('style', 'display: none !important;');
