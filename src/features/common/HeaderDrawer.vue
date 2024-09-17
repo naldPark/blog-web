@@ -53,6 +53,7 @@ const menuInfo = computed(() => {
 
 const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
   if ('active' in menu) menu.active = !menu.active;
+  if ('url' in menu) window.open(menu.url, '_blank');
   router.push({ name: menu.value });
 };
 
