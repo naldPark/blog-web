@@ -3,7 +3,7 @@ import { ref, watch, onMounted, Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import UserManage from '@/features/admin/UserManage.vue';
 import DataManage from '@/features/admin/DataManage.vue';
-import ResourceManage from '@/features/admin/ResourceManage.vue';
+import VideoManage from '@/features/admin/VideoManage.vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -53,7 +53,7 @@ onMounted(() => {
       </VTabs>
       <div class="tab-content">
         <UserManage v-if="currentTab === 0" />
-        <ResourceManage v-if="currentTab === 1" />
+        <VideoManage v-if="currentTab === 1" />
         <DataManage v-if="currentTab === 2" />
       </div>
     </v-sheet>

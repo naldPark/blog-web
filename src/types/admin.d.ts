@@ -19,12 +19,21 @@ export type UserRequestBody = {
 };
 
 /** User 생성 / 수정 요청 데이터 */
-export type VideoRequestBody = {
-  storageId: string;
-  downloadable: boolean;
-  fileCover: string;
-  fileName: string;
-  fileDesc: string;
-  fileType: string;
-  vttSrc: string;
+export type UserRequestBody = {
+  accountId: string;
+  accountName: string;
+  authority: number;
+  email: string;
+  password: string;
 };
+
+export interface VideoRequestBody {
+  storageId?: string;
+  originName?: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  fileDesc: string;
+  fileAuth: boolean;
+  downloadable: boolean;
+}

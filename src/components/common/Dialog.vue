@@ -5,11 +5,12 @@
     :max-height="maxHeight"
     :persistent="persistent"
     :scrollable="scrollable"
-    :draggable="true"
+    :draggable="false"
     :fullscreen="fullscreen"
     :eager="eager"
     :width="width"
     :height="height"
+    @click:outside="closeDialog"
   >
     <template #default>
       <VCard rounded="lg">
@@ -21,7 +22,6 @@
             color="gray"
             icon="mdi-close"
             variant="text"
-            size="xs"
             @click="closeDialog"
           />
         </VCardTitle>
@@ -32,7 +32,7 @@
         <VDivider class="mt-2" />
         <VCardActions class="ma-2 d-flex justify-end">
           <slot name="footer">
-            <Button rounded="xl" :label="t('cancel')" @click="closeDialog" />
+            <Button :label="t('cancel')" @click="closeDialog" />
             <Button
               color="primary"
               :label="t('confirm')"

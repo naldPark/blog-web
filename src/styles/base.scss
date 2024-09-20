@@ -1,0 +1,358 @@
+/* 공용 스타일 클래스 */
+$base-width-class: 'w';
+$base-height-class: 'h';
+$base-min-width-class: 'min-w';
+$base-min-height-class: 'min-h';
+$base-gap-class: 'gap';
+$base-font-size-class: 'fs';
+$base-font-weight-class: 'fw';
+$base-margin-class: 'm';
+$base-margin-top-class: 'mt';
+$base-margin-bottom-class: 'mb';
+$base-margin-right-class: 'mr';
+$base-margin-left-class: 'ml';
+$base-padding-class: 'p';
+$base-padding-top-class: 'pt';
+$base-padding-bottom-class: 'pb';
+$base-padding-right-class: 'pr';
+$base-padding-left-class: 'pl';
+$base-radius-class: 'rounded';
+
+/* rounded-1 ~ rounded-20 (border-radius: 1 ~ 20) */
+@for $i from 1 through 20 {
+  .#{$base-radius-class}-#{$i} {
+    border-radius: #{$i}px;
+  }
+}
+
+/* w-1 ~ w-1000 (width: 1 ~ 1000px) */
+@for $i from 1 through 1000 {
+  .#{$base-width-class}-#{$i} {
+    width: #{$i}px !important;
+  }
+}
+
+/* h-1 ~ h-1000 (height: 1 ~ 1000px) */
+@for $i from 1 through 1000 {
+  .#{$base-height-class}-#{$i} {
+    height: #{$i}px !important;
+  }
+}
+
+/* min-w-1 ~ min-w-1000 (width: 1 ~ 1000px) */
+@for $i from 1 through 1000 {
+  .#{$base-min-width-class}-#{$i} {
+    min-width: #{$i}px !important;
+  }
+}
+
+/* min-h-1 ~ min-h-1000 (height: 1 ~ 1000px) */
+@for $i from 1 through 1000 {
+  .#{$base-min-height-class}-#{$i} {
+    min-height: #{$i}px !important;
+  }
+}
+
+/* gap-1 ~ gap-100 (gap: 1px ~ 100px) */
+@for $i from 1 through 100 {
+  .#{$base-gap-class}-#{$i} {
+    gap: #{$i}px !important;
+  }
+}
+
+/* fs-1 ~ fs-30 (font-size: 1px ~ 30px) */
+@for $i from 1 through 30 {
+  .#{$base-font-size-class}-#{$i} {
+    font-size: #{$i}px !important;
+  }
+}
+
+/* fw-1 ~ fw-10 (font-weigh: 100px ~ 1000px) */
+@for $i from 1 through 10 {
+  .#{$base-font-weight-class}-#{$i} {
+    font-weight: #{$i * 100} !important;
+  }
+}
+
+.flex {
+  display: flex !important;
+}
+
+.flex-column {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-justify-left {
+  display: flex;
+  justify-content: left;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.text-red {
+  color: red;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-status-success {
+  color: var(--status-success) !important;
+}
+
+.text-status-error {
+  color: var(--status-error) !important;
+}
+
+.text-status-warning {
+  color: var(--status-warning) !important;
+}
+
+.text-status-info {
+  color: var(--status-info) !important;
+}
+
+.text-status-green {
+  color: var(--status-green) !important;
+}
+
+.text-gray-01 {
+  color: var(--gray01);
+}
+
+.text-gray-02 {
+  color: var(--gray02);
+}
+
+.text-gray-03 {
+  color: var(--gray03);
+}
+
+.text-gray-04 {
+  color: var(--gray04);
+}
+
+.text-gray-05 {
+  color: var(--gray05);
+}
+
+.text-gray-06 {
+  color: var(--gray06);
+}
+
+.text-gray-07 {
+  color: var(--gray07);
+}
+
+.text-gray-08 {
+  color: var(--gray08);
+}
+
+.text-gray-09 {
+  color: var(--gray09);
+}
+
+.text-gray-10 {
+  color: var(--gray10);
+}
+
+.text-gray-11 {
+  color: var(--gray11);
+}
+
+.text-gray-12 {
+  color: var(--gray12);
+}
+
+.text-gray-13 {
+  color: var(--gray13);
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.min-h-screen {
+  min-height: 100vh !important;
+}
+
+.min-w-screen {
+  min-width: 100vw !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.justify-content-center {
+  justify-content: center !important;
+}
+
+.justify-content-between {
+  justify-content: space-between !important;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-half {
+  width: 50%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-half {
+  height: 50%;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  overflow: hidden;
+}
+
+// href기본 링크 색상 제거
+a:-webkit-any-link {
+  color: unset;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-default {
+  cursor: default !important;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.nowrap {
+  text-wrap: nowrap;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-gray-01 {
+  background-color: var(--gray01);
+}
+
+.bg-gray-02 {
+  background-color: var(--gray02);
+}
+
+.bg-gray-03 {
+  background-color: var(--gray03);
+}
+
+.bg-gray-04 {
+  background-color: var(--gray04);
+}
+
+.bg-gray-05 {
+  background-color: var(--gray05);
+}
+
+.bg-gray-06 {
+  background-color: var(--gray06);
+}
+
+.bg-gray-07 {
+  background-color: var(--gray07);
+}
+
+.bg-gray-08 {
+  background-color: var(--gray08);
+}
+
+.bg-gray-09 {
+  background-color: var(--gray09);
+}
+
+.bg-gray-10 {
+  background-color: var(--gray10);
+}
+
+.bg-gray-11 {
+  background-color: var(--gray11);
+}
+
+.bg-gray-12 {
+  background-color: var(--gray12);
+}
+
+.divider {
+  width: 1px;
+  height: 16px;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  background-color: var(--gray08);
+}
+
+.border-none {
+  border: none;
+}
+
+.none {
+  display: none !important;
+}

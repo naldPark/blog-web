@@ -10,24 +10,34 @@ import { useI18n } from 'vue-i18n';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import useMutation from '@/hook/useMutation';
 import { clone } from 'ramda';
-import ResourceEditDialog from '@/features/dialog/ResourceEditDialog.vue';
+import VideoEditDialog from '@/features/dialog/VideoEditDialog.vue';
+import { VDataTable } from 'vuetify/lib/components/index.mjs';
+import { useFetch } from '@/hook/useFetch';
+import { useDownloadFile } from '@/hook/useDownloadFile';
 
 /** 전체 비디오 리스트 */
 const videoList = ref<VideoDetailData[]>([]);
 
 const { t } = useI18n();
-const appStatusStore = useAppCommonStore();
+const { showDialog, showToast, hideDialog } = useAppCommonStore();
 const selectedVideo = ref<VideoDetailData>();
 
 const showResourceEditDialog = ref(false);
 
+type Header = {
+  title: string;
+  align?: 'start' | 'center' | 'end';
+  key: string;
+  width?: number;
+};
+
 /** 테이블 헤더 */
-const videoListHeaders = [
+const videoListHeaders: Header[] = [
   { title: 'id', align: 'start', key: 'storageId', width: 50 },
-  { title: t('name'), align: 'left', key: 'fileName' },
+  { title: t('name'), align: 'start', key: 'fileName' },
   {
     title: t('video.synopsis'),
-    align: 'left',
+    align: 'start',
     key: 'fileDesc',
     width: 450,
   },
@@ -56,17 +66,24 @@ const { mutate: deleteVideo } = useMutation({
   mutationFn: (rowData: VideoDetailData) =>
     storageService.deleteVideo([rowData.storageId]),
   onSuccess: () => {
-    appStatusStore.showToast({
+    showToast({
       type: 'success',
       message: t('complete'),
     });
-    appStatusStore.hideDialog();
+    hideDialog();
   },
 });
 
+/** vtt 파일 download */
+const downloadVtt = async (rowData: VideoDetailData) => {
+  await fetchData(() => storageService.getFileVtt(rowData.storageId));
+  if (data.value)
+    await downloadFile(new Blob([data.value]), `${rowData.fileName}.vtt`);
+};
+
 /** Delete Confirm Dialog */
 const clickDeleteVideo = (rowData: VideoDetailData) => {
-  appStatusStore.showDialog({
+  showDialog({
     title: t('deleteUsers'),
     description: `${t('deleteRowMsg', [rowData.fileName])}`,
     showCloseButton: true,
@@ -75,17 +92,16 @@ const clickDeleteVideo = (rowData: VideoDetailData) => {
 };
 
 const clickEditVideo = (rowData: VideoDetailData) => {
+  console.log('rowData', rowData);
   selectedVideo.value = clone(rowData);
   showResourceEditDialog.value = true;
 };
 
-const onEditVideo = () => {
-  console.log('수정띠');
+const onEditVideo = (editVideoInfo: VideoDetailData) => {
+  console.log('수정띠', editVideoInfo.fileCover);
 };
-
-const downloadVtt = (rowData: VideoDetailData) => {
-  videoRefetch();
-};
+const { data, fetchData } = useFetch<BlobPart>();
+const { downloadFile } = useDownloadFile();
 </script>
 <template>
   <VCard flat>
@@ -103,13 +119,13 @@ const downloadVtt = (rowData: VideoDetailData) => {
       <template v-slot:item.fileDesc="{ value }">
         <div style="width: 450px" class="ellipsis">{{ value }}</div>
       </template>
-      <template v-slot:item.vttSrc="{ value }">
+      <template v-slot:item.vttSrc="{ value, item }">
         <Button
           v-if="!!value"
           icon="mdi-cloud-download"
           color="orange"
           size="xl"
-          @onClick="downloadVtt(value)"
+          @onClick="downloadVtt(item)"
         />
       </template>
       <template v-slot:item.actions="{ item }">
@@ -142,10 +158,10 @@ const downloadVtt = (rowData: VideoDetailData) => {
       </template>
     </VDataTable>
   </VCard>
-  <ResourceEditDialog
+  <VideoEditDialog
     v-if="showResourceEditDialog"
     v-model:showDialog="showResourceEditDialog"
-    :selectedVideo="selectedVideo"
+    :selectedVideo="selectedVideo!"
     @action-on-edit="onEditVideo"
   />
 </template>

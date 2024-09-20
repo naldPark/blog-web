@@ -1,6 +1,7 @@
 @import 'font';
 @import 'vuetify';
 @import 'theme';
+@import 'base';
 
 :root {
   --vh: 100%;
@@ -78,14 +79,6 @@ body {
   font-size: 1.3rem;
 }
 
-.w-full {
-  width: 100% !important;
-}
-
-.h-full {
-  height: 100% !important;
-}
-
 .mdi-check-circle {
   color: var(--v-theme-success);
 }
@@ -122,11 +115,4 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   border: 1.5px solid #fff8e8;
-}
-
-.ellipsis {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
-  overflow: hidden;
 }

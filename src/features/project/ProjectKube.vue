@@ -79,104 +79,104 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
-  import InfraService from '@/api/infraService';
-  import { useAppCommonStore } from '@/store/appCommonStore';
+import { ref, onMounted } from 'vue';
+import infraService from '@/api/infraService';
+import { useAppCommonStore } from '@/store/appCommonStore';
 
-  interface NodeInfo {
-    name: string;
-    cpu: string;
-    memory: string;
-    os: string;
-    condition: string;
-    createdDt: string;
-    roles: string;
+interface NodeInfo {
+  name: string;
+  cpu: string;
+  memory: string;
+  os: string;
+  condition: string;
+  createdDt: string;
+  roles: string;
+}
+
+interface PodInfo {
+  name: string;
+  age: string;
+  labels: string;
+  namespace: string;
+  nodeName: string;
+  runningTime: string;
+  status: string;
+  containers: number;
+}
+
+const appStatusStore = useAppCommonStore();
+
+const nodesHeader = [
+  { title: 'Name', value: 'name' },
+  { title: 'CPU', value: 'cpu' },
+  { title: 'Memory', value: 'memory' },
+  { title: 'Os', value: 'os' },
+  { title: 'Roles', value: 'roles' },
+  { title: 'Condition', value: 'condition' },
+  { title: 'createdDt', value: 'createdDt' },
+];
+const nodeInfo = ref<NodeInfo[]>([]);
+const podsHeader = [
+  { title: 'Name', value: 'name' },
+  { title: 'Namespace', value: 'namespace', width: 140 },
+  { title: 'Containers', value: 'containers', width: 120 },
+  { title: 'Node', value: 'nodeName', width: 90 },
+  { title: 'Age', value: 'runningTime', width: 90 },
+  { title: 'Status', value: 'status', width: 120 },
+];
+const podInfo = ref<PodInfo[]>([]);
+
+const getColor = (text: string) => {
+  switch (text) {
+    case 'Ready':
+    case 'Running':
+    case 'Succeeded':
+      return '#49c54e';
+    case 'Pending':
+    case 'NotReady':
+      return 'orange';
+    case 'Failed':
+      return 'red';
+    default:
+      return 'grey';
   }
+};
 
-  interface PodInfo {
-    name: string;
-    age: string;
-    labels: string;
-    namespace: string;
-    nodeName: string;
-    runningTime: string;
-    status: string;
-    containers: number;
+const fetchClusterInfo = async () => {
+  appStatusStore.showLoading();
+  try {
+    const res = await infraService.getClusterInfo();
+    const result = res.data;
+    nodeInfo.value = result.nodeResult.map((v: any) => ({
+      name: v.name,
+      cpu: v.percentCpu,
+      memory: v.percentMemory,
+      os: v.labels['beta.kubernetes.io/os'],
+      condition: v.condition,
+      createdDt: v.createdDt.substr(0, 10),
+      roles: Object.keys(v.labels)
+        .filter((v) => v.startsWith('node-role.kubernetes.io'))[0]
+        .replace('node-role.kubernetes.io/', ''),
+    }));
+    console.log('nodeInfo.value', nodeInfo.value);
+    podInfo.value = result.podResult;
+  } catch (error) {
+    console.error('Error fetching cluster info:', error);
+  } finally {
+    appStatusStore.hideLoading();
   }
+};
 
-  const appStatusStore = useAppCommonStore();
-
-  const nodesHeader = [
-    { title: 'Name', value: 'name' },
-    { title: 'CPU', value: 'cpu' },
-    { title: 'Memory', value: 'memory' },
-    { title: 'Os', value: 'os' },
-    { title: 'Roles', value: 'roles' },
-    { title: 'Condition', value: 'condition' },
-    { title: 'createdDt', value: 'createdDt' },
-  ];
-  const nodeInfo = ref<NodeInfo[]>([]);
-  const podsHeader = [
-    { title: 'Name', value: 'name' },
-    { title: 'Namespace', value: 'namespace', width: 140 },
-    { title: 'Containers', value: 'containers', width: 120 },
-    { title: 'Node', value: 'nodeName', width: 90 },
-    { title: 'Age', value: 'runningTime', width: 90 },
-    { title: 'Status', value: 'status', width: 120 },
-  ];
-  const podInfo = ref<PodInfo[]>([]);
-
-  const getColor = (text: string) => {
-    switch (text) {
-      case 'Ready':
-      case 'Running':
-      case 'Succeeded':
-        return '#49c54e';
-      case 'Pending':
-      case 'NotReady':
-        return 'orange';
-      case 'Failed':
-        return 'red';
-      default:
-        return 'grey';
-    }
-  };
-
-  const fetchClusterInfo = async () => {
-    appStatusStore.showLoading();
-    try {
-      const res = await InfraService.getClusterInfo();
-      const result = res.data;
-      nodeInfo.value = result.nodeResult.map((v: any) => ({
-        name: v.name,
-        cpu: v.percentCpu,
-        memory: v.percentMemory,
-        os: v.labels['beta.kubernetes.io/os'],
-        condition: v.condition,
-        createdDt: v.createdDt.substr(0, 10),
-        roles: Object.keys(v.labels)
-          .filter((v) => v.startsWith('node-role.kubernetes.io'))[0]
-          .replace('node-role.kubernetes.io/', ''),
-      }));
-      console.log('nodeInfo.value', nodeInfo.value);
-      podInfo.value = result.podResult;
-    } catch (error) {
-      console.error('Error fetching cluster info:', error);
-    } finally {
-      appStatusStore.hideLoading();
-    }
-  };
-
-  onMounted(fetchClusterInfo);
+onMounted(fetchClusterInfo);
 </script>
 
 <style lang="scss" scoped>
-  .k8s-wrapper {
-    background-image: url('../../assets/images/k8sCover.png');
-    background-size: cover;
-    min-height: 300px;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-  }
+.k8s-wrapper {
+  background-image: url('../../assets/images/k8sCover.png');
+  background-size: cover;
+  min-height: 300px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
 </style>

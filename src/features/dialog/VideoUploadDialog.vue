@@ -1,47 +1,14 @@
-<template>
-  <Dialog
-    v-model:visible="showDialog"
-    max-width="1200"
-    min-width="1000"
-    @confirm="handleConfirm"
-    @click:outside="handleClickOutside"
-  >
-    <template #header>
-      <VIcon class="text-primary mr-3" icon="mdi-video" />
-      {{ t('video.uploadVideo') }}
-    </template>
-    <template #default>
-      <h4 class="mb-5">
-        <VIcon class="text-primary mr-3" icon="mdi-video" />
-        {{ t('video.uploadVideo') }}
-      </h4>
-      <ImportLocalFile
-        selected-type="nan"
-        :file-types="availableFileTypes"
-        :is-multiple="isMultiple"
-        @updated-uploadfiles="updatedUploadfiles"
-      />
-      <VDivider class="mt-10" />
-      <FileUpload
-        v-model="movieInfo"
-        @close-dialog="closeDialog"
-        @updated-uploadVtt="updatedUploadVtt"
-        @updated-uploadCover="updatedUploadCover"
-      />
-    </template>
-  </Dialog>
-</template>
-
 <script setup lang="ts">
 import { ref, computed, watch, Ref } from 'vue';
 import Dialog from '@/components/common/Dialog.vue';
 import { useI18n } from 'vue-i18n';
-import ImportLocalFile from '@/features/wonderwall/video/ImportLocalFIle.vue';
-import FileUpload from '@/features/wonderwall/video/FileUpload.vue';
-import { FileInfo, MovieInfoRequestData } from '@/types/wonderwall/video';
+import ImportVideoFile from '@/features/wonderwall/video/ImportVideoFile.vue';
+import VideoFileUpload from '@/features/wonderwall/video/VideoFileUpload.vue';
+import { FileInfo, VideoDetailData } from '@/types/wonderwall/video';
 import useMutation from '@/hook/useMutation';
 import storageService from '@/api/storageService';
 import { useAppCommonStore } from '@/store/appCommonStore';
+import { VideoRequestBody } from '@/types/admin';
 const { t } = useI18n();
 const { isMultiple } = defineProps({
   isMultiple: {
@@ -63,7 +30,7 @@ const vttFile: Ref<File | null> = ref(null);
 const coverFile: Ref<File | null> = ref(null);
 const videoFile: Ref<File | null> = ref(null);
 
-/** Video 삭제 mutation */
+/** Video upload mutation */
 const { mutate: uploadVideo } = useMutation({
   mutationFn: (bodyForm: FormData) => storageService.localUploadFiles(bodyForm),
   onSuccess: () => {
@@ -75,7 +42,7 @@ const { mutate: uploadVideo } = useMutation({
   },
 });
 
-// Confirm 버튼 클릭 처리 함수
+/**  Confirm 버튼 클릭 처리 함수*/
 const handleConfirm = () => {
   const json: string = JSON.stringify(movieInfo.value); // JSON 문자열로 변환
   const blob = new Blob([json], { type: 'application/json' }); // JSON Blob 생성
@@ -87,23 +54,17 @@ const handleConfirm = () => {
   uploadVideo(bodyForm);
 };
 
-// 다이얼로그 외부 클릭 처리 함수
-const handleClickOutside = () => {
-  console.log('Clicked outside the dialog');
-};
-
-const movieInfo: Ref<MovieInfoRequestData> = ref({
+const movieInfo: Ref<VideoRequestBody> = ref({
   originName: '',
   fileName: '',
   fileSize: 0,
-  category: 'etc',
-  description: '',
+  fileType: 'etc',
+  fileDesc: '',
   fileAuth: false,
-  fileDownload: false,
+  downloadable: false,
 });
 
 const closeDialog = () => {
-  console.log();
   showDialog.value = false;
   emit('fetchVideoList');
 };
@@ -126,5 +87,31 @@ const updatedUploadfiles = (files: FileInfo[]) => {
   movieInfo.value.fileSize = files[0].size;
 };
 </script>
+
+<template>
+  <Dialog v-model:visible="showDialog" width="1000px" @confirm="handleConfirm">
+    <template #header>
+      <VIcon class="text-primary mr-3" icon="mdi-video" />
+      {{ t('video.uploadVideo') }}
+    </template>
+    <template #default>
+      <ImportVideoFile
+        selected-type="nan"
+        :file-types="availableFileTypes"
+        :is-multiple="isMultiple"
+        @updated-uploadfiles="updatedUploadfiles"
+      />
+      <VDivider class="mt-10" />
+      <VideoFileUpload
+        class="pa-5"
+        :is-edit="false"
+        v-model:movieInfo="movieInfo"
+        @close-dialog="closeDialog"
+        @updated-uploadVtt="updatedUploadVtt"
+        @updated-uploadCover="updatedUploadCover"
+      />
+    </template>
+  </Dialog>
+</template>
 
 <style scoped lang="scss"></style>

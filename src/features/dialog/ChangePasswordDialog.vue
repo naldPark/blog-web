@@ -82,7 +82,7 @@ const { mutate: onClickEdit } = useMutation({
       />
     </template>
     <template #footer>
-      <Button rounded="xl" :label="t('cancel')" @click="showDialog = false" />
+      <Button :label="t('cancel')" @click="showDialog = false" />
       <Button
         color="primary"
         :disabled="

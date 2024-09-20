@@ -1,27 +1,19 @@
 import { CommonListRequestData } from '../common';
-
 export interface VideoDetailData {
-  storageId: number;
+  storageId: string;
+  originName?: string;
   fileName: string;
-  fileSrc: string;
   fileSize: number;
-  fileDesc?: string;
   fileType: string;
+  fileDesc: string;
+  fileAuth: boolean;
+  downloadable: boolean;
   fileCover?: string;
   vttSrc?: string;
+  fileSrc: string;
   createdDt?: string;
-  downloadable?: string;
 }
 
-export interface MovieInfoRequestData {
-  originName: string;
-  fileName: string;
-  fileSize: number;
-  category: string;
-  description: string;
-  fileAuth: boolean;
-  fileDownload: boolean;
-}
 export interface FileInfo {
   file: File;
   name: string;

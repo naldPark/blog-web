@@ -1,43 +1,38 @@
-// useFetch.ts
+import { useAppCommonStore } from '@/store/appCommonStore';
 import { ref, Ref } from 'vue';
 
 type FetchState<T> = {
   data: Ref<T | null>;
-  error: Ref<string | null>;
   isLoading: Ref<boolean>;
+  fetchData: (apiMethod: () => Promise<T>) => Promise<void>;
 };
 
-export const useFetch = <T>(url: string): FetchState<T> => {
+export const useFetch = <T>(): FetchState<T> => {
   const data = ref<T | null>(null) as Ref<T | null>;
   const error = ref<string | null>(null);
-  const isLoading = ref(true);
-
-  const fetchData = async () => {
+  const isLoading = ref(false);
+  const { showToast } = useAppCommonStore();
+  const fetchData = async (apiMethod: () => Promise<T>) => {
     isLoading.value = true;
     error.value = null;
 
     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      data.value = (await response.json()) as T;
+      data.value = await apiMethod();
     } catch (err) {
       if (err instanceof Error) {
         error.value = err.message;
       } else {
-        error.value = 'An unknown error occurred';
+        error.value = 'error';
       }
     } finally {
       isLoading.value = false;
+      if (error.value) showToast({ type: 'error', message: error.value });
     }
   };
 
-  fetchData();
-
   return {
     data,
-    error,
     isLoading,
+    fetchData,
   };
 };

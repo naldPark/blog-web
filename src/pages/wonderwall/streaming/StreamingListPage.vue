@@ -139,6 +139,7 @@ const onClickMovie = (item: VideoDetailData) => {
       />
     </template>
     <VideoUploadDialog
+      v-if="showUploadDialog"
       :isMultiple="true"
       v-model:showDialog="showUploadDialog"
       @fetchVideoList="videoRefetch"

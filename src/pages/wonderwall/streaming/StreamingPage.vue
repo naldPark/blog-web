@@ -56,7 +56,7 @@
                 color="primary"
                 rounded
                 variant="outlined"
-                :disabled="currentMovie.downloadable === 'N'"
+                :disabled="!currentMovie.downloadable"
                 @click="clickToDownload"
               >
                 <VIcon>mdi-download</VIcon>
@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import { ref, onMounted, Ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import StorageService from '@/api/storageService';
+import storageService from '@/api/storageService';
 import MovieItem from '@/features/wonderwall/video/MovieItem.vue';
 import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
@@ -103,15 +103,16 @@ import { streamimgCategories } from '@/assets/data/streaming';
 const { t } = useI18n();
 const searchCategory: Ref<string> = ref('');
 const currentMovie: Ref<VideoDetailData> = ref({
-  storageId: 0,
+  storageId: '0',
   fileName: '',
   fileSrc: '',
   fileSize: 0,
   fileType: '',
   createdDt: '',
-  downloadable: '',
+  downloadable: false,
   vttSrc: '',
   fileDesc: '',
+  fileAuth: false,
 });
 const movieList: Ref<VideoDetailData[]> = ref([]);
 const searchText: Ref<string> = ref('');
@@ -133,7 +134,7 @@ const searchVideo = () => {
     .catch((err) => err);
 };
 
-const onClickMovie = async (storageId: number) => {
+const onClickMovie = async (storageId: string) => {
   router
     .replace({
       name: 'StreamingPage',
@@ -146,10 +147,10 @@ const onClickMovie = async (storageId: number) => {
   appStatusStore.showLoading();
   const fileSeq = storageId;
   lazyShow.value = true;
-  await StorageService.getVideoDetail(fileSeq).then(async (res: any) => {
+  await storageService.getVideoDetail(fileSeq).then(async (res: any) => {
     let vttSrc = '';
     if (res.data.vttSrc) {
-      const response: Blob = await StorageService.videoVtt(storageId);
+      const response: Blob = await storageService.getFileVtt(storageId);
       vttSrc = URL.createObjectURL(
         new Blob([response], { type: 'text/vtt;charset=utf-8;' }),
       );
@@ -168,16 +169,16 @@ const onClickMovie = async (storageId: number) => {
 
 const clickToDownload = async () => {
   appStatusStore.showLoading();
-  await StorageService.download(currentMovie.value.storageId).then(
-    (res: any) => {
+  await storageService
+    .download(currentMovie.value.storageId)
+    .then((res: any) => {
       const blob = new Blob([res.data]);
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
       link.target = '_self';
       link.download = `${currentMovie.value.fileName}.mp4`;
       link.click();
-    },
-  );
+    });
   appStatusStore.hideLoading();
 };
 
@@ -188,7 +189,8 @@ const fetchVideoList = () => {
       pageNumber: 0,
       sort: 'random',
     };
-    StorageService.getVideoList(param)
+    storageService
+      .getVideoList(param)
       .then((response: any) => {
         if (response.status_code === 200) {
           movieList.value = response.data.list;
@@ -212,8 +214,8 @@ onMounted(() => {
   appStatusStore.showLoading();
   fetchVideoList();
   appStatusStore.hideLoading();
-  const movieId: number = Number(route.query.movieId);
-  if (!isNaN(movieId)) {
+  const movieId = String(route.query.movieId);
+  if (!!movieId) {
     onClickMovie(movieId);
   } else {
     lazyShow.value = false;

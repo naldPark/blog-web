@@ -2,8 +2,8 @@ import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
 import { createVuetify, type ThemeDefinition } from 'vuetify';
 import type { App } from 'vue';
-import { VTreeview } from 'vuetify/lib/labs/components.mjs';
-import { Ripple } from 'vuetify/lib/directives/index.mjs';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 
 const myTheme: ThemeDefinition = {
   dark: true,
@@ -29,12 +29,8 @@ const vuetify = createVuetify({
       myTheme,
     },
   },
-  components: {
-    VTreeview,
-  },
-  directives: {
-    Ripple,
-  },
+  components,
+  directives,
 });
 
 export const vuetifyPlugins = (app: App) => {
