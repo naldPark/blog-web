@@ -43,7 +43,6 @@ const useCustomQuery = ({
 
   /* 캐시 삭제 후 refetch */
   const hardFetch = () => {
-    // queryClient.removeQueries({ queryKey: customQueryKey });
     queryClient.refetchQueries();
   };
 

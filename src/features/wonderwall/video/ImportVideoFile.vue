@@ -1,54 +1,3 @@
-<template>
-  <div>
-    <VCard
-      outlined
-      v-if="!onProgressing"
-      class="file-drop-area"
-      @dragenter.prevent
-      :class="{ 'grey darken-3': dragover }"
-      @dragover="dragoverHover(true)"
-      @dragleave="dragoverHover(false)"
-      @dragover.prevent
-      @drop="onDropFiles"
-      @click="onClickBrowse"
-    >
-      <VCardText>
-        <VRow class="d-flex flex-column align-center" dense justify="center">
-          <VIcon
-            v-if="selectedLocalFiles.length === 0"
-            size="60"
-            color="secondary"
-            icon=" mdi-cloud-upload"
-          />
-          <VIcon v-else size="60" color="grey" icon="mdi-cloud-check" />
-          <p class="pt-3" v-if="selectedLocalFiles.length === 0">
-            {{ t('video.uploadDetail') }}
-          </p>
-          <p class="pt-3" v-else>
-            {{ t('video.uploadedDetail') }}
-          </p>
-        </VRow>
-      </VCardText>
-    </VCard>
-    <VCard v-else class="file-drop-area">
-      <VCardText>
-        <div class="text-center">
-          <VProgressCircular indeterminate color="amber" />
-        </div>
-      </VCardText>
-    </VCard>
-    <VFileInput
-      v-model="fileInput"
-      ref="fileInput"
-      type="file"
-      :multiple="isMultiple"
-      style="display: none"
-      :accept="availableFileTypes.join(',')"
-      @change="onFileSelected"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 
@@ -107,7 +56,6 @@ const dragoverHover = (value: boolean) => {
 };
 
 const onDropFiles = async (e: DragEvent) => {
-  console.log('???');
   onProgressing.value = true;
   e.stopPropagation();
   e.preventDefault();
@@ -249,7 +197,7 @@ const doCheckFiles = (files: Array<any>, isFolder?: boolean) => {
 
     if (dialogText !== '') {
       appStatusStore.showDialog({
-        title: `${t('error')}`,
+        title: t('error'),
         description: dialogText,
         showCloseButton: true,
         action: () => {},
@@ -259,6 +207,57 @@ const doCheckFiles = (files: Array<any>, isFolder?: boolean) => {
   }, 2000);
 };
 </script>
+
+<template>
+  <div>
+    <VCard
+      outlined
+      v-if="!onProgressing"
+      class="file-drop-area"
+      @dragenter.prevent
+      :class="{ 'grey darken-3': dragover }"
+      @dragover="dragoverHover(true)"
+      @dragleave="dragoverHover(false)"
+      @dragover.prevent
+      @drop="onDropFiles"
+      @click="onClickBrowse"
+    >
+      <VCardText>
+        <VRow class="d-flex flex-column align-center" dense justify="center">
+          <VIcon
+            v-if="selectedLocalFiles.length === 0"
+            size="60"
+            color="secondary"
+            icon=" mdi-cloud-upload"
+          />
+          <VIcon v-else size="60" color="grey" icon="mdi-cloud-check" />
+          <p class="pt-3" v-if="selectedLocalFiles.length === 0">
+            {{ t('video.uploadDetail') }}
+          </p>
+          <p class="pt-3" v-else>
+            {{ t('video.uploadedDetail') }}
+          </p>
+        </VRow>
+      </VCardText>
+    </VCard>
+    <VCard v-else class="file-drop-area">
+      <VCardText>
+        <div class="text-center">
+          <VProgressCircular indeterminate color="amber" />
+        </div>
+      </VCardText>
+    </VCard>
+    <VFileInput
+      v-model="fileInput"
+      ref="fileInput"
+      type="file"
+      :multiple="isMultiple"
+      style="display: none"
+      :accept="availableFileTypes.join(',')"
+      @change="onFileSelected"
+    />
+  </div>
+</template>
 
 <style scoped lang="scss">
 .file-drop-area {

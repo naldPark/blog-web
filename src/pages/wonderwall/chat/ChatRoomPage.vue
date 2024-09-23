@@ -32,19 +32,15 @@
           <VToolbarTitle class="text-primary"
             >{{ t('chat.chatRoom') }} [{{ roomId }}]</VToolbarTitle
           >
-          <VSpacer></VSpacer>
-          <VBtn class="ma-1" color="secondary" plain @click="leave">{{
-            t('leave')
-          }}</VBtn>
+          <VSpacer />
+          <VBtn class="ma-1" color="secondary" plain @click="leave">
+            {{ t('leave') }}
+          </VBtn>
         </VToolbar>
-        <!-- <div class="connecting ml-3" v-if="!roomId">
-          {{ t('chat.connecting') }}
-        </div> -->
-
         <VList id="msgList" style="height: 500px; overflow: auto">
           <VListSubheader v-if="!roomId">
-            {{ t('chat.connecting') }}</VListSubheader
-          >
+            {{ t('chat.connecting') }}
+          </VListSubheader>
 
           <VListItem
             v-for="(item, index) in messageList"
@@ -59,27 +55,6 @@
             </template>
           </VListItem>
         </VList>
-
-        <!-- <VList id="msgList" style="height:500px; overflow: auto;">
-          <template v-for="(item, index) in messageList" :key="index">
-            <VListItem v-if="item.type !== 'chat-message'">
-              <div>{{ item.content }}</div>
-            </VListItem>
-            <VListItem v-else>
-              <VListItem-avatar size="30" class="justify-center">
-                <VAvatar v-if='item.id' :color="getAvatarColor(item.id)">{{ item.id.charAt(0) }}</VAvatar>
-              </VListItem-avatar>
-              <VListItem-content>
-                <VListItemTitle>
-                  <span>{{ item.id }}</span>
-                </VListItemTitle>
-                <VListItemSubtitle>
-                  <span>{{ item.content }}</span>
-                </VListItemSubtitle>
-              </VListItem-content>
-            </VListItem>
-          </template>
-        </VList> -->
         <div class="chat-container pa-2 pl-3 pr-3">
           <VTextField
             outlined

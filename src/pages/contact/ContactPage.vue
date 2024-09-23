@@ -1,3 +1,112 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useAppCommonStore } from '@/store/appCommonStore';
+import { sendMail } from '@/api/commonService';
+import router from '@/router';
+import { useI18n } from 'vue-i18n';
+import Textarea from '@/components/common/TextArea.vue';
+import InputText from '@/components/common/InputText.vue';
+import { ValidationRule } from '@/types/common';
+import { emailRegExp } from '@/utils/regExpUtil';
+import Button from '@/components/common/Button.vue';
+import useMutation from '@/hook/useMutation';
+import { MessageDataRequestBody } from '@/types/admin';
+
+const appStatusStore = useAppCommonStore();
+const { t } = useI18n();
+
+// Define messageData with the MessageData interface
+const messageData = ref<MessageDataRequestBody>({
+  name: '',
+  email: '',
+  title: '',
+  content: '',
+});
+
+/** 검증 rules */
+const rules: {
+  required: ValidationRule;
+  email: ValidationRule;
+} = {
+  required: (value: string) => !!value || t('required'),
+  email: (value: string) => {
+    return emailRegExp().test(value) || t('emailValidate');
+  },
+};
+
+// Validate form data
+const validateCheck = (): boolean => {
+  let res = '';
+  for (const key in messageData.value) {
+    if (key === 'email') {
+      res = !emailRegExp().test(
+        messageData.value[key as keyof MessageDataRequestBody],
+      )
+        ? `${t('emailValidate')}`
+        : res;
+    }
+    res =
+      messageData.value[key as keyof MessageDataRequestBody] === ''
+        ? `${t('inputEmpty')}`
+        : res;
+  }
+  if (res !== '') {
+    appStatusStore.showToast({
+      type: 'error',
+      message: res,
+    });
+    return false;
+  }
+  return true;
+};
+
+// Social media links
+const socials = [
+  {
+    icon: 'mdi-linkedin',
+    color: '#0A66C2',
+    link: 'https://www.linkedin.com/in/naldpark/',
+  },
+  {
+    icon: 'mdi-instagram',
+    color: '#FF5A51',
+    link: 'https://www.instagram.com/youngik_nald/',
+  },
+  {
+    icon: 'mdi-facebook',
+    color: 'indigo',
+    link: 'https://www.facebook.com/nald873',
+  },
+];
+
+// Open social media link
+const exploreSNS = (url: string) => {
+  window.open(url);
+};
+
+/** 메세지 발송 Mutation */
+const { mutate: onSendMessage } = useMutation({
+  mutationFn: () => sendMail(messageData.value),
+  onSuccess: () => {
+    appStatusStore.showToast({
+      type: 'success',
+      message: t('complete'),
+    });
+    for (const key in messageData.value) {
+      messageData.value[key as keyof MessageDataRequestBody] = '';
+    }
+    router.push({ name: 'MainPage' });
+  },
+});
+
+// Send message function
+const sendMessage = async (): Promise<void> => {
+  appStatusStore.showLoading();
+  if (!validateCheck()) return;
+  onSendMessage();
+};
+</script>
+
 <template>
   <div class="contact-page-wrap">
     <VRow justify="center" no-gutters>
@@ -20,14 +129,14 @@
             </VImg>
             <VCardActions>
               <VSpacer />
-              <VBtn
+              <Button
                 v-for="(social, i) in socials"
                 :key="i"
                 :color="social.color"
                 small
-              >
-                <VIcon @click="exploreSNS(social.link)" :icon="social.icon" />
-              </VBtn>
+                :icon="social.icon"
+                @click="exploreSNS(social.link)"
+              />
             </VCardActions>
           </VCardText>
         </VCard>
@@ -94,138 +203,6 @@
     </VRow>
   </div>
 </template>
-<script lang="ts" setup>
-import { ref } from 'vue';
-import { useAppCommonStore } from '@/store/appCommonStore';
-import { sendMail } from '@/api/commonService';
-import router from '@/router';
-import { useI18n } from 'vue-i18n';
-import Textarea from '@/components/common/TextArea.vue';
-import InputText from '@/components/common/InputText.vue';
-import { ValidationRule } from '@/types/common';
-import { emailRegExp } from '@/utils/regExpUtil';
-
-// Interface for messageData
-interface MessageData {
-  name: string;
-  email: string;
-  title: string;
-  content: string;
-}
-
-const appStatusStore = useAppCommonStore();
-const { t } = useI18n();
-
-// Define messageData with the MessageData interface
-const messageData = ref<MessageData>({
-  name: '',
-  email: '',
-  title: '',
-  content: '',
-});
-
-/** 검증 rules */
-const rules: {
-  required: ValidationRule;
-  email: ValidationRule;
-} = {
-  required: (value: string) => !!value || t('required'),
-  email: (value: string) => {
-    return emailRegExp().test(value) || t('emailValidate');
-  },
-};
-
-// Validate form data
-const validateCheck = (): string => {
-  let res = '';
-  for (const key in messageData.value) {
-    if (key === 'email') {
-      res = !emailRegExp().test(messageData.value[key as keyof MessageData])
-        ? `${t('emailValidate')}`
-        : res;
-    }
-    res =
-      messageData.value[key as keyof MessageData] === ''
-        ? `${t('inputEmpty')}`
-        : res;
-  }
-  return res;
-};
-
-// Social media links
-const socials = [
-  {
-    icon: 'mdi-linkedin',
-    color: '#0A66C2',
-    link: 'https://www.linkedin.com/in/naldpark/',
-  },
-  {
-    icon: 'mdi-instagram',
-    color: '#FF5A51',
-    link: 'https://www.instagram.com/youngik_nald/',
-  },
-  {
-    icon: 'mdi-facebook',
-    color: 'indigo',
-    link: 'https://www.facebook.com/nald873',
-  },
-];
-
-// Open social media link
-const exploreSNS = (url: string) => {
-  window.open(url);
-};
-
-// Send message function
-const sendMessage = async (): Promise<void> => {
-  appStatusStore.showLoading();
-  const validate = validateCheck();
-  if (validate === '') {
-    try {
-      const res = await sendMail(messageData.value);
-      let type: 'success' | 'error';
-      let message: string;
-
-      if (res.status_code === 200) {
-        // Clear messageData after successful send
-        for (const key in messageData.value) {
-          messageData.value[key as keyof MessageData] = '';
-        }
-        type = 'success';
-        message = `${t('complete')}`;
-      } else {
-        type = 'error';
-        message = `${t('unknownError')}`;
-      }
-      appStatusStore.hideLoading();
-      appStatusStore.showDialog({
-        title: type,
-        description: message,
-        showCloseButton: true,
-        action: () => {
-          router.push({ name: 'MainPage' }).catch((err: unknown) => {
-            if (err instanceof Error) {
-              console.error(err.message);
-            }
-          });
-        },
-      });
-    } catch (error: unknown) {
-      appStatusStore.hideLoading();
-      appStatusStore.showToast({
-        type: 'error',
-        message: `${t('unknownError')}`,
-      });
-    }
-  } else {
-    appStatusStore.hideLoading();
-    appStatusStore.showToast({
-      type: 'error',
-      message: validate,
-    });
-  }
-};
-</script>
 
 <style lang="scss" scoped>
 .contact-page-wrap {

@@ -1,87 +1,9 @@
-<template>
-  <div style="background-color: #121212">
-    <div class="k8s-wrapper">
-      <h1 class="font-weight-bold text-h4">
-        Cluster Information<VIcon class="text-primary ml-3"
-          >mdi-lan-connect</VIcon
-        >
-      </h1>
-    </div>
-    <div class="text-md-left pa-7">
-      <h2 class="text-primary mb-3">NODES</h2>
-      <VDataTable
-        :calculate-widths="true"
-        fixed-header
-        class="custom-table use-head"
-        :headers="nodesHeader"
-        :items="nodeInfo"
-        hide-default-footer
-      >
-        <template v-slot:[`item.cpu`]="{ item }">
-          <div>
-            <span>{{ item.cpu }}</span>
-            <VProgressLinear
-              color="blue"
-              :model-value="item.cpu"
-            ></VProgressLinear>
-          </div>
-        </template>
-        <template v-slot:[`item.memory`]="{ item }">
-          <div>
-            <span>{{ item.memory }}</span>
-            <VProgressLinear
-              color="purple"
-              :model-value="item.memory"
-            ></VProgressLinear>
-          </div>
-        </template>
-        <template v-slot:[`item.condition`]="{ item }">
-          <div :style="{ color: getColor(item.condition) }">
-            {{ item.condition }}
-          </div>
-        </template>
-      </VDataTable>
-      <VDivider class="mt-5 mb-5"></VDivider>
-      <h2 class="text-primary mb-3">PODS</h2>
-      <VDataTable
-        fixed-header
-        class="custom-table text-truncate"
-        :headers="podsHeader"
-        :items="podInfo"
-      >
-        <template v-slot:[`item.name`]="{ item }">
-          <div
-            class="text-truncate"
-            style="
-              max-width: 30vw;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            "
-          >
-            {{ item.name }}
-          </div>
-        </template>
-        <template v-slot:[`item.containers`]="{ item }">
-          <div style="color: #49c54e">
-            {{ '&#9632;'.repeat(item.containers) }}
-          </div>
-        </template>
-        <template v-slot:[`item.runningTime`]="{ item }">
-          <div>{{ item.age }}</div>
-        </template>
-        <template v-slot:[`item.status`]="{ item }">
-          <div :style="{ color: getColor(item.status) }">{{ item.status }}</div>
-        </template>
-      </VDataTable>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import infraService from '@/api/infraService';
-import { useAppCommonStore } from '@/store/appCommonStore';
+import useCustomQuery from '@/hook/useCustomQuery';
+import { COMMON_QUERY_KEY } from '@/types/queryEnum';
+import { ApiResponse } from '@/types/axios';
 
 interface NodeInfo {
   name: string;
@@ -103,8 +25,6 @@ interface PodInfo {
   status: string;
   containers: number;
 }
-
-const appStatusStore = useAppCommonStore();
 
 const nodesHeader = [
   { title: 'Name', value: 'name' },
@@ -142,10 +62,11 @@ const getColor = (text: string) => {
   }
 };
 
-const fetchClusterInfo = async () => {
-  appStatusStore.showLoading();
-  try {
-    const res = await infraService.getClusterInfo();
+/** k8sInfo Query */
+const { hardFetch: k8sRefetch } = useCustomQuery({
+  queryKey: [COMMON_QUERY_KEY.K8S_LIST],
+  queryFn: () => infraService.getClusterInfo(),
+  onSuccess: (res: ApiResponse) => {
     const result = res.data;
     nodeInfo.value = result.nodeResult.map((v: any) => ({
       name: v.name,
@@ -158,17 +79,75 @@ const fetchClusterInfo = async () => {
         .filter((v) => v.startsWith('node-role.kubernetes.io'))[0]
         .replace('node-role.kubernetes.io/', ''),
     }));
-    console.log('nodeInfo.value', nodeInfo.value);
     podInfo.value = result.podResult;
-  } catch (error) {
-    console.error('Error fetching cluster info:', error);
-  } finally {
-    appStatusStore.hideLoading();
-  }
-};
-
-onMounted(fetchClusterInfo);
+  },
+});
 </script>
+
+<template>
+  <div style="background-color: #121212">
+    <div class="k8s-wrapper">
+      <h1 class="font-weight-bold text-h4">
+        Cluster Information
+        <VIcon class="text-primary ml-3" icon="mdi-lan-connect" />
+      </h1>
+    </div>
+    <div class="text-md-left pa-7">
+      <h2 class="text-primary mb-3">NODES</h2>
+      <VDataTable
+        :calculate-widths="true"
+        fixed-header
+        class="custom-table use-head"
+        :headers="nodesHeader"
+        :items="nodeInfo"
+        hide-default-footer
+      >
+        <template v-slot:[`item.cpu`]="{ item }">
+          <div>
+            <span>{{ item.cpu }}</span>
+            <VProgressLinear color="blue" :model-value="item.cpu" />
+          </div>
+        </template>
+        <template v-slot:[`item.memory`]="{ item }">
+          <div>
+            <span>{{ item.memory }}</span>
+            <VProgressLinear color="purple" :model-value="item.memory" />
+          </div>
+        </template>
+        <template v-slot:[`item.condition`]="{ item }">
+          <div :style="{ color: getColor(item.condition) }">
+            {{ item.condition }}
+          </div>
+        </template>
+      </VDataTable>
+      <VDivider class="mt-5 mb-5" />
+      <h2 class="text-primary mb-3">PODS</h2>
+      <VDataTable
+        fixed-header
+        class="custom-table text-truncate"
+        :headers="podsHeader"
+        :items="podInfo"
+      >
+        <template v-slot:[`item.name`]="{ item }">
+          <div class="text-truncate ellipsis" style="max-width: 30vw">
+            {{ item.name }}
+          </div>
+        </template>
+        <template v-slot:[`item.containers`]="{ item }">
+          <div style="color: #49c54e">
+            {{ '&#9632;'.repeat(item.containers) }}
+          </div>
+        </template>
+        <template v-slot:[`item.runningTime`]="{ item }">
+          <div>{{ item.age }}</div>
+        </template>
+        <template v-slot:[`item.status`]="{ item }">
+          <div :style="{ color: getColor(item.status) }">{{ item.status }}</div>
+        </template>
+      </VDataTable>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .k8s-wrapper {

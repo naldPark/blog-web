@@ -1,9 +1,9 @@
 <template>
   <div class="sandbox-wrapper">
     <VCard variant="outlined" elevation="0" class="sandbox-card">
-      <VCardTitle class="text-subtitle-1 text-primary">{{
-        t('sandbox.funcInfo')
-      }}</VCardTitle>
+      <VCardTitle class="text-subtitle-1 text-primary">
+        {{ t('sandbox.funcInfo') }}
+      </VCardTitle>
       <VCardText class="mb-3">
         <p class="subtitle-2 text-white mt-3 mb-1">{{ t('sandbox.rules') }}</p>
         <h4 class="ec2-content font-weight-light" style="margin-right: 12px">
@@ -33,17 +33,19 @@
         >
           <template v-slot:selection="item">
             <span>
-              <VIcon :style="{ color: item.item.value.color }">{{
-                item.item.value.icon
-              }}</VIcon>
+              <VIcon
+                :style="{ color: item.item.value.color }"
+                :icon="item.item.value.icon"
+              />
               {{ item.item.value.name }}
             </span>
           </template>
           <template v-slot:item="{ item }">
             <span>
-              <VIcon :style="{ color: item.value.color }">{{
-                item.value.icon
-              }}</VIcon>
+              <VIcon
+                :style="{ color: item.value.color }"
+                :icon="item.value.icon"
+              />
               {{ item.value.name }}
             </span>
           </template>
@@ -54,36 +56,42 @@
               {{ t('sandbox.instanceInfo') }}
             </p>
             <span class="ec2-content">
-              <VIcon class="text-primary mr-1">mdi-ubuntu</VIcon>
+              <VIcon class="text-primary mr-1" icon="mdi-ubuntu" />
               Linux
             </span>
-            <VBtn color="error" rounded small @click="accessEndpoint">{{
-              t('sandbox.startInstance')
-            }}</VBtn>
+            <Button
+              small
+              @click="accessEndpoint"
+              :label="t('sandbox.startInstance')"
+            />
           </VCol>
           <VCol cols="12" sm="6">
             <p class="subtitle-2 text-white mt-3 mb-1">
               {{ t('sandbox.instancePwd') }}
             </p>
             <span class="ec2-content" v-if="!showPwd">
-              <VIcon class="text--grey">mdi-eye-off-outline</VIcon>
+              <VIcon class="text--grey" icon="mdi-eye-off-outline" />
               ******
             </span>
             <span class="ec2-content" v-else @click="copyClipboard">
-              <VIcon class="text--grey">mdi-eye-outline</VIcon>
+              <VIcon class="text--grey" icon="mdi-eye-outline" />
               qwerty1234
             </span>
-            <VBtn color="background" rounded small @click="showPwd = !showPwd">
-              {{ showPwd ? t('hide') : t('show') }}
-            </VBtn>
+            <Button
+              color="background"
+              small
+              variant="flat"
+              @click="showPwd = !showPwd"
+              :label="showPwd ? t('hide') : t('show')"
+            />
           </VCol>
         </VRow>
         <p class="subtitle-2 text-white mt-3 mb-1">
           {{ t('sandbox.containerImage') }}
         </p>
-        <span class="ec2-content" style="margin-right: 12px"
-          >/node:16.14.0</span
-        >
+        <span class="ec2-content" style="margin-right: 12px">
+          /node:16.14.0
+        </span>
       </VCardText>
     </VCard>
     <VCard variant="outlined" elevation="0" class="sandbox-card">
@@ -101,13 +109,8 @@
           open-on-click
         >
           <template v-slot:prepend="{ item }">
-            <!-- {{ JSON.stringify(item) }} -->
-            <VIcon v-if="!item.file">
-              {{ 'mdi-folder' }}
-            </VIcon>
-            <VIcon v-else>
-              {{ files[item.file] }}
-            </VIcon>
+            <VIcon v-if="!item.file" icon="mdi-folder" />
+            <VIcon v-else :icon="files[item.file]" />
           </template>
         </VTreeview>
       </VCardText>
@@ -121,6 +124,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import infraService from '@/api/infraService';
+import Button from '@/components/common/Button.vue';
 
 interface StatusItems {
   name: string;

@@ -4,7 +4,7 @@
       <VCard class="mx-auto pa-5" color="#121212">
         <VRow class="justify-align-center">
           <VCol class="d-flex pa-1" cols="12" sm="4">
-            <VSelect
+            <SelectBox
               class="input-custom"
               item-title="label"
               item-value="value"
@@ -13,10 +13,10 @@
               :items="streamimgCategories"
               filled
               :label="t('category')"
-            ></VSelect>
+            />
           </VCol>
           <VCol class="d-flex pa-1" cols="12" sm="8">
-            <VTextField
+            <InputText
               class="input-custom"
               solo
               :label="t('searchPlaceHolder')"
@@ -24,7 +24,7 @@
               v-model="searchText"
               @keyup.enter="searchVideo"
               @click:append="searchVideo"
-            ></VTextField>
+            />
           </VCol>
         </VRow>
       </VCard>
@@ -52,20 +52,19 @@
           </VCol>
           <VCol cols="12" sm="4">
             <div class="download mb-5">
-              <VBtn
+              <Button
                 color="primary"
                 rounded
                 variant="outlined"
                 :disabled="!currentMovie.downloadable"
                 @click="clickToDownload"
-              >
-                <VIcon>mdi-download</VIcon>
-                {{ t('video.download') }}
-              </VBtn>
+                :label="t('video.download')"
+                append-icon="mdi-download"
+              />
             </div>
           </VCol>
         </VRow>
-        <VDivider class="mt-4 mb-4"></VDivider>
+        <VDivider class="mt-4 mb-4" />
         <div class="title">
           {{ t('video.synopsis') }}
         </div>
@@ -73,7 +72,7 @@
           {{ currentMovie.fileDesc }}
         </div>
       </div>
-      <VDivider class="mt-2 mb-4"></VDivider>
+      <VDivider class="mt-2 mb-4" />
       <div class="movie-list pa-2">
         <div class="title">
           {{ t('video.recommendedMovie') }}
@@ -90,16 +89,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import storageService from '@/api/storageService';
 import MovieItem from '@/features/wonderwall/video/MovieItem.vue';
 import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
-import { useAppCommonStore } from '@/store/appCommonStore';
 import { VideoDetailData } from '@/types/wonderwall/video';
 import { useI18n } from 'vue-i18n';
 import { streamimgCategories } from '@/assets/data/streaming';
-
+import Button from '@/components/common/Button.vue';
+import useCustomQuery from '@/hook/useCustomQuery';
+import { COMMON_QUERY_KEY } from '@/types/queryEnum';
+import { ApiResponse } from '@/types/axios';
+import { useFetch } from '@/hook/useFetch';
+import { useDownloadFile } from '@/hook/useDownloadFile';
 const { t } = useI18n();
 const searchCategory: Ref<string> = ref('');
 const currentMovie: Ref<VideoDetailData> = ref({
@@ -120,21 +123,41 @@ const lazyShow: Ref<boolean> = ref(true);
 
 const router = useRouter();
 const route = useRoute();
-const appStatusStore = useAppCommonStore();
 
 const searchVideo = () => {
-  router
-    .push({
-      name: 'StreamingListPage',
-      params: {
-        searchText: searchText.value,
-        searchCategory: searchCategory.value,
-      },
-    })
-    .catch((err) => err);
+  router.push({
+    name: 'StreamingListPage',
+    params: {
+      searchText: searchText.value,
+      searchCategory: searchCategory.value,
+    },
+  });
 };
+const { data, fetchData } = useFetch<BlobPart>();
 
-const onClickMovie = async (storageId: string) => {
+/** VideoDetail  Query */
+const { hardFetch: videoDetailRefetch } = useCustomQuery({
+  queryKey: [COMMON_QUERY_KEY.VIDEO_DETAIL],
+  queryFn: () => storageService.getVideoDetail(String(route.query.movieId)),
+  onSuccess: async (res: ApiResponse) => {
+    let vttSrc = '';
+    if (res.data.vttSrc) {
+      await fetchData(() => storageService.getFileVtt(res.data.storageId));
+      if (data.value)
+        vttSrc = URL.createObjectURL(
+          new Blob([data.value], { type: 'text/vtt;charset=utf-8;' }),
+        );
+    }
+    currentMovie.value = {
+      ...res.data,
+      fileSrc: `/api/storage/${res.data.fileSrc}`,
+      vttSrc: vttSrc,
+    };
+    lazyShow.value = false;
+  },
+});
+
+const onClickMovie = (storageId: string) => {
   router
     .replace({
       name: 'StreamingPage',
@@ -142,84 +165,37 @@ const onClickMovie = async (storageId: string) => {
         movieId: storageId,
       },
     })
-    .catch((err) => err);
-
-  appStatusStore.showLoading();
-  const fileSeq = storageId;
-  lazyShow.value = true;
-  await storageService.getVideoDetail(fileSeq).then(async (res: any) => {
-    let vttSrc = '';
-    if (res.data.vttSrc) {
-      const response: Blob = await storageService.getFileVtt(storageId);
-      vttSrc = URL.createObjectURL(
-        new Blob([response], { type: 'text/vtt;charset=utf-8;' }),
-      );
-    }
-    const videoSrc = `/api/storage/${res.data.fileSrc}`;
-    currentMovie.value = {
-      ...res.data,
-      fileSrc: videoSrc,
-      vttSrc: vttSrc,
-    };
-    lazyShow.value = false;
-    fetchVideoList();
-    appStatusStore.hideLoading();
-  });
-};
-
-const clickToDownload = async () => {
-  appStatusStore.showLoading();
-  await storageService
-    .download(currentMovie.value.storageId)
-    .then((res: any) => {
-      const blob = new Blob([res.data]);
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.target = '_self';
-      link.download = `${currentMovie.value.fileName}.mp4`;
-      link.click();
+    .finally(() => {
+      lazyShow.value = true;
+      videoDetailRefetch();
+      videoListRefetch();
     });
-  appStatusStore.hideLoading();
 };
 
-const fetchVideoList = () => {
-  return new Promise((resolve) => {
-    const param: any = {
+const { downloadFile } = useDownloadFile();
+
+/** video 파일 download */
+const clickToDownload = async () => {
+  await fetchData(() => storageService.download(currentMovie.value.storageId));
+  if (data.value)
+    await downloadFile(
+      new Blob([data.value]),
+      `${currentMovie.value.fileName}.mp4`,
+    );
+};
+
+/** VideoList random  */
+const { hardFetch: videoListRefetch } = useCustomQuery({
+  queryKey: [COMMON_QUERY_KEY.VIDEO_LIST],
+  queryFn: () =>
+    storageService.getVideoList({
       pageSize: 4,
       pageNumber: 0,
       sort: 'random',
-    };
-    storageService
-      .getVideoList(param)
-      .then((response: any) => {
-        if (response.status_code === 200) {
-          movieList.value = response.data.list;
-        } else {
-          appStatusStore.hideLoading();
-          appStatusStore.showToast({
-            type: 'error',
-            message: response.data.data || response.data.message,
-          });
-        }
-        resolve({ finish: true });
-      })
-      .catch((error) => {
-        resolve({ finish: true });
-      });
-  });
-};
-
-onMounted(() => {
-  lazyShow.value = true;
-  appStatusStore.showLoading();
-  fetchVideoList();
-  appStatusStore.hideLoading();
-  const movieId = String(route.query.movieId);
-  if (!!movieId) {
-    onClickMovie(movieId);
-  } else {
-    lazyShow.value = false;
-  }
+    }),
+  onSuccess: async (res: ApiResponse) => {
+    movieList.value = res.data.list;
+  },
 });
 </script>
 

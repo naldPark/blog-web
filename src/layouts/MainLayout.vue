@@ -1,22 +1,3 @@
-<template>
-  <div class="main-cover">
-    <NaldHeader />
-    <div ref="mainlayout" class="main-layout">
-      <div class="router-page">
-        <RouterView />
-        <VBtn
-          v-if="scrollY > 100"
-          class="fixed-button"
-          icon="mdi-arrow-up"
-          color="primary"
-          @click="goTo(0)"
-        />
-      </div>
-      <NaldFooter class="nald-footer" />
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import NaldHeader from '@/features/common/NaldHeader.vue';
@@ -38,6 +19,24 @@ onUnmounted(() => {
 });
 </script>
 
+<template>
+  <div class="main-cover">
+    <NaldHeader />
+    <div ref="mainlayout" class="main-layout">
+      <div class="router-page">
+        <RouterView />
+        <VBtn
+          v-if="scrollY > 100"
+          class="fixed-button"
+          icon="mdi-arrow-up"
+          color="primary"
+          @click="goTo(0)"
+        />
+      </div>
+      <NaldFooter class="nald-footer" />
+    </div>
+  </div>
+</template>
 <style lang="scss" scoped>
 @media only screen and (max-device-width: 640px) {
   .main-layout {
@@ -52,7 +51,6 @@ onUnmounted(() => {
     position: relative;
     margin: auto;
     height: 100%;
-    // height: calc(var(--vh, 1dvh) * 100) !important;
     width: 100%;
     background-color: #0e0e0e;
 
@@ -60,25 +58,9 @@ onUnmounted(() => {
       min-height: calc(100% - 50px);
       padding-top: 48px; //header
       overflow-y: auto;
-      // padding-bottom: 53px; //footer
       max-width: 1500px;
       margin: auto;
     }
-
-    // .nald-footer {
-    //   bottom: 0;
-    //   left: 0;
-    //   right: 0;
-    //   // position: absolute;
-    //   align-items: center;
-    //   display: flex;
-    //   // flex: 1 1 auto;
-    //   // padding: 8px 16px;
-    //   position: relative;
-    //   // transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    //   // transition-property: height, width, transform, max-width, left, right, top,
-    //   //   bottom;
-    // }
   }
 }
 

@@ -20,9 +20,12 @@
             ></VImg>
           </VAvatar>
           {{ selectedNode ? selectedNode.name : 'Please select node' }}
-          <VIcon v-if="selectedNode?.icon" small class="ml-2 blinking">
-            mdi-open-in-new
-          </VIcon>
+          <VIcon
+            v-if="selectedNode?.icon"
+            small
+            class="ml-2 blinking"
+            icon="mdi-open-in-new"
+          />
         </VBtn>
         <VBottomSheet scrollable v-model="showSelectedNodeInfo">
           <VCard>
@@ -32,12 +35,12 @@
                   :src="
                     getImageUrl('/assets/diagram', `${selectedNode.icon}.png`)
                   "
-                ></VImg>
+                />
               </VAvatar>
               <span style="color: #ffb800">{{
                 selectedNode ? selectedNode.name : 'Please select node'
               }}</span>
-              <VSpacer></VSpacer>
+              <VSpacer />
               <VBtn
                 class="justify-end"
                 color="primary"
@@ -47,7 +50,7 @@
                 Close
               </VBtn>
             </VCardActions>
-            <VDivider></VDivider>
+            <VDivider />
             <VCardText>
               <div class="py-3">
                 <p class="text-h6 font-weight-bold mb-10">

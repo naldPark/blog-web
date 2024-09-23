@@ -1,51 +1,8 @@
-<template>
-  <div class="d-flex justify-end px-6 py-3">
-    <div class="arrow-left">
-      <VBtn block variant="plain" color="primary" @click="onClickMove('left')">
-        <VIcon>mdi-chevron-left</VIcon>
-      </VBtn>
-    </div>
-    <div class="arrow-right">
-      <VBtn block variant="plain" color="primary" @click="onClickMove('right')">
-        <VIcon>mdi-chevron-right</VIcon>
-      </VBtn>
-    </div>
-  </div>
-
-  <div class="movie-scoll">
-    <ul
-      class="movie-items"
-      :id="`movie-items-${category}`"
-      :class="{ 'scroll-smooth': !isDraggingMode }"
-    >
-      <li
-        class="movie-item"
-        @click="onClickMovie(item)"
-        v-for="item in videoList"
-        :key="item.storageId"
-        :class="{ disabled: !item.fileSrc, 'is-mobile': isMobile }"
-        :style="{ 'background-image': `url('${item.fileCover}')` }"
-      >
-        <div class="movie-content" v-if="!item.fileSrc">
-          <VChip class="mb-2 mr-2" color="lightgrey">
-            not converted yet
-            <VIcon>mdi-upload-off</VIcon>
-          </VChip>
-        </div>
-        <div class="movie-content movie-desc" v-else>{{ item.fileDesc }}</div>
-        <div class="movie-title" v-if="item.fileName">
-          <VIcon small class="text-secondary mr-1">mdi-play</VIcon
-          >{{ item.fileName }}
-        </div>
-      </li>
-    </ul>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
 import { useDisplay } from 'vuetify';
 import { VideoDetailData } from '@/types/wonderwall/video';
+import Button from '@/components/common/Button.vue';
 
 const props = defineProps<{
   category: string;
@@ -148,13 +105,62 @@ onMounted(() => {
   }
 });
 </script>
+
+<template>
+  <div class="d-flex justify-end px-6 py-3">
+    <div class="arrow-left">
+      <Button
+        block
+        variant="plain"
+        color="primary"
+        @click="onClickMove('left')"
+        icon="mdi-chevron-left"
+      />
+    </div>
+    <div class="arrow-right">
+      <Button
+        block
+        variant="plain"
+        color="primary"
+        @click="onClickMove('right')"
+        icon="mdi-chevron-right"
+      />
+    </div>
+  </div>
+  <div class="movie-scoll">
+    <ul
+      class="movie-items"
+      :id="`movie-items-${category}`"
+      :class="{ 'scroll-smooth': !isDraggingMode }"
+    >
+      <li
+        class="movie-item"
+        @click="onClickMovie(item)"
+        v-for="item in videoList"
+        :key="item.storageId"
+        :class="{ disabled: !item.fileSrc, 'is-mobile': isMobile }"
+        :style="{ 'background-image': `url('${item.fileCover}')` }"
+      >
+        <div class="movie-content" v-if="!item.fileSrc">
+          <VChip class="mb-2 mr-2" color="lightgrey">
+            not converted yet
+            <VIcon icon="mdi-upload-off" />
+          </VChip>
+        </div>
+        <div class="movie-content movie-desc" v-else>{{ item.fileDesc }}</div>
+        <div class="movie-title" v-if="item.fileName">
+          <VIcon small class="text-secondary mr-1" icon="mdi-play" />
+          {{ item.fileName }}
+        </div>
+      </li>
+    </ul>
+  </div>
+</template>
+
 <style scoped lang="scss">
 .arrow-left,
 .arrow-right {
   button {
-    // width: 50px;
-    // background-color: transparent !important;
-    // min-width: 0 !important;
     font-size: 40px !important;
     padding: 0 !important;
   }

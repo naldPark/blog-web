@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-  import TerminalItem from '@/features/terminal/TerminalItem.vue';
+import TerminalItem from '@/features/terminal/TerminalItem.vue';
 
-  const teminalIcons = ['mdi-minus', 'mdi-checkbox-blank-outline', 'mdi-close'];
+const teminalIcons = ['mdi-minus', 'mdi-checkbox-blank-outline', 'mdi-close'];
 </script>
 
 <template>
@@ -9,10 +9,10 @@
     <div class="container">
       <div class="menubar">
         <VSystemBar window style="background-color: #0e0e0e">
-          <VIcon>mdi-console</VIcon>
+          <VIcon icon="mdi-console" />
           <span>Terminal</span>
-          <VSpacer></VSpacer>
-          <VIcon v-for="icon in teminalIcons" :key="icon">{{ icon }}</VIcon>
+          <VSpacer />
+          <VIcon v-for="icon in teminalIcons" :key="icon" :icon="icon" />
         </VSystemBar>
         <TerminalItem />
       </div>

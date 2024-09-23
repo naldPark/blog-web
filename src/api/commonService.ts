@@ -1,15 +1,18 @@
 import Config from '@/config';
 import { get, post } from './axiosMethod';
 import { ApiResult } from '@/types/axios';
+import { MessageDataRequestBody } from '@/types/admin';
 
 const defaultAPI = Config.backend;
 
 /**
  * 메일을 보내는 메서드
- * @param {Record<string, any>} body - 메일 전송에 필요한 정보
+ * @param {MessageDataRequestBody} body - 메일 전송에 필요한 정보
  * @returns {Promise<ApiResult<any>>} 메일 전송 결과를 반환하는 Promise
  */
-const sendMail = async (body: Record<string, any>): Promise<ApiResult<any>> => {
+const sendMail = async (
+  body: MessageDataRequestBody,
+): Promise<ApiResult<any>> => {
   return await post(`${defaultAPI}/common/mail`, body);
 };
 

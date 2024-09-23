@@ -4,7 +4,7 @@ import Dialog from '@/components/common/Dialog.vue';
 import { useI18n } from 'vue-i18n';
 import ImportVideoFile from '@/features/wonderwall/video/ImportVideoFile.vue';
 import VideoFileUpload from '@/features/wonderwall/video/VideoFileUpload.vue';
-import { FileInfo, VideoDetailData } from '@/types/wonderwall/video';
+import { FileInfo } from '@/types/wonderwall/video';
 import useMutation from '@/hook/useMutation';
 import storageService from '@/api/storageService';
 import { useAppCommonStore } from '@/store/appCommonStore';

@@ -3,7 +3,6 @@ import { onBeforeMount, Ref, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Button from '@/components/common/Button.vue';
 import Dialog from '@/components/common/Dialog.vue';
-import { filterKeysFromObject } from '@/utils/commonUtil';
 import { VideoDetailData } from '@/types/wonderwall/video';
 import VideoFileUpload from '@/features/wonderwall/video/VideoFileUpload.vue';
 import { VideoRequestBody } from '@/types/admin';
@@ -15,6 +14,11 @@ const showDialog = defineModel('showDialog', {
 const props = defineProps<{
   selectedVideo: VideoDetailData;
 }>();
+
+/** 업로드한 썸네일  */
+const fileCover: Ref<File | undefined> = ref(undefined);
+/** 업로드한 자막  */
+const fileVtt: Ref<File | undefined> = ref(undefined);
 
 const { t } = useI18n();
 
@@ -50,26 +54,20 @@ const closeDialog = () => {
 };
 
 const updatedUploadCover = (upload: File) => {
-  // coverFile.value = upload;
-  console.log('cover왔다');
+  fileCover.value = upload;
 };
 
 const updatedUploadVtt = (upload: File) => {
-  // vttFile.value = upload;
-  console.log('업로드왔다');
+  fileVtt.value = upload;
 };
 
-/** data - calulating - action
+/** data - calculating - action
  *  action은 되도록 상위 컴포넌트에 전달
  */
 const emit = defineEmits(['actionOnEdit']);
 
 const onConfirm = () => {
-  emit('actionOnEdit', {
-    ...editVideoInfo.value,
-    vttFile: editVideoInfo.value.vttSrc, // 필요한 경우 vttFile 추가
-    fileCover: editVideoInfo.value.fileCover, // 필요한 경우 fileCover 추가
-  });
+  emit('actionOnEdit', movieInfo.value, fileCover.value, fileVtt.value);
 };
 </script>
 

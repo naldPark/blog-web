@@ -14,6 +14,7 @@ import VideoEditDialog from '@/features/dialog/VideoEditDialog.vue';
 import { VDataTable } from 'vuetify/lib/components/index.mjs';
 import { useFetch } from '@/hook/useFetch';
 import { useDownloadFile } from '@/hook/useDownloadFile';
+import { VideoRequestBody } from '@/types/admin';
 
 /** 전체 비디오 리스트 */
 const videoList = ref<VideoDetailData[]>([]);
@@ -74,6 +75,36 @@ const { mutate: deleteVideo } = useMutation({
   },
 });
 
+/** Video 수정 mutation */
+const { mutate: editVideo } = useMutation({
+  mutationFn: (editVideo: FormData) => storageService.putEditVideo(editVideo),
+  onSuccess: () => {
+    showToast({
+      type: 'success',
+      message: t('complete'),
+    });
+    showResourceEditDialog.value = false;
+    videoRefetch();
+  },
+});
+
+const onEditVideo = (
+  editVideoInfo: VideoDetailData,
+  fileCover: File,
+  fileVtt: File,
+) => {
+  const json: string = JSON.stringify({
+    ...editVideoInfo,
+    storageId: selectedVideo.value?.storageId,
+  }); // JSON 문자열로 변환
+  const blob = new Blob([json], { type: 'application/json' }); // JSON Blob 생성
+  const bodyForm = new FormData();
+  bodyForm.append('info', blob); // JSON 정보를 FormData에 추가
+  fileVtt && bodyForm.append('vttFile', fileVtt); // VTT 파일 추가
+  fileCover && bodyForm.append('coverFile', fileCover); // Cover 파일 추가
+  editVideo(bodyForm);
+};
+
 /** vtt 파일 download */
 const downloadVtt = async (rowData: VideoDetailData) => {
   await fetchData(() => storageService.getFileVtt(rowData.storageId));
@@ -92,14 +123,10 @@ const clickDeleteVideo = (rowData: VideoDetailData) => {
 };
 
 const clickEditVideo = (rowData: VideoDetailData) => {
-  console.log('rowData', rowData);
   selectedVideo.value = clone(rowData);
   showResourceEditDialog.value = true;
 };
 
-const onEditVideo = (editVideoInfo: VideoDetailData) => {
-  console.log('수정띠', editVideoInfo.fileCover);
-};
 const { data, fetchData } = useFetch<BlobPart>();
 const { downloadFile } = useDownloadFile();
 </script>

@@ -1,6 +1,7 @@
 import Config from '@/config';
-import { del, get, post } from './axiosMethod';
+import { del, get, post, put } from './axiosMethod';
 import { ApiResult } from '@/types/axios';
+import { VideoRequestBody } from '@/types/admin';
 
 const storageService = {
   // 기본 API URL
@@ -62,6 +63,17 @@ const storageService = {
 
   deleteVideo(fileSeq: string[]): Promise<ApiResult<any>> {
     return del(`${this.dafaultAPI}/storage/${fileSeq}`);
+  },
+  /**
+   * 비디오 수정 bodyForm
+   * @param {FormData} bodyForm - 수정할 비디오 정보
+   * @returns {Promise<ApiResult<any>>} 비디오 수정 결과를 반환하는 Promise
+   */
+  putEditVideo(bodyForm: FormData): Promise<ApiResult<any>> {
+    const config = {
+      headers: { 'Content-type': 'multipart/form-data' },
+    };
+    return put(`${this.dafaultAPI}/storage`, bodyForm, config);
   },
 };
 
