@@ -8,14 +8,14 @@ import Textarea from '@/components/common/TextArea.vue';
 import InputText from '@/components/common/InputText.vue';
 import { ValidationRule } from '@/types/common';
 import { emailRegExp } from '@/utils/regExpUtil';
-import Button from '@/components/common/Button.vue';
 import useMutation from '@/hook/useMutation';
 import { MessageDataRequestBody } from '@/types/admin';
+import Button from '@/components/common/Button.vue';
 
 const appStatusStore = useAppCommonStore();
 const { t } = useI18n();
 
-// Define messageData with the MessageData interface
+/** 메세지 데이터 초기값 */
 const messageData = ref<MessageDataRequestBody>({
   name: '',
   email: '',
@@ -34,7 +34,7 @@ const rules: {
   },
 };
 
-// Validate form data
+/** 검증  */
 const validateCheck = (): boolean => {
   let res = '';
   for (const key in messageData.value) {
@@ -186,15 +186,14 @@ const sendMessage = async (): Promise<void> => {
                 />
               </VCol>
               <VCol class="mx-auto" cols="auto">
-                <VBtn
+                <Button
                   color="primary"
                   rounded
                   variant="outlined"
+                  prepend-icon="mdi-check"
                   @click="sendMessage"
-                >
-                  <VIcon icon="mdi-check" />
-                  {{ t('send') }}
-                </VBtn>
+                  :label="t('send')"
+                />
               </VCol>
             </VRow>
           </VThemeProvider>

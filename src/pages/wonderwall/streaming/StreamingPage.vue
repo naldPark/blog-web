@@ -1,93 +1,3 @@
-<template>
-  <div>
-    <div v-if="!lazyShow">
-      <VCard class="mx-auto pa-5" color="#121212">
-        <VRow class="justify-align-center">
-          <VCol class="d-flex pa-1" cols="12" sm="4">
-            <SelectBox
-              class="input-custom"
-              item-title="label"
-              item-value="value"
-              v-model="searchCategory"
-              solo
-              :items="streamimgCategories"
-              filled
-              :label="t('category')"
-            />
-          </VCol>
-          <VCol class="d-flex pa-1" cols="12" sm="8">
-            <InputText
-              class="input-custom"
-              solo
-              :label="t('searchPlaceHolder')"
-              append-icon="mdi-magnify"
-              v-model="searchText"
-              @keyup.enter="searchVideo"
-              @click:append="searchVideo"
-            />
-          </VCol>
-        </VRow>
-      </VCard>
-      <div
-        id="vue-core-video-player-box"
-        class="movie-player text-center"
-        :preload="'metadata'"
-        style="vertical-align: middle"
-      >
-        <VideoPlayer
-          :hlsSource="currentMovie.fileSrc"
-          :vttSrc="currentMovie.vttSrc"
-        />
-      </div>
-      <div class="movie-detail pl-3">
-        <VChip small color="grey" variant="outlined" class="mb-2">
-          {{ currentMovie.fileType }}
-        </VChip>
-        <VRow>
-          <VCol cols="12" sm="8">
-            <h1 class="title">{{ currentMovie.fileName }}</h1>
-            <div class="body-2">
-              {{ t('registDt') }}: {{ currentMovie.createdDt }}
-            </div>
-          </VCol>
-          <VCol cols="12" sm="4">
-            <div class="download mb-5">
-              <Button
-                color="primary"
-                rounded
-                variant="outlined"
-                :disabled="!currentMovie.downloadable"
-                @click="clickToDownload"
-                :label="t('video.download')"
-                append-icon="mdi-download"
-              />
-            </div>
-          </VCol>
-        </VRow>
-        <VDivider class="mt-4 mb-4" />
-        <div class="title">
-          {{ t('video.synopsis') }}
-        </div>
-        <div class="font-weight-light subtitle-2 description text-grey pa-3">
-          {{ currentMovie.fileDesc }}
-        </div>
-      </div>
-      <VDivider class="mt-2 mb-4" />
-      <div class="movie-list pa-2">
-        <div class="title">
-          {{ t('video.recommendedMovie') }}
-        </div>
-        <MovieItem
-          v-for="movie in movieList"
-          :key="movie.storageId"
-          :item="movie"
-          @selectMovie="onClickMovie(movie.storageId)"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -198,6 +108,96 @@ const { hardFetch: videoListRefetch } = useCustomQuery({
   },
 });
 </script>
+
+<template>
+  <div>
+    <div v-if="!lazyShow">
+      <VCard class="mx-auto pa-5" color="#121212">
+        <VRow class="justify-align-center">
+          <VCol class="d-flex pa-1" cols="12" sm="4">
+            <SelectBox
+              class="input-custom"
+              item-title="label"
+              item-value="value"
+              v-model="searchCategory"
+              solo
+              :items="streamimgCategories"
+              filled
+              :label="t('category')"
+            />
+          </VCol>
+          <VCol class="d-flex pa-1" cols="12" sm="8">
+            <InputText
+              class="input-custom"
+              solo
+              :label="t('searchPlaceHolder')"
+              append-icon="mdi-magnify"
+              v-model="searchText"
+              @keyup.enter="searchVideo"
+              @click:append="searchVideo"
+            />
+          </VCol>
+        </VRow>
+      </VCard>
+      <div
+        id="vue-core-video-player-box"
+        class="movie-player text-center"
+        :preload="'metadata'"
+        style="vertical-align: middle"
+      >
+        <VideoPlayer
+          :hlsSource="currentMovie.fileSrc"
+          :vttSrc="currentMovie.vttSrc"
+        />
+      </div>
+      <div class="movie-detail pl-3">
+        <VChip small color="grey" variant="outlined" class="mb-2">
+          {{ currentMovie.fileType }}
+        </VChip>
+        <VRow>
+          <VCol cols="12" sm="8">
+            <h1 class="title">{{ currentMovie.fileName }}</h1>
+            <div class="body-2">
+              {{ t('registDt') }}: {{ currentMovie.createdDt }}
+            </div>
+          </VCol>
+          <VCol cols="12" sm="4">
+            <div class="download mb-5">
+              <Button
+                color="primary"
+                rounded
+                variant="outlined"
+                :disabled="!currentMovie.downloadable"
+                @click="clickToDownload"
+                :label="t('video.download')"
+                append-icon="mdi-download"
+              />
+            </div>
+          </VCol>
+        </VRow>
+        <VDivider class="mt-4 mb-4" />
+        <div class="title">
+          {{ t('video.synopsis') }}
+        </div>
+        <div class="font-weight-light subtitle-2 description text-grey pa-3">
+          {{ currentMovie.fileDesc }}
+        </div>
+      </div>
+      <VDivider class="mt-2 mb-4" />
+      <div class="movie-list pa-2">
+        <div class="title">
+          {{ t('video.recommendedMovie') }}
+        </div>
+        <MovieItem
+          v-for="movie in movieList"
+          :key="movie.storageId"
+          :item="movie"
+          @selectMovie="onClickMovie(movie.storageId)"
+        />
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .movie-player {

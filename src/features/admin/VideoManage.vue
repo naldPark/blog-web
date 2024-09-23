@@ -14,7 +14,6 @@ import VideoEditDialog from '@/features/dialog/VideoEditDialog.vue';
 import { VDataTable } from 'vuetify/lib/components/index.mjs';
 import { useFetch } from '@/hook/useFetch';
 import { useDownloadFile } from '@/hook/useDownloadFile';
-import { VideoRequestBody } from '@/types/admin';
 
 /** 전체 비디오 리스트 */
 const videoList = ref<VideoDetailData[]>([]);
@@ -97,11 +96,11 @@ const onEditVideo = (
     ...editVideoInfo,
     storageId: selectedVideo.value?.storageId,
   }); // JSON 문자열로 변환
-  const blob = new Blob([json], { type: 'application/json' }); // JSON Blob 생성
+  const blob = new Blob([json], { type: 'application/json' }); // JSON Blob
   const bodyForm = new FormData();
-  bodyForm.append('info', blob); // JSON 정보를 FormData에 추가
-  fileVtt && bodyForm.append('vttFile', fileVtt); // VTT 파일 추가
-  fileCover && bodyForm.append('coverFile', fileCover); // Cover 파일 추가
+  bodyForm.append('info', blob);
+  fileVtt && bodyForm.append('vttFile', fileVtt); // VTT
+  fileCover && bodyForm.append('coverFile', fileCover); // Cover
   editVideo(bodyForm);
 };
 

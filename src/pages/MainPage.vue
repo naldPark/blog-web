@@ -15,21 +15,6 @@
           </p>
           <span class="main-title-sub">
             {{ $t('mainDescription') }}
-            <!-- <v-btn @click="onTest()">Open Dialog</v-btn>
-            <Dialog
-              v-model:visible="showDialog"
-              title="Dialog Header"
-              @confirm="handleConfirm"
-              @click:outside="handleClickOutside"
-            >
-              <template #header>
-                <p>난헤더다</p>
-              </template>
-              <InputText class="mb-2" type="password" required flat />
-              <template #footer>
-                <p>Here's some contact info</p>
-              </template>
-            </Dialog> -->
           </span>
           <p class="typing text-right">
             . . of

@@ -25,7 +25,7 @@ onUnmounted(() => {
     <div ref="mainlayout" class="main-layout">
       <div class="router-page">
         <RouterView />
-        <VBtn
+        <Button
           v-if="scrollY > 100"
           class="fixed-button"
           icon="mdi-arrow-up"

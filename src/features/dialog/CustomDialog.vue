@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { storeToRefs } from 'pinia';
+import Button from '@/components/common/Button.vue';
 
 const appStatusStore = useAppCommonStore();
 const showDialog = ref(false);
@@ -34,19 +35,22 @@ const onClickDialog = () => {
       :title="dialogInfo.title"
     >
       <template v-slot:actions>
-        <VBtn
+        <Button
           variant="text"
           class="ma-1"
           color="grey"
           :rounded="false"
           v-if="dialogInfo.showCloseButton"
           @click="onClickDialogClose"
-        >
-          {{ dialogInfo.cancelButtonText }}
-        </VBtn>
-        <VBtn class="ma-1" color="primary" plain @click="onClickDialog">
-          {{ dialogInfo.buttonText }}
-        </VBtn>
+          :label="dialogInfo.cancelButtonText || ''"
+        />
+        <Button
+          class="ma-1"
+          color="primary"
+          plain
+          @click="onClickDialog"
+          :label="dialogInfo.buttonText || ''"
+        />
       </template>
     </VCard>
   </VDialog>
