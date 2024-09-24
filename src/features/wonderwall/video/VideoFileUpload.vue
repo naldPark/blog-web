@@ -84,7 +84,7 @@ const rules = {
         <InputText
           class="input-aster"
           required
-          counter="40"
+          :counter="40"
           :label="t('video.movieName')"
           prepend-icon="mdi-pen"
           v-model="movieInfo.fileName"
@@ -104,7 +104,7 @@ const rules = {
     <VRow>
       <VCol md="12">
         <InputText
-          counter="100"
+          :counter="100"
           :label="t('video.description')"
           prepend-icon="mdi-text-box"
           v-model="movieInfo.fileDesc"

@@ -9,7 +9,6 @@ import InputText from '@/components/common/InputText.vue';
 import useMutation from '@/hook/useMutation';
 import Button from '@/components/common/Button.vue';
 import { isEmpty, any } from 'ramda';
-import { ApiResponse } from '@/types/axios';
 
 const { t } = useI18n();
 const accountId = ref('');
