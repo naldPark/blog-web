@@ -7,7 +7,7 @@ const isMobile = props.isMobile;
 </script>
 
 <template>
-  <div class="project-history-wrap" :class="{ 'is-mobile': isMobile }">
+  <div class="project-history-wrap mb-3" :class="{ 'is-mobile': isMobile }">
     <VTimeline side="end">
       <VTimelineItem
         v-for="(entry, index) in timelineEntries"

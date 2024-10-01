@@ -3,7 +3,6 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import NaldHeader from '@/features/common/NaldHeader.vue';
 import NaldFooter from '@/features/common/NaldFooter.vue';
 import { useGoTo } from 'vuetify';
-const mainlayout = ref<HTMLElement | null>(null);
 const goTo = useGoTo();
 const scrollY = ref<number>(0);
 const handleScroll = () => {
@@ -22,7 +21,7 @@ onUnmounted(() => {
 <template>
   <div class="main-cover">
     <NaldHeader />
-    <div ref="mainlayout" class="main-layout">
+    <div class="main-layout">
       <div class="router-page">
         <RouterView />
         <Button

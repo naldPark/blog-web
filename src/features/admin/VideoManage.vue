@@ -13,7 +13,7 @@ import { clone } from 'ramda';
 import VideoEditDialog from '@/features/dialog/VideoEditDialog.vue';
 import { VDataTable } from 'vuetify/lib/components/index.mjs';
 import { useFetch } from '@/hook/useFetch';
-import { useDownloadFile } from '@/hook/useDownloadFile';
+import { downloadFile } from '@/utils/fileUtil';
 
 /** 전체 비디오 리스트 */
 const videoList = ref<VideoDetailData[]>([]);
@@ -127,7 +127,6 @@ const clickEditVideo = (rowData: VideoDetailData) => {
 };
 
 const { data, fetchData } = useFetch<BlobPart>();
-const { downloadFile } = useDownloadFile();
 </script>
 <template>
   <VCard flat>

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { VSelect } from 'vuetify/lib/components/index.mjs';
 
 /** 다국어 사용  */
 const { t } = useI18n();
@@ -9,10 +10,10 @@ const { t } = useI18n();
 const props = defineProps<{
   modelValue: any;
   items: any[];
-  itemValue: string;
-  itemTitle: string;
+  itemValue?: string;
+  itemTitle?: string;
   placeholder?: string;
-  label: string;
+  label?: string;
 }>();
 
 /** Emits 정의*/
@@ -42,7 +43,17 @@ const computedPlaceholder = computed(
     :item-title="itemTitle"
     :label="label"
     :placeholder="computedPlaceholder"
-  />
+  >
+    <!-- $slots.list는 slot name과 일치시킴 -->
+    <template v-if="$slots.list" #item="{ item, props }">
+      <v-list-item v-bind="{ props }">
+        <slot name="list" :item="item" />
+      </v-list-item>
+    </template>
+    <template v-if="$slots.selection" #selection="{ item }">
+      <slot name="selection" :item="item" />
+    </template>
+  </VSelect>
 </template>
 
 <style lang="scss" scoped></style>

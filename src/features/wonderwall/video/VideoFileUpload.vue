@@ -165,6 +165,7 @@ const rules = {
       <VSwitch
         v-model="movieInfo.downloadable"
         inset
+        :disabled="detailData?.downloadable == false"
         color="primary"
         :label="t('video.ableToDownload')"
       />

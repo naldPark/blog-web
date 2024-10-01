@@ -12,7 +12,7 @@ import useCustomQuery from '@/hook/useCustomQuery';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
 import { ApiResponse } from '@/types/axios';
 import { useFetch } from '@/hook/useFetch';
-import { useDownloadFile } from '@/hook/useDownloadFile';
+import { downloadFile } from '@/utils/fileUtil';
 const { t } = useI18n();
 const searchCategory: Ref<string> = ref('');
 const currentMovie: Ref<VideoDetailData> = ref({
@@ -81,8 +81,6 @@ const onClickMovie = (storageId: string) => {
       videoListRefetch();
     });
 };
-
-const { downloadFile } = useDownloadFile();
 
 /** video 파일 download */
 const clickToDownload = async () => {

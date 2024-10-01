@@ -16,7 +16,6 @@ export interface AccountInfo {
 export const useUserStore = defineStore('user', () => {
   const cookies = useCookies();
   const router = useRouter();
-
   const authToken = ref<string | null>(cookies.get(ACCESS_TOKEN) || null);
   const initAccountValue: AccountInfo = {
     accountId: '',
@@ -28,7 +27,7 @@ export const useUserStore = defineStore('user', () => {
     JSON.parse(localStorage.getItem(ACCOUNT_INFO_KEY) || '{}') ||
       initAccountValue,
   );
-  const isSignIn = ref<boolean>(!!accountInfo);
+  const isSignIn = ref<boolean>(!!authToken.value);
 
   const isSuper = ref<boolean>(accountInfo.value.authority == 0);
 
@@ -44,6 +43,7 @@ export const useUserStore = defineStore('user', () => {
         authority: tokenInfo.authority,
         email: tokenInfo.user_email,
       });
+      isSuper.value = accountInfo.value.authority == 0;
     } else {
       cookies.remove(ACCESS_TOKEN);
       localStorage.removeItem(ACCOUNT_INFO_KEY);
@@ -68,6 +68,9 @@ export const useUserStore = defineStore('user', () => {
     if (['/', '/main'].includes(location.pathname)) return;
     router.push('/');
   };
+  if (!isSignIn.value) {
+    resetAccountInfo();
+  }
 
   return {
     isSignIn,

@@ -36,7 +36,7 @@ const nodeSelected = (e: any) => {
 </script>
 
 <template>
-  <VRow dense>
+  <VRow dense class="mb-3">
     <VCol cols="12" md="8">
       <DiagramItem
         @modelData="emitData"

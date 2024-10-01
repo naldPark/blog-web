@@ -138,12 +138,11 @@ export default {
     funcInfo: '기능 정보',
     rules: '규칙',
     rulesDesc: `
-      - 각당 하나의 linux 기반의 샌드박스만 제공 \n
-      - 사용하지 않는 경우 샌드박스는 stop상태로 변경  \n
-      - 10일간 미사용시 샌드박스는 초기화 됨`,
+      - 각 계정 당 하나의 linux 기반의 샌드박스만 제공 \n
+      - 사용하지 않는 경우 샌드박스는 stop상태로 변경 `,
     howToUse: '사용방법',
-    howToUseDesc:
-      '- 상태가 Running이 아닌 경우 Running으로 변경 후 접속 가능 \n - 하단의 인스턴스 시작 버튼 클릭 / 비밀번호는 버튼 우측에서 확인 가능 \n ',
+    howToUseDesc: `- 상태가 Running이 아닌 경우 Running으로 변경 후 접속 가능 \n
+       - 하단의 인스턴스 시작 버튼 클릭 / 비밀번호는 버튼 우측에서 확인 가능 \n  `,
     environmentInfo: '환경 정보',
     status: '상태',
     instanceInfo: '인스턴스 정보',
@@ -168,7 +167,7 @@ export default {
       'API 호출 시 오류가 발생하였습니다. \n 파일을 확인해주세요.(파일명 특수문자 등) \n\n {0} \n 관리자에게 문의 하시기 바랍니다.',
   },
   prMessage: DOMPurify.sanitize(
-    'Docker와 Kubernetes등의 환경에 익숙하며, Backend는 Java, Frontend는 Javascript(주로 Vue.js)를 다룹니다. \n도전적인 문제 해결에 성취감을 느낍니다.  \n 직관적이고 확장성있는 코드방식을 선호하고 효율적인 인프라 설계를 모색하는 편입니다.',
+    'Docker와 Kubernetes등의 환경에 익숙하며, Frontend는 Javascript(React, Vue), Backend는 Java를 다룹니다. \n도전적인 문제 해결에 성취감을 느낍니다.  \n 직관적이고 확장성있는 코드방식을 선호하고 효율적인 인프라 설계를 모색하는 편입니다.',
   ),
   contactMsg: '편하게 연락 주세요.',
   error_code: {
