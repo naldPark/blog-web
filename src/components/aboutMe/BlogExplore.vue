@@ -10,35 +10,44 @@ import { ApiErrorResponse, ApiResponse, ApiResult } from '@/types/axios';
 import { useQuery } from 'vue-query';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
 import { isEmpty } from 'ramda';
+import useCustomQuery from '@/hook/useCustomQuery';
 
 const cardList = ref<BlogData[]>([]);
 
 /** useQuery는 마운팅 전에 실행 됨 */
-const {
-  // isError: hasError,
-  // data: blogList,
-  // isLoading,
-  // refetch,
-  // error,
-} = useQuery({
-  /**쿼리 키 - 고유성 보장 */
-  queryKey: [COMMON_QUERY_KEY.BADGE_LIST],
+// const {
+//   // isError: hasError,
+//   // data: blogList,
+//   // isLoading,
+//   // refetch,
+//   // error,
+// } = useQuery({
+//   /**쿼리 키 - 고유성 보장 */
+//   queryKey: [COMMON_QUERY_KEY.BADGE_LIST],
+//   queryFn: () => getBlogList(),
+//   /** 데이터를 패칭하는 동안 이전 데이터는 유지, default : false */
+//   keepPreviousData: false,
+//   staleTime: 5 * 60 * 1000, // 또는 Infinity
+//   /** 해당 변수가 없을 때만 쿼리가 실행
+//    * 반대로 해당변수가 존재할 때만 이라는 조건을 걸고 싶다면 !!cardList
+//    */
+//   enabled: isEmpty(cardList.value),
+//   onError: (err: ApiErrorResponse) => {
+//     console.log('error', err);
+//   },
+//   onSuccess: (res: ApiResponse) => {
+//     cardList.value = res.data;
+//   },
+//   onSettled: () => {
+//     /**성공 실패 여부 상관없이 실행되는 함수 */
+//   },
+// });
+
+const { hardFetch: blogRefetch } = useCustomQuery({
+  queryKey: [COMMON_QUERY_KEY.BLOG_LIST],
   queryFn: () => getBlogList(),
-  /** 데이터를 패칭하는 동안 이전 데이터는 유지, default : false */
-  keepPreviousData: false,
-  staleTime: 5 * 60 * 1000, // 또는 Infinity
-  /** 해당 변수가 없을 때만 쿼리가 실행
-   * 반대로 해당변수가 존재할 때만 이라는 조건을 걸고 싶다면 !!cardList
-   */
-  enabled: isEmpty(cardList.value),
-  onError: (err: ApiErrorResponse) => {
-    console.log('error', err);
-  },
   onSuccess: (res: ApiResponse) => {
     cardList.value = res.data;
-  },
-  onSettled: () => {
-    /**성공 실패 여부 상관없이 실행되는 함수 */
   },
 });
 

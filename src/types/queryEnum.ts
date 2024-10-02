@@ -4,4 +4,5 @@ export enum COMMON_QUERY_KEY {
   VIDEO_LIST = 'videoList',
   K8S_LIST = 'k8sList',
   VIDEO_DETAIL = 'videoDetail',
+  BLOG_LIST = 'blogList',
 }

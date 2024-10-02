@@ -152,72 +152,68 @@ watch(words, () => {
 </script>
 
 <style lang="scss" scoped>
-html {
-  overflow-y: hidden;
+.main-page {
+  height: 100dvh;
 
-  .main-page {
+  .main-cover {
     height: 100dvh;
+    background:
+      linear-gradient(to top, rgba(20, 20, 20, 0.8), rgb(0, 0, 0)),
+      url('./../assets/images/network.gif') no-repeat;
+    background-position: 60% center;
+    /* GIF를 컨테이너 중간에서 오른쪽으로 배치 */
+    overflow: hidden;
+    display: flex;
+    background-color: black;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 0 3rem;
+    font-family: var(--font-Raleway) !important;
+    background-position: 70% 50%;
 
-    .main-cover {
-      height: 100dvh;
-      background:
-        linear-gradient(to top, rgba(20, 20, 20, 0.8), rgb(0, 0, 0)),
-        url('./../assets/images/network.gif') no-repeat;
-      background-position: 60% center;
-      /* GIF를 컨테이너 중간에서 오른쪽으로 배치 */
-      overflow: hidden;
-      display: flex;
-      background-color: black;
-      flex-direction: column;
-      justify-content: center;
-      height: 100%;
-      padding: 0 3rem;
-      font-family: var(--font-Raleway) !important;
-      background-position: 70% 50%;
+    .main-content {
+      margin-left: 10%;
+      font-size: 2rem;
 
-      .main-content {
-        margin-left: 10%;
-        font-size: 2rem;
+      .main-title {
+        font-size: 3rem;
+        color: #ccc;
+      }
 
-        .main-title {
-          font-size: 3rem;
-          color: #ccc;
+      .main-title-sub {
+        margin-bottom: 0px;
+        font-size: 1.2rem;
+        color: #ccc;
+      }
+
+      .typing {
+        font-weight: 100;
+        font-size: 1.5rem;
+        color: #ccc;
+        .txt-type {
+          display: inline-block;
+          border-right: 0.2rem solid #ffb800;
+          white-space: nowrap;
+          overflow: hidden;
+          animation: blink 0.75s step-end infinite;
+          line-height: 1; /* Ensure the line-height matches the font size */
         }
+      }
 
-        .main-title-sub {
-          margin-bottom: 0px;
-          font-size: 1.2rem;
-          color: #ccc;
-        }
+      button {
+        width: 170px;
+      }
 
-        .typing {
-          font-weight: 100;
-          font-size: 1.5rem;
-          color: #ccc;
-          .txt-type {
-            display: inline-block;
-            border-right: 0.2rem solid #ffb800;
-            white-space: nowrap;
-            overflow: hidden;
-            animation: blink 0.75s step-end infinite;
-            line-height: 1; /* Ensure the line-height matches the font size */
-          }
-        }
+      &.is-mobile {
+        margin-left: 0;
 
         button {
-          width: 170px;
+          width: 100px;
         }
 
-        &.is-mobile {
-          margin-left: 0;
-
-          button {
-            width: 100px;
-          }
-
-          .main-title {
-            font-size: 2rem;
-          }
+        .main-title {
+          font-size: 2rem;
         }
       }
     }

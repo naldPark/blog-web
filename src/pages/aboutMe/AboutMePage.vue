@@ -5,12 +5,14 @@ import Experience from '@/components/aboutMe/Experience.vue';
 </script>
 
 <template>
-  <IntroSection />
-  <VDivider class="mt-5" />
-  <Experience />
-  <VDivider class="mt-5" />
-  <BlogExplore />
-  <div class="mt-10 hidden-sm-and-down" />
+  <div>
+    <IntroSection />
+    <VDivider class="mt-5" />
+    <Experience />
+    <VDivider class="mt-5" />
+    <BlogExplore />
+    <div class="mt-10 hidden-sm-and-down" />
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

@@ -5,6 +5,8 @@ import NaldFooter from '@/features/common/NaldFooter.vue';
 import { useGoTo } from 'vuetify';
 const goTo = useGoTo();
 const scrollY = ref<number>(0);
+
+/** TODO: 스크롤고장남 */
 const handleScroll = () => {
   scrollY.value = window.scrollY;
 };
@@ -46,19 +48,21 @@ onUnmounted(() => {
 .main-cover {
   height: 100%;
   width: 100%;
+  min-height: 100vh;
   .main-layout {
     position: relative;
     margin: auto;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     background-color: #0e0e0e;
-
     .router-page {
-      min-height: calc(100% - 50px);
-      padding-top: 48px; //header
+      height: calc(100vh - 50px); // 50px는 header의 높이
+      padding-top: 48px;
       overflow-y: auto;
-      max-width: 1500px;
-      margin: auto;
+      > div {
+        max-width: 1500px;
+        margin: auto;
+      }
     }
   }
 }
