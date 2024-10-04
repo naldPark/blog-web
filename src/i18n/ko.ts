@@ -176,4 +176,6 @@ export default {
     error_bad_request_005: '비밀번호가 일치하지 않습니다.',
     error_unauthorized_004: '권한이 없습니다. 다시 로그인 해 주세요.',
   },
+  noticeNewPage:
+    '해당 메뉴는 해당 페이지를 벗어나 새로운 페이지로 연동됩니다. 이동하시겠습니까 ?',
 };

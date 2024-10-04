@@ -7,8 +7,14 @@ const timelineEntries = [
   },
   {
     icon: '📺',
-    cardTitle: 'vue-query',
-    cardText: '해부장',
+    cardTitle: 'custom-hook',
+    cardText: 'React에서 사용하는 custom-hook을 사용하여 반복 로직 제거',
+  },
+  {
+    icon: '📺',
+    cardTitle: 'vue-query, vue-mutation',
+    cardText:
+      '기존 axios에서 api를 바로 호출하는 방향에서 query, mutation을 활용하도록 변경',
   },
   {
     icon: '📺💻🕋',
@@ -19,8 +25,7 @@ const timelineEntries = [
   {
     icon: '💻🕋',
     cardTitle: 'Free S3',
-    cardText:
-      'ubuntu에서 wget으로 file을 편리하게 받고싶어서 nodejs서버를 만듬',
+    cardText: 'ubuntu에서 wget으로 file 다운로드 용도 (nodejs)',
     link: 'https://daylog.nald.me/retrospect/s3',
   },
   {
@@ -54,12 +59,13 @@ const timelineEntries = [
   {
     icon: '📺',
     cardTitle: '개발자도구 못하게 막기',
-    cardText: '어떤 사이트에 개발자도구가 금지된걸 봤는데 적용해 보고 싶었음',
+    cardText:
+      'F12를 누를때, 또는 다른경로로 개발자도구가 열려있을시 접근불가 페이지로 이동',
   },
   {
     icon: '🕋',
     cardTitle: 'kubernetes CRI containerd로 변경',
-    cardText: 'kubernetes CRI containerd로 변경',
+    cardText: 'docker 호환 종료에 따라 containerd로 재설치',
     link: 'https://daylog.nald.me/infralogs/on-premise-kubernetes/4.-on-premise-k8s-cri',
   },
   {

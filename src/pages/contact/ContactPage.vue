@@ -205,8 +205,6 @@ const sendMessage = async (): Promise<void> => {
 
 <style lang="scss" scoped>
 .contact-page-wrap {
-  margin-top: 50px;
-
   .contact-box {
     background-color: rgba(20, 20, 20, 0.6);
     justify-content: left;

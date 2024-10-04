@@ -8,11 +8,12 @@ import { MenuInfo, SubMenuInfo } from '@/types/common';
 import { storeToRefs } from 'pinia';
 import avatarOnline from '@/assets/icons/avatar_online.png';
 import avatarOffline from '@/assets/icons/avatar_offline.png';
+import { useAppCommonStore } from '@/store/appCommonStore';
 
 const router = useRouter();
 const { t } = useI18n();
 const { accountInfo } = storeToRefs(useUserStore());
-
+const appStatusStore = useAppCommonStore();
 const props = defineProps<{
   showLoginDialog: boolean;
 }>();
@@ -53,11 +54,20 @@ const menuInfo = computed(() => {
 
 const onChangePage = (menu: MenuInfo | SubMenuInfo) => {
   if ('active' in menu) menu.active = !menu.active;
-  if ('url' in menu) window.open(menu.url, '_blank');
+  if ('url' in menu) {
+    appStatusStore.showDialog({
+      title: t('alert'),
+      description: t('noticeNewPage'),
+      showCloseButton: true,
+      action: () => {
+        appStatusStore.hideDialog();
+        window.open(menu.url, '_blank');
+      },
+    });
+  }
+
   router.push({ name: menu.value });
 };
-
-// 전체 그룹을 열기 위해 true로 초기화
 </script>
 
 <template>

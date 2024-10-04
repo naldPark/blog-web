@@ -134,20 +134,16 @@ router.beforeEach(
     next: NavigationGuardNext,
   ) => {
     const userStore = useUserStore();
-
-    console.log(userStore.isSignIn);
-
     if (to.matched.some((route) => route.meta.anonymousAccess)) {
-      // 익명 접근이 허용된 경우
+      /* 익명 접근이 허용된 경우 */
       next();
     } else if (userStore.isSignIn) {
-      // 사용자가 로그인한 경우
+      /* 사용자가 로그인한 경우 */
       next();
     } else {
-      // 사용자가 로그인하지 않은 경우
-      // 메인 페이지로 리디렉션
-      router.push({ name: 'MainPage' }); // 'MainPage'는 메인 페이지의 이름으로 대체하세요.
-      next(); // 리디렉션 후 next를 호출하여 네비게이션을 계속 진행합니다.
+      /** 사용자가 로그인하지 않은 경우 메인 페이지로 리디렉션 */
+      router.push({ name: 'MainPage' });
+      next();
     }
   },
 );

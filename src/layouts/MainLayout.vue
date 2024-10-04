@@ -1,40 +1,56 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import NaldHeader from '@/features/common/NaldHeader.vue';
 import NaldFooter from '@/features/common/NaldFooter.vue';
-import { useGoTo } from 'vuetify';
-const goTo = useGoTo();
+import { useRoute } from 'vue-router';
 const scrollY = ref<number>(0);
+const route = useRoute();
 
-/** TODO: 스크롤고장남 */
-const handleScroll = () => {
-  scrollY.value = window.scrollY;
+/**  scrollWrap Element */
+const scrollWrap = ref<HTMLElement | null>(null);
+
+/** 스크롤 위치 업데이트 */
+const handleScroll = (e: any) => {
+  scrollY.value = e.target.scrollTop;
 };
 
+/** 스크롤 최상단 이동 */
+const toTop = () => scrollWrap.value?.scrollTo({ top: 0, behavior: 'smooth' });
+
 onMounted(() => {
-  goTo(0);
-  window.addEventListener('scroll', handleScroll);
+  scrollWrap.value = document.querySelector('.scroll-wrap') as HTMLElement;
+  scrollWrap.value?.addEventListener('scroll', handleScroll);
+  toTop();
 });
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
+
+onUnmounted(() =>
+  scrollWrap.value?.removeEventListener('scroll', handleScroll),
+);
+
+/* 라우터 변경 시 스크롤을 맨 위로 이동*/
+watchEffect(() => {
+  route.fullPath;
+  toTop();
 });
 </script>
 
 <template>
-  <div class="main-cover">
+  <div class="main-wrap">
     <NaldHeader />
     <div class="main-layout">
-      <div class="router-page">
-        <RouterView />
-        <Button
-          v-if="scrollY > 100"
-          class="fixed-button"
-          icon="mdi-arrow-up"
-          color="primary"
-          @click="goTo(0)"
-        />
+      <div class="scroll-wrap">
+        <div class="router-page">
+          <RouterView />
+          <Button
+            v-if="scrollY > 100"
+            class="fixed-button"
+            icon="mdi-arrow-up"
+            color="primary"
+            @click="toTop()"
+          />
+        </div>
+        <NaldFooter class="nald-footer" />
       </div>
-      <NaldFooter class="nald-footer" />
     </div>
   </div>
 </template>
@@ -45,32 +61,32 @@ onUnmounted(() => {
   }
 }
 
-.main-cover {
+.main-wrap {
   height: 100%;
   width: 100%;
-  min-height: 100vh;
   .main-layout {
     position: relative;
     margin: auto;
-    height: 100vh;
+    height: 100dvh;
     width: 100%;
     background-color: #0e0e0e;
-    .router-page {
-      height: calc(100vh - 50px); // 50px는 header의 높이
-      padding-top: 48px;
+    .scroll-wrap {
+      height: 100%;
+      // padding-top: 48px;
       overflow-y: auto;
-      > div {
+      .router-page {
+        min-height: calc(100% - 100px);
         max-width: 1500px;
         margin: auto;
+        margin-top: 50px;
+        .fixed-button {
+          position: fixed;
+          z-index: 999;
+          inset-block-end: 3%;
+          inset-inline-end: 30px;
+        }
       }
     }
   }
-}
-
-.fixed-button {
-  position: fixed;
-  z-index: 999;
-  inset-block-end: 3%;
-  inset-inline-end: 30px;
 }
 </style>

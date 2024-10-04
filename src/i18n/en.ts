@@ -177,4 +177,6 @@ export default {
     error_bad_request_005: 'Password does not match.',
     error_unauthorized_004: 'Access denied. Please log in again.',
   },
+  noticeNewPage:
+    'The menu will redirect you to a new page. Would you like to proceed?',
 };

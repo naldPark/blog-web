@@ -232,7 +232,7 @@ onMounted(() => {
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
-        font-size: 1.2rem;
+        font-size: 1em;
         color: rgb(210, 210, 210);
       }
 

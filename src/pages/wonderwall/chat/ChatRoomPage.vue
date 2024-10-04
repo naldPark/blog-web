@@ -1,18 +1,3 @@
-<template>
-  <div>
-    <div class="chat-wrapper" v-if="!entered">
-      <ChatForm @connect="connect" v-model:name-input="nameInput" />
-    </div>
-    <div class="mt-3" v-else>
-      <ChatRoom
-        :messageList="messageList"
-        @sendMessage="sendMessage"
-        :roomId="roomId"
-      />
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, onUnmounted, nextTick } from 'vue';
 import { useCookies } from '@vueuse/integrations/useCookies';
@@ -155,15 +140,30 @@ onUnmounted(() => {
 });
 </script>
 
+<template>
+  <div class="chat-page-wrap">
+    <div class="chat-wrapper" v-if="!entered">
+      <ChatForm @connect="connect" v-model:name-input="nameInput" />
+    </div>
+    <div class="mt-3" v-else>
+      <ChatRoom
+        :messageList="messageList"
+        @sendMessage="sendMessage"
+        :roomId="roomId"
+      />
+    </div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
-.chat-wrapper {
-  background: #f6f5f7 url('../../../assets/images/chatBackground.jpg') no-repeat
-    center center / cover;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: -20px 0 0;
+.chat-page-wrap {
+  height: 100%;
+  min-height: 500px;
+  .chat-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>

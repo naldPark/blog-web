@@ -53,14 +53,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, Ref, watchEffect } from 'vue';
+import { ref, onMounted, watch, Ref } from 'vue';
 import NaldHeader from '@/features/common/NaldHeader.vue';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useDisplay } from 'vuetify';
 import { getBadgeList } from '@/api/commonService';
 import { getImageUrl } from '../utils/commonUtil';
 import { ApiResponse, ApiResult } from '@/types/axios';
-import Dialog from '@/components/common/Dialog.vue';
 import { useEffect } from '@/hook/useEffect';
 
 interface Badge {
