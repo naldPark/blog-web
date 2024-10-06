@@ -71,7 +71,7 @@ watchEffect(() => {
     width: 100%;
     background-color: #0e0e0e;
     .scroll-wrap {
-      height: 100%;
+      height: 100dvh;
       // padding-top: 48px;
       overflow-y: auto;
       .router-page {

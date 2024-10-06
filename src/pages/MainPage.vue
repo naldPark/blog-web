@@ -155,7 +155,7 @@ watch(words, () => {
   height: 100dvh;
 
   .main-cover {
-    height: 100dvh;
+    height: 100%;
     background:
       linear-gradient(to top, rgba(20, 20, 20, 0.8), rgb(0, 0, 0)),
       url('./../assets/images/network.gif') no-repeat;
