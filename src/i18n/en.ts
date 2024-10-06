@@ -176,6 +176,7 @@ export default {
     error_bad_request_001: '"An issue occurred while fetching the information.',
     error_bad_request_005: 'Password does not match.',
     error_unauthorized_004: 'Access denied. Please log in again.',
+    error_not_found_003: 'The user does not exist.',
   },
   noticeNewPage:
     'The menu will redirect you to a new page. Would you like to proceed?',

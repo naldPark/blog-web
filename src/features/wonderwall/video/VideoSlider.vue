@@ -26,9 +26,7 @@ const onClickMove = (direction: 'left' | 'right') => {
 };
 
 const onClickMovie = (item: any) => {
-  if (!isDraggingMode.value) {
-    emits('onClickMovie', item);
-  }
+  if (!isDraggingMode.value) emits('onClickMovie', item);
 };
 
 onMounted(() => {
@@ -134,24 +132,29 @@ onMounted(() => {
       :class="{ 'scroll-smooth': !isDraggingMode }"
     >
       <li
-        class="movie-item"
+        class="movie-item-wrap"
+        :class="{ disabled: !item.fileSrc, 'is-mobile': isMobile }"
         @click="onClickMovie(item)"
         v-for="item in videoList"
         :key="item.storageId"
-        :class="{ disabled: !item.fileSrc, 'is-mobile': isMobile }"
-        :style="{ 'background-image': `url('${item.fileCover}')` }"
       >
-        <div class="movie-content" v-if="!item.fileSrc">
-          <VChip class="mb-2 mr-2" color="lightgrey">
-            not converted yet
-            <VIcon icon="mdi-upload-off" />
-          </VChip>
+        <div
+          class="movie-item"
+          :style="{ 'background-image': `url('${item.fileCover}')` }"
+        >
+          <div class="movie-content" v-if="!item.fileSrc">
+            <VChip class="mb-2 mr-2" color="lightgrey">
+              not converted yet
+              <VIcon icon="mdi-upload-off" />
+            </VChip>
+          </div>
+          <div class="movie-content movie-desc" v-else>{{ item.fileDesc }}</div>
+          <div class="movie-title" v-if="item.fileName">
+            <VIcon small class="text-secondary mr-1" icon="mdi-play" />
+            {{ item.fileName }}
+          </div>
         </div>
-        <div class="movie-content movie-desc" v-else>{{ item.fileDesc }}</div>
-        <div class="movie-title" v-if="item.fileName">
-          <VIcon small class="text-secondary mr-1" icon="mdi-play" />
-          {{ item.fileName }}
-        </div>
+        sad
       </li>
     </ul>
   </div>
@@ -161,7 +164,7 @@ onMounted(() => {
 .arrow-left,
 .arrow-right {
   button {
-    font-size: 40px !important;
+    font-size: 2em !important;
     padding: 0 !important;
   }
 }
@@ -183,8 +186,8 @@ onMounted(() => {
     list-style: none;
     padding-left: 0;
     counter-reset: list-item;
-    perspective: 9000px;
-    transform-style: preserve-3d;
+    // perspective: 9000px;
+    // transform-style: preserve-3d;
     perspective-origin: 50% 50%;
     position: relative;
     overflow: hidden;
@@ -193,14 +196,35 @@ onMounted(() => {
     &.scroll-smooth {
       scroll-behavior: smooth;
     }
+    .movie-item-wrap {
+      border-radius: 20px;
+      min-width: 200px;
+      max-width: 200px;
+      // border-radius: 20px;
+      height: 320px;
+      &:hover {
+        border: 1px solid var(--primary-color) !important;
+      }
+      &.is-mobile {
+        min-width: 100px;
+        max-width: 100px;
+        height: 150px;
+      }
 
+      &.disabled {
+        cursor: default !important;
+        background-color: black;
+      }
+    }
     .movie-item {
       border-radius: 20px;
       background-size: cover;
       background-position: center;
-      flex: 1;
+      width: 100%;
       min-width: 200px;
+      max-width: 200px;
       height: 300px;
+      flex: 1;
       padding: 1rem;
       animation:
         auto ease-in-out intro forwards,
@@ -212,13 +236,15 @@ onMounted(() => {
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      font-weight: 300;
-
-      &.is-mobile {
-        min-width: 100px;
-        height: 150px;
+      &:hover:not(.disabled) {
+        background: var(--v-theme-surface) !important;
+        .movie-desc {
+          visibility: visible !important;
+        }
+        .movie-title {
+          color: #ffb800;
+        }
       }
-
       &.disabled {
         cursor: default !important;
         background-color: black;
@@ -242,7 +268,7 @@ onMounted(() => {
         max-height: 200px;
         color: rgb(210, 210, 210);
         line-height: 1.7;
-        font-size: 11pt;
+        font-size: 0.8em;
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -274,21 +300,6 @@ onMounted(() => {
           opacity 0.4s linear;
         opacity: 0;
         z-index: -1;
-      }
-
-      &:hover:not(.disabled) {
-        .movie-desc {
-          visibility: visible !important;
-        }
-
-        .movie-title {
-          color: #ffb800;
-        }
-
-        &::after {
-          transform: scale(1.1) rotate(4deg);
-          opacity: 1;
-        }
       }
     }
   }
