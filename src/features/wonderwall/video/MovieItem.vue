@@ -13,16 +13,22 @@ const changeMovie = () => {
 <template>
   <div>
     <VCard
-      class="movie-item-card text-grey font-weight-light"
+      class="movie-item-card text-grey font-weight-light mb-3"
       color="transparent"
       elevation="0"
       dark
       @click="changeMovie"
     >
       <div class="d-flex flex-no-wrap align-start">
-        <VAvatar class="ma-3" size="120" tile>
-          <VImg cover aspect-ratio="2/4" :src="item.fileCover" />
-        </VAvatar>
+        <v-img
+          :src="item.fileCover"
+          class="align-end"
+          aspect-ratio="0.7"
+          height="150px"
+          width="100px"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,1)"
+          cover
+        />
         <div class="movie-card">
           <VCardTitle class="mb-3 body-1">{{ item.fileName }}</VCardTitle>
           <VCardSubtitle class="body-2 hidden-sm-and-down overflow-hidden">

@@ -6,7 +6,6 @@ import MovieItem from '@/features/wonderwall/video/MovieItem.vue';
 import VideoPlayer from '@/features/wonderwall/video/VideoPlayer.vue';
 import { VideoDetailData } from '@/types/wonderwall/video';
 import { useI18n } from 'vue-i18n';
-import { streamimgCategories } from '@/assets/data/streaming';
 import Button from '@/components/common/Button.vue';
 import useCustomQuery from '@/hook/useCustomQuery';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
@@ -14,7 +13,6 @@ import { ApiResponse } from '@/types/axios';
 import { useFetch } from '@/hook/useFetch';
 import { downloadFile } from '@/utils/fileUtil';
 const { t } = useI18n();
-const searchCategory: Ref<string> = ref('');
 const currentMovie: Ref<VideoDetailData> = ref({
   storageId: '0',
   fileName: '',
@@ -28,21 +26,11 @@ const currentMovie: Ref<VideoDetailData> = ref({
   fileAuth: false,
 });
 const movieList: Ref<VideoDetailData[]> = ref([]);
-const searchText: Ref<string> = ref('');
 const lazyShow: Ref<boolean> = ref(true);
 
 const router = useRouter();
 const route = useRoute();
 
-const searchVideo = () => {
-  router.push({
-    name: 'StreamingListPage',
-    params: {
-      searchText: searchText.value,
-      searchCategory: searchCategory.value,
-    },
-  });
-};
 const { data, fetchData } = useFetch<BlobPart>();
 
 /** VideoDetail  Query */
@@ -110,33 +98,6 @@ const { hardFetch: videoListRefetch } = useCustomQuery({
 <template>
   <div>
     <div v-if="!lazyShow">
-      <VCard class="mx-auto pa-5" color="#121212">
-        <VRow class="justify-align-center">
-          <VCol class="d-flex pa-1" cols="12" sm="4">
-            <SelectBox
-              class="input-custom"
-              item-title="label"
-              item-value="value"
-              v-model="searchCategory"
-              solo
-              :items="streamimgCategories"
-              filled
-              :label="t('category')"
-            />
-          </VCol>
-          <VCol class="d-flex pa-1" cols="12" sm="8">
-            <InputText
-              class="input-custom"
-              solo
-              :label="t('searchPlaceHolder')"
-              append-icon="mdi-magnify"
-              v-model="searchText"
-              @keyup.enter="searchVideo"
-              @click:append="searchVideo"
-            />
-          </VCol>
-        </VRow>
-      </VCard>
       <div
         id="vue-core-video-player-box"
         class="movie-player text-center"
@@ -183,7 +144,7 @@ const { hardFetch: videoListRefetch } = useCustomQuery({
       </div>
       <VDivider class="mt-2 mb-4" />
       <div class="movie-list pa-2">
-        <div class="title">
+        <div class="title mb-3">
           {{ t('video.recommendedMovie') }}
         </div>
         <MovieItem

@@ -14,6 +14,8 @@ import { ApiResponse } from '@/types/axios';
 import { streamimgCategories } from '@/assets/data/streaming';
 import useCustomQuery from '@/hook/useCustomQuery';
 import { COMMON_QUERY_KEY } from '@/types/queryEnum';
+import VideoMobile from '@/features/wonderwall/video/VideoMobile.vue';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -22,6 +24,7 @@ const movieList = ref<VideoDetailData[]>([]);
 const searchText = ref<string>('');
 const searchCategory = ref<string>('');
 const showUploadDialog = ref<boolean>(false);
+const { smAndDown: isMobile } = useDisplay();
 
 const updateShowUploadDialog = (newValue: boolean) => {
   showUploadDialog.value = newValue;
@@ -129,12 +132,13 @@ const onClickMovie = (item: VideoDetailData) => {
       <VDivider class="mb-10 mt-10" />
       <h2 class="text-primary mb-3">{{ category.label }}</h2>
       <VideoSlider
-        :category="category.value"
-        :videoList="
-          movieList.filter(
-            (f: VideoDetailData) => f.fileType === category.value,
-          )
-        "
+        v-if="!isMobile"
+        :videoList="movieList.filter((f) => f.fileType == category.value)"
+        @onClickMovie="onClickMovie"
+      />
+      <VideoMobile
+        v-else
+        :videoList="movieList.filter((f) => f.fileType == category.value)"
         @onClickMovie="onClickMovie"
       />
     </template>
