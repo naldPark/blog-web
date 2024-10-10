@@ -10,6 +10,7 @@ const getIconAndColor = (type: string) =>
     success: { icon: 'mdi-check-circle', color: '#4CAF50' },
     error: { icon: 'mdi-close-circle', color: '#c24c4f' },
     warning: { icon: 'mdi-alert-circle', color: '#6ed7f5' },
+    info: { icon: 'mdi-information-outline', color: '#fcd97c' },
   })[type] || { icon: 'mdi-alert-circle', color: '#6ed7f5' };
 
 const getColor = (type: string) => getIconAndColor(type).color;
@@ -46,6 +47,7 @@ const handleButtonClick = (toast: {
         style="background-color: #212121"
         :border-color="getColor(toast.info.type)"
         rounded="sm"
+        class="text-white"
         width="400"
         theme="dark"
       >

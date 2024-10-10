@@ -50,7 +50,7 @@ const accessEndpoint = () =>
   });
 </script>
 <template>
-  <div class="sandbox-wrapper">
+  <div class="sandbox-wrapper" style="border: 1px solid red">
     <VCard variant="outlined" elevation="0" class="sandbox-card">
       <VCardTitle class="text-subtitle-1 text-primary">
         {{ t('sandbox.funcInfo') }}

@@ -36,7 +36,8 @@ const menuInfo = computed(() => {
   const currentAuthority: number = accountInfo.value.authority;
   if (currentAuthority === -1) return [];
   if (currentAuthority == 0) return menuItems;
-
+  if (currentAuthority == 3) return menuItems;
+  console.log('currentAuthority,currentAuthority', currentAuthority);
   /** 권한이 0이 아닌 사용자에 대해 필터링 */
   return menuItems
     .filter(

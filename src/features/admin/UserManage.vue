@@ -111,8 +111,8 @@ const { mutate: deleteUser } = useMutation({
       type: 'success',
       message: t('complete'),
     });
-    appStatusStore.hideDialog();
   },
+  onSettled: () => appStatusStore.hideDialog(),
 });
 
 /** User 수정 mutation */
@@ -123,8 +123,8 @@ const { mutate: onEditUser } = useMutation({
       type: 'success',
       message: t('confirmMsg'),
     });
-    userApiCallback();
   },
+  onSettled: () => userApiCallback(),
 });
 
 /** User 생성 Mutation */
@@ -141,8 +141,8 @@ const { mutate: onCreateUser } = useMutation({
       type: 'success',
       message: t('complete'),
     });
-    userApiCallback();
   },
+  onSettled: () => userApiCallback(),
 });
 
 const clickCreateUser = () => {

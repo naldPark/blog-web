@@ -177,6 +177,7 @@ export default {
     error_bad_request_005: 'Password does not match.',
     error_unauthorized_004: 'Access denied. Please log in again.',
     error_not_found_003: 'The user does not exist.',
+    error_forbidden_002: 'Unauthorized account',
   },
   noticeNewPage:
     'The menu will redirect you to a new page. Would you like to proceed?',

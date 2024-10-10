@@ -15,7 +15,7 @@ export interface DialogInfo {
 }
 
 interface ToastInfo {
-  type: 'success' | 'error' | 'warning';
+  type: 'success' | 'error' | 'warning' | 'info';
   title?: string;
   showButton?: boolean;
   inputMsg?: string;

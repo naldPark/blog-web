@@ -63,12 +63,12 @@ const menuItems = [
         title: 'menubar.clilendor',
         value: 'ChatRoomPage',
       },
-      {
-        name: 'characterTest',
-        icon: 'mdi-penguin',
-        title: 'menubar.characterTest',
-        value: 'CharacterTestPage',
-      },
+      // {
+      //   name: 'characterTest',
+      //   icon: 'mdi-penguin',
+      //   title: 'menubar.characterTest',
+      //   value: 'CharacterTestPage',
+      // },
     ],
   },
   {

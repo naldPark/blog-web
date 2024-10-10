@@ -19,12 +19,11 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #terminal {
-  margin-top: 40px;
-  height: calc(100dvh - 150px);
-  max-height: 100%;
+  height: calc(90dvh - 150px);
+  max-height: 90%;
   :deep(.xterm-text-layer) {
-    width: calc(100dvh - 150px);
-    height: 100%;
+    width: calc(90dvh - 150px);
+    height: 90%;
   }
 }
 </style>

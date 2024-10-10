@@ -70,8 +70,8 @@ const { mutate: deleteVideo } = useMutation({
       type: 'success',
       message: t('complete'),
     });
-    hideDialog();
   },
+  onSettled: () => hideDialog(),
 });
 
 /** Video 수정 mutation */
@@ -84,6 +84,9 @@ const { mutate: editVideo } = useMutation({
     });
     showResourceEditDialog.value = false;
     videoRefetch();
+  },
+  onSettled: () => {
+    showResourceEditDialog.value = false;
   },
 });
 

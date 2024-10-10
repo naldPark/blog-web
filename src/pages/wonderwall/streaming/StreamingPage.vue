@@ -12,6 +12,7 @@ import { COMMON_QUERY_KEY } from '@/types/queryEnum';
 import { ApiResponse } from '@/types/axios';
 import { useFetch } from '@/hook/useFetch';
 import { downloadFile } from '@/utils/fileUtil';
+import { useAppCommonStore } from '@/store/appCommonStore';
 const { t } = useI18n();
 const currentMovie: Ref<VideoDetailData> = ref({
   storageId: '0',
@@ -27,7 +28,7 @@ const currentMovie: Ref<VideoDetailData> = ref({
 });
 const movieList: Ref<VideoDetailData[]> = ref([]);
 const lazyShow: Ref<boolean> = ref(true);
-
+const appStatusStore = useAppCommonStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -72,12 +73,14 @@ const onClickMovie = (storageId: string) => {
 
 /** video 파일 download */
 const clickToDownload = async () => {
+  appStatusStore.showLoading();
   await fetchData(() => storageService.download(currentMovie.value.storageId));
   if (data.value)
     await downloadFile(
       new Blob([data.value]),
       `${currentMovie.value.fileName}.mp4`,
     );
+  appStatusStore.hideLoading();
 };
 
 /** VideoList random  */

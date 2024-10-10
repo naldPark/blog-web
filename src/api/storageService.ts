@@ -5,7 +5,7 @@ import { VideoRequestBody } from '@/types/admin';
 
 const storageService = {
   // 기본 API URL
-  dafaultAPI: `${Config.backend}`,
+  defaultAPI: `${Config.backend}`,
 
   /**
    * 파일 다운로드 메서드
@@ -16,7 +16,7 @@ const storageService = {
     const config: any = {
       responseType: 'blob', // 파일 데이터 처리 방식 설정
     };
-    return get(`${this.dafaultAPI}/storage/download/${fileSeq}`, config);
+    return get(`${this.defaultAPI}/storage/download/${fileSeq}`, config);
   },
 
   /**
@@ -28,7 +28,7 @@ const storageService = {
     const config: any = {
       params: params, // 요청 파라미터 설정
     };
-    return get(`${this.dafaultAPI}/storage/video/list`, config);
+    return get(`${this.defaultAPI}/storage/video/list`, config);
   },
 
   /**
@@ -37,7 +37,7 @@ const storageService = {
    * @returns {Promise<ApiResult<any>>} 비디오 세부 정보를 포함하는 API 결과를 반환하는 Promise
    */
   getVideoDetail(fileSeq: string): Promise<ApiResult<any>> {
-    return get(`${this.dafaultAPI}/storage/video/detail/${fileSeq}`);
+    return get(`${this.defaultAPI}/storage/video/detail/${fileSeq}`);
   },
 
   /**
@@ -46,7 +46,7 @@ const storageService = {
    * @returns {Promise<Blob>} VTT 파일을 포함하는 Blob 객체를 반환하는 Promise
    */
   getFileVtt(fileSeq: string): Promise<Blob> {
-    return get(`${this.dafaultAPI}/storage/vtt/${fileSeq}.vtt`);
+    return get(`${this.defaultAPI}/storage/vtt/${fileSeq}.vtt`);
   },
 
   /**
@@ -58,11 +58,13 @@ const storageService = {
     const config = {
       headers: { 'Content-type': 'multipart/form-data' }, // 폼 데이터 전송을 위한 헤더 설정
     };
-    return post(`${this.dafaultAPI}/storage/uploadLocal`, bodyForm, config);
+    return post(`${this.defaultAPI}/storage/uploadLocal`, bodyForm, config);
   },
 
-  deleteVideo(fileSeq: string[]): Promise<ApiResult<any>> {
-    return del(`${this.dafaultAPI}/storage/${fileSeq}`);
+  deleteVideo(seqList: string[]): Promise<ApiResult<any>> {
+    return del(`${this.defaultAPI}/storage`, {
+      data: seqList,
+    });
   },
   /**
    * 비디오 수정 bodyForm
@@ -73,7 +75,7 @@ const storageService = {
     const config = {
       headers: { 'Content-type': 'multipart/form-data' },
     };
-    return put(`${this.dafaultAPI}/storage`, bodyForm, config);
+    return put(`${this.defaultAPI}/storage`, bodyForm, config);
   },
 };
 

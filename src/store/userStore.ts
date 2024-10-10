@@ -30,7 +30,7 @@ export const useUserStore = defineStore('user', () => {
   const isSignIn = ref<boolean>(!!authToken.value);
 
   const isSuper = ref<boolean>(accountInfo.value.authority == 0);
-
+  const isBiz = ref<boolean>(accountInfo.value.authority == 3);
   /** 토큰 세팅 */
   const setAuthToken = (token: string | null) => {
     authToken.value = token;
@@ -75,6 +75,7 @@ export const useUserStore = defineStore('user', () => {
   return {
     isSignIn,
     authToken,
+    isBiz,
     isSuper,
     accountInfo,
     setAuthToken,

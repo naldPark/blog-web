@@ -35,7 +35,7 @@ const showDrawer = ref(false);
  * storeToRefs 는 반응형으로 작동하게 해줌
  */
 const userStore = useUserStore();
-const { accountInfo, isSuper } = storeToRefs(userStore);
+const { accountInfo, isSuper, isBiz } = storeToRefs(userStore);
 
 const toggleDrawer = () => (showDrawer.value = !showDrawer.value);
 
@@ -76,7 +76,7 @@ const listItems = computed<RightMenuItems[]>(() => [
 ]);
 
 const getRightPanelItems = () => {
-  if (isSuper.value) return listItems.value;
+  if (isSuper.value || isBiz.value) return listItems.value;
   else return listItems.value.filter((f) => !f.requiresAdmin);
 };
 </script>
