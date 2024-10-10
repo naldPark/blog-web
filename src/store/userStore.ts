@@ -44,6 +44,7 @@ export const useUserStore = defineStore('user', () => {
         email: tokenInfo.user_email,
       });
       isSuper.value = accountInfo.value.authority == 0;
+      isBiz.value = accountInfo.value.authority == 3;
     } else {
       cookies.remove(ACCESS_TOKEN);
       localStorage.removeItem(ACCOUNT_INFO_KEY);
