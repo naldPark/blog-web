@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
 import DiagramItem from './DiagramItem.vue';
-import story from '@/assets/data/story';
+import { diagramStory } from '@/assets/data/story';
 import { useDisplay } from 'vuetify';
 import { getImageUrl } from '@/utils/commonUtil';
 interface Node {
@@ -14,6 +14,8 @@ interface NodeDesc {
   title: string;
   content: string;
 }
+
+/** TODO: 타입 정리 필요 */
 
 const { smAndDown: isMobile } = useDisplay();
 const selectedNode: Ref<Node> = ref({ icon: '', name: '', value: '' });
@@ -31,7 +33,7 @@ const diagramChange = (item: any) => {
 
 const nodeSelected = (e: any) => {
   selectedNode.value = e;
-  selectedNodeDesc.value = story[e.name];
+  selectedNodeDesc.value = diagramStory[e.name];
 };
 </script>
 

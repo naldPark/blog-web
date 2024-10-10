@@ -1,4 +1,11 @@
-const story: any = {
+interface DiagramStoryItems {
+  [key: string]: {
+    title: string;
+    content: string;
+  };
+}
+
+export const diagramStory: DiagramStoryItems = {
   Nald: {
     title: '프로젝트 존재의 이유',
     content:
@@ -43,6 +50,11 @@ const story: any = {
     title: 'Vue3 + Vuetify ',
     content:
       '나한테 가장 익숙해서 선택함\n\n Vue3도 있고 React도 있고 다양한 라이브러리가 나오고 있는데 이런것들은 사이드로 붙여서 사용해볼 예정 (마이그레이션 했음) \n\n 디자인 능력은 그다지 좋지 않아 Vuetify의 힘을 빌려 사용중',
+  },
+  React: {
+    title: 'React',
+    content:
+      'Webapp으로 background상태에서 알림을 전송하는 테스트를 해보고 싶었는데, 마침 react가 익숙한 상황이라 react로 구현해 봄',
   },
   JPA: {
     title: 'Spring Data JPA + QueryDsl',
@@ -104,5 +116,3 @@ const story: any = {
       '여러가지 어플리케이션을 간단한 cmd명령어로 실행할 수 있는데, nfs는 Helm을 활용하여 설치함',
   },
 };
-
-export default story;

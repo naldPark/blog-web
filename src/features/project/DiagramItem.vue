@@ -79,6 +79,8 @@ import infraService from '@/api/infraService';
 import { useAppCommonStore } from '@/store/appCommonStore';
 import { useDisplay } from 'vuetify';
 
+/** TODO: 타입 정리 필요 */
+
 const { smAndDown: isMobile } = useDisplay();
 const gojs = go.GraphObject.make;
 
@@ -349,7 +351,6 @@ onMounted(async () => {
     myOverview.value.box.elt(0).stroke = '#ffb700';
   }
   appStatusStore.hideLoading();
-  console.log('myDiagram', myDiagram);
 });
 
 const textStyle = (field: any) => {
