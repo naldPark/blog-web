@@ -20,19 +20,19 @@ const timelineEntries = [
     icon: '📺💻🕋',
     cardTitle: '리펙토링',
     cardText: 'Vue3 + pinia 로 리팩토링',
-    link: 'https://daylog.nald.me/retrospect/vue2-greater-than-vue3',
+    link: 'https://book.nald.me/retrospect/vue2-greater-than-vue3',
   },
   {
     icon: '💻🕋',
     cardTitle: 'Free S3',
     cardText: 'ubuntu에서 wget으로 file 다운로드 용도 (nodejs)',
-    link: 'https://daylog.nald.me/retrospect/s3',
+    link: 'https://book.nald.me/retrospect/s3',
   },
   {
     icon: '💻🕋',
     cardTitle: 'Free EC2',
     cardText: 'nodejs 쿠버네티스 권한상승 방지',
-    link: 'https://daylog.nald.me/retrospect/ec2',
+    link: 'https://book.nald.me/retrospect/ec2',
   },
   {
     hideDot: true,
@@ -44,7 +44,7 @@ const timelineEntries = [
     icon: '💻🕋',
     cardTitle: 'K8s',
     cardText: '백엔드 쿠버네티스 상태조회',
-    link: 'https://daylog.nald.me/infralogs/metric-server',
+    link: 'https://book.nald.me/infralogs/metric-server',
   },
   {
     icon: '📺💻',
@@ -66,20 +66,20 @@ const timelineEntries = [
     icon: '🕋',
     cardTitle: 'kubernetes CRI containerd로 변경',
     cardText: 'docker 호환 종료에 따라 containerd로 재설치',
-    link: 'https://daylog.nald.me/infralogs/on-premise-kubernetes/4.-on-premise-k8s-cri',
+    link: 'https://book.nald.me/infralogs/on-premise-kubernetes/4.-on-premise-k8s-cri',
   },
   {
     icon: '📺💻🕋',
     cardTitle: '스트리밍 서비스 & nfs',
     cardText: '넷플릭스는 어떤 방식으로 작동할까가 시작',
-    link: 'https://daylog.nald.me/backendlogs/ffmpeg-hls',
+    link: 'https://book.nald.me/backendlogs/ffmpeg-hls',
   },
   {
     icon: '📺💻🕋',
     cardTitle: 'Free RDB, ECR',
     cardText:
       '나스를 사고 무료 RDB, ECR: Elastic Container Registry로 사용 컴퓨터가 너무 불안정해서 db도 꺼지고 했음',
-    link: 'https://daylog.nald.me/infralogs/on-premise-repo-db/1.-docker-repository-nexus',
+    link: 'https://book.nald.me/infralogs/on-premise-repo-db/1.-docker-repository-nexus',
   },
   {
     hideDot: true,
@@ -94,7 +94,7 @@ const timelineEntries = [
     cardTitle: 'CI / CD 구현',
     cardText:
       '귀찮아서.. 젠킨스에서 권한의처리 엘리게이션 이라든가 롤바인딩 중요함',
-    link: 'https://daylog.nald.me/infralogs/kubernetes/jenkins',
+    link: 'https://book.nald.me/infralogs/kubernetes/jenkins',
   },
   {
     class: 'mb-1',
@@ -120,18 +120,18 @@ const timelineEntries = [
   {
     cardTitle: '📺💻 로그인 기능 구현 (JWT)',
     cardText: 'JWT로 토큰방식으로 로그인 여부를 판단',
-    link: 'https://daylog.nald.me/backendlogs/login',
+    link: 'https://book.nald.me/backendlogs/login',
   },
   {
     cardTitle: '🕋 쿠버네티스 환경 셋업',
     cardText: 'ec2프리티어에 의존할수 없어서',
-    link: 'https://daylog.nald.me/infralogs/on-premise-kubernetes/1.-kubernetes',
+    link: 'https://book.nald.me/infralogs/on-premise-kubernetes/1.-kubernetes',
   },
   {
     cardTitle: '💻 backend java jpa & 마리아디비 초기셋업',
     cardText:
       'frontend만 사용하면 기능의 한계가 있기에 이것또한 가장 익숙한 것 채택',
-    link: 'https://daylog.nald.me/infralogs/on-premise-repo-db/3.-maria-db',
+    link: 'https://book.nald.me/infralogs/on-premise-repo-db/3.-maria-db',
   },
   {
     cardTitle: '🕋 EC2 프리티어 사용 베포',
@@ -151,7 +151,7 @@ const timelineEntries = [
   {
     cardTitle: '🕋 Rout53 도메인구매',
     cardText: 'ssl 수동으로 직접한다',
-    link: 'https://daylog.nald.me/infralogs/on-premise-kubernetes/1.-kubernetes',
+    link: 'https://book.nald.me/infralogs/on-premise-kubernetes/1.-kubernetes',
   },
   {
     hideDot: true,
