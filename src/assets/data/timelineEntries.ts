@@ -7,6 +7,12 @@ const timelineEntries = [
   },
   {
     icon: '📺',
+    cardTitle: 'NextJs',
+    cardText:
+      '현재 ejs, node서버로 구성되어있는 s3저장소(Free S3)를 nextjs로 마이그레이션',
+  },
+  {
+    icon: '📺',
     cardTitle: 'custom-hook',
     cardText: 'React에서 사용하는 custom-hook을 사용하여 반복 로직 제거',
   },
@@ -71,7 +77,7 @@ const timelineEntries = [
   {
     icon: '📺💻🕋',
     cardTitle: '스트리밍 서비스 & nfs',
-    cardText: '넷플릭스는 어떤 방식으로 작동할까가 시작',
+    cardText: '넷플릭스는 어떤 방식으로 작동할까에 대한 탐색전',
     link: 'https://book.nald.me/backendlogs/ffmpeg-hls',
   },
   {
