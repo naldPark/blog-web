@@ -15,12 +15,12 @@ const createHttpClient = (): AxiosInstance => {
   const axiosInstance: AxiosInstance = Axios.create({
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      'Access-Control-Allow-Origin': '*',
       'Cache-Control': 'no-cache',
       Pragma: 'no-cache',
       Expires: '0',
     } as unknown as AxiosHeaders, // 여기서 unknown으로 변환 후 AxiosHeaders로 변환
     timeout: 300000, // 5 minutes timeout
+    withCredentials: true, // 쿠키를 요청에 포함
   });
 
   // Request interceptor handler
